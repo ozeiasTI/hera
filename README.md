@@ -1,14 +1,18 @@
-# 🚀 SEI PLUS v2.0
+# 🚀 SEI PLUS v1.0
 
 **Sistema Avançado de Gerenciamento de Fluxos Processuais do SEI**
 
 ![Status](https://img.shields.io/badge/Status-Ativo-brightgreen)
-![Versão](https://img.shields.io/badge/Versão-2.0.0-blue)
+![Versão](https://img.shields.io/badge/Versão-v1.0-blue)
 ![Licença](https://img.shields.io/badge/Licença-Livre-green)
 
 ---
 
 ## 📌 Sobre o Projeto
+
+Este software foi desenvolvido para uma abordagem de projeto de pesquisa intitulada **Desenvolvimento de ferramenta low-code para gestão de fluxos processuais no SEI com foco em soberania digital do IFRO**.
+
+**Criadores:** Ozeias Souza e Gustavo Sales.
 
 O **SEI PLUS** é uma aplicação web desenvolvida para **criar, gerenciar e padronizar fluxos processuais administrativos**, especialmente voltados ao uso com o **SEI (Sistema Eletrônico de Informações)**.
 

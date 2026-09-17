@@ -10,6 +10,7 @@ class UI {
     this.currentSubtype = null;
     this.currentEtapa = null;
     this.etapasEmCriacao = [];
+    this.visualizacaoEmCriacao = this._getDefaultVisualizacao();
     this.etapaEditandoIndex = null;
     this.isEditingSavedFluxo = false; // Flag para saber se estamos editando um fluxo salvo
     this.selectedProcessos = new Set(); // Conjunto para armazenar processos selecionados
@@ -44,7 +45,7 @@ class UI {
       .getElementById("btn-help")
       .addEventListener("click", () =>
         alert(
-          "SEI PLUS v2.0\n\nSistema de gerenciamento de fluxos processuais.\n\nDesenvolvido por: OZEIAS SOUZA",
+          "SEI PLUS v1.0\n\nSistema de gerenciamento de fluxos processuais.\n\nDesenvolvido por: Ozeias Souza e Gustavo Sales",
         ),
       );
 
@@ -113,17 +114,6 @@ class UI {
       .getElementById("file-import")
       .addEventListener("change", (e) => this.importBackup(e));
 
-    // Tema
-    document
-      .getElementById("btn-theme-light")
-      .addEventListener("click", () => this.setTheme("light"));
-    document
-      .getElementById("btn-theme-dark")
-      .addEventListener("click", () => this.setTheme("dark"));
-    document
-      .getElementById("btn-theme-auto")
-      .addEventListener("click", () => this.setTheme("auto"));
-
     // API Key
     document
       .getElementById("btn-save-api-key")
@@ -147,6 +137,19 @@ class UI {
     document
       .getElementById("btn-view-fluxo")
       .addEventListener("click", () => this.switchView("fluxo"));
+    ["mermaid-direction", "mermaid-node-shape", "mermaid-color-default", "mermaid-color-decision", "mermaid-color-start", "mermaid-color-border"].forEach((id) => {
+      document.getElementById(id).addEventListener("change", (event) => {
+        this.visualizacaoEmCriacao[this._getVisualizacaoField(id)] = event.target.value;
+        storage.updateVisualizacao(this.currentProcess, this.currentSubtype, this.visualizacaoEmCriacao);
+        this.renderFluxograma();
+      });
+    });
+    document.getElementById("btn-reset-mermaid-style").addEventListener("click", () => {
+      this.visualizacaoEmCriacao = this._getDefaultVisualizacao();
+      storage.updateVisualizacao(this.currentProcess, this.currentSubtype, this.visualizacaoEmCriacao);
+      this._syncVisualizacaoControls();
+      this.renderFluxograma();
+    });
 
     // Search Modal
     document
@@ -343,6 +346,18 @@ class UI {
     const grid = document.getElementById("home-processos");
     grid.innerHTML = "";
 
+    if (Object.keys(data).length === 0) {
+      grid.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">🗂️</div>
+          <h3>Nenhum fluxo cadastrado</h3>
+          <p>Comece criando o primeiro fluxo processual do sistema.</p>
+          <button class="btn btn-primary" onclick="ui.goToPage('novo')">Criar Primeiro Fluxo</button>
+        </div>
+      `;
+      return;
+    }
+
     Object.entries(data).forEach(([processo, subtipos]) => {
       const card = document.createElement("div");
       card.className = "processo-card";
@@ -366,6 +381,18 @@ class UI {
     const data = storage.getAllProcessos();
     const list = document.getElementById("processos-list");
     list.innerHTML = "";
+
+    if (Object.keys(data).length === 0) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">🗂️</div>
+          <h3>Sua biblioteca está vazia</h3>
+          <p>Crie um fluxo do zero ou importe um arquivo JSON para começar.</p>
+          <button class="btn btn-primary" onclick="ui.goToPage('novo')">Criar Novo Fluxo</button>
+        </div>
+      `;
+      return;
+    }
 
     Object.entries(data).forEach(([processo, subtipos]) => {
       const section = document.createElement("div");
@@ -509,7 +536,7 @@ class UI {
       <body>
         <div class="header">
           <h1>Relatório de Fluxos Processuais</h1>
-          <p>Sistema SEI PLUS v2.0 • Gerado em ${new Date().toLocaleString('pt-BR')}</p>
+          <p>Sistema SEI PLUS v1.0 • Gerado em ${new Date().toLocaleString('pt-BR')}</p>
         </div>
     `;
 
@@ -557,7 +584,7 @@ class UI {
 
     html += `
         <div class="footer">
-          <p>SEI PLUS v2.0 - Desenvolvido por OZEIAS SOUZA</p>
+          <p>SEI PLUS v1.0 - Desenvolvido por Ozeias Souza e Gustavo Sales</p>
           <p>Este documento é para fins de consulta e padronização processual.</p>
         </div>
         <script>window.onload = () => { window.print(); }</script>
@@ -584,6 +611,7 @@ class UI {
     this.currentProcess = processo;
     this.currentSubtype = subtipo;
     const fluxo = storage.getSubtipo(processo, subtipo);
+    this.visualizacaoEmCriacao = { ...this._getDefaultVisualizacao(), ...(fluxo.visualizacao || {}) };
     this.currentEtapa = fluxo.inicio;
     this.renderDetalhes();
     this.switchView("lista"); // Resetar para vista de lista ao abrir
@@ -615,15 +643,18 @@ class UI {
     const container = document.getElementById("mermaid-graph");
     container.removeAttribute("data-processed");
 
-    let definition = "graph TD\n";
+    const visualizacao = { ...this._getDefaultVisualizacao(), ...(fluxo.visualizacao || {}), ...this.visualizacaoEmCriacao };
+    this.visualizacaoEmCriacao = visualizacao;
+    this._syncVisualizacaoControls();
+    let definition = `graph ${visualizacao.direcao}\n`;
 
     // Estilos
     definition +=
-      "classDef default fill:#f9f9f9,stroke:#333,stroke-width:1px,color:#333,font-family:Inter;\n";
+      `classDef default fill:${visualizacao.corEtapa},stroke:${visualizacao.corBorda},stroke-width:1px,color:#333,font-family:Inter;\n`;
     definition +=
-      "classDef decisao fill:#fff4dd,stroke:#d4a017,stroke-width:2px;\n";
+      `classDef decisao fill:${visualizacao.corDecisao},stroke:${visualizacao.corBorda},stroke-width:2px;\n`;
     definition +=
-      "classDef inicio fill:#e6f0ff,stroke:#0066cc,stroke-width:2px;\n";
+      `classDef inicio fill:${visualizacao.corInicio},stroke:${visualizacao.corBorda},stroke-width:2px;\n`;
 
     const etapas = fluxo.etapas;
     const keys = Object.keys(etapas).sort(
@@ -640,7 +671,8 @@ class UI {
         definition += `  ${id}{"${nome}"}\n`;
         definition += `  class ${id} decisao\n`;
       } else {
-        definition += `  ${id}["${nome}"]\n`;
+        const shape = { rect: `["${nome}"]`, rounded: `("${nome}")`, stadium: `(["${nome}"])`, hexagon: `{{"${nome}"}}` }[visualizacao.formato] || `["${nome}"]`;
+        definition += `  ${id}${shape}\n`;
         if (index === 0) definition += `  class ${id} inicio\n`;
       }
 
@@ -671,6 +703,43 @@ class UI {
       });
       mermaid.init(undefined, container);
     }
+  }
+
+  _getDefaultVisualizacao() {
+    return {
+      direcao: "TD",
+      formato: "rect",
+      corEtapa: "#f9f9f9",
+      corDecisao: "#fff4dd",
+      corInicio: "#e6f0ff",
+      corBorda: "#333333",
+    };
+  }
+
+  _getVisualizacaoField(id) {
+    return {
+      "mermaid-direction": "direcao",
+      "mermaid-node-shape": "formato",
+      "mermaid-color-default": "corEtapa",
+      "mermaid-color-decision": "corDecisao",
+      "mermaid-color-start": "corInicio",
+      "mermaid-color-border": "corBorda",
+    }[id];
+  }
+
+  _syncVisualizacaoControls() {
+    const fields = {
+      "mermaid-direction": "direcao",
+      "mermaid-node-shape": "formato",
+      "mermaid-color-default": "corEtapa",
+      "mermaid-color-decision": "corDecisao",
+      "mermaid-color-start": "corInicio",
+      "mermaid-color-border": "corBorda",
+    };
+    Object.entries(fields).forEach(([id, field]) => {
+      const control = document.getElementById(id);
+      if (control) control.value = this.visualizacaoEmCriacao[field];
+    });
   }
 
   renderDetalhes() {
@@ -882,6 +951,7 @@ class UI {
     this.isEditingSavedFluxo = true;
     this.currentProcess = processo;
     this.currentSubtype = subtipo;
+    this.visualizacaoEmCriacao = { ...this._getDefaultVisualizacao(), ...(fluxo.visualizacao || {}) };
 
     // Converter o mapa de etapas de volta para array para o editor
     this.etapasEmCriacao = Object.keys(fluxo.etapas)
@@ -933,7 +1003,7 @@ class UI {
         ...etapa
       }));
 
-      storage.addFluxo(processo, novoSubtipo, fluxo.descricao, etapasArray);
+      storage.addFluxo(processo, novoSubtipo, fluxo.descricao, etapasArray, fluxo.visualizacao);
       alert(`Fluxo "${subtipo}" duplicado como "${novoSubtipo}"`);
       this.renderProcessos();
       this.updateStats();
@@ -946,6 +1016,7 @@ class UI {
 
   renderNovo() {
     if (!this.isEditingSavedFluxo) {
+      this.visualizacaoEmCriacao = this._getDefaultVisualizacao();
       this.etapasEmCriacao = [
         { nome: "Etapa 1", tipo: "texto", texto: "", obs: "" },
       ];
@@ -1667,22 +1738,6 @@ class UI {
     if (menu) menu.remove();
   }
 
-  setTheme(theme) {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("seiplus_theme", "dark");
-    } else if (theme === "light") {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("seiplus_theme", "light");
-    } else if (theme === "auto") {
-      const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      isDark
-        ? document.documentElement.classList.add("dark")
-        : document.documentElement.classList.remove("dark");
-      localStorage.removeItem("seiplus_theme");
-    }
-  }
-
   openSearch() {
     document.getElementById("search-modal").style.display = "flex";
   }
@@ -1773,7 +1828,7 @@ class UI {
       return;
     }
 
-    storage.addFluxo(processo, subtipo, descricao, this.etapasEmCriacao);
+    storage.addFluxo(processo, subtipo, descricao, this.etapasEmCriacao, this.visualizacaoEmCriacao);
     alert("Fluxo salvo com sucesso!");
 
     this.isEditingSavedFluxo = false;
@@ -1928,9 +1983,5 @@ class UI {
 
 document.addEventListener("DOMContentLoaded", () => {
   window.ui = new UI();
-  const theme = localStorage.getItem("seiplus_theme");
-  if (theme === "dark") document.documentElement.classList.add("dark");
-  else if (theme === "light") document.documentElement.classList.remove("dark");
-  else if (window.matchMedia("(prefers-color-scheme: dark)").matches)
-    document.documentElement.classList.add("dark");
+  document.documentElement.classList.remove("dark");
 });

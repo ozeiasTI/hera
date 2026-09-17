@@ -1,5 +1,5 @@
 /* ============================================
-   SEIPLUS PRO v2.0 - Design System
+    SEIPLUS PRO v1.0 - Design System
    ============================================ */
 
 * {
@@ -36,16 +36,6 @@
     --radius: 12px;
     --radius-sm: 8px;
     --radius-lg: 16px;
-}
-
-html.dark {
-    --bg-primary: #1a1a1a;
-    --bg-secondary: #2d2d2d;
-    --bg-tertiary: #3d3d3d;
-    --text-primary: #ffffff;
-    --text-secondary: #cccccc;
-    --text-muted: #999999;
-    --border: #444444;
 }
 
 body {
@@ -930,95 +920,238 @@ h1, h2, h3, h4, h5, h6 {
    PÁGINA DE CONFIGURAÇÕES
    ============================================ */
 
-.config-grid {
+.config-intro {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    max-width: 1200px;
+    margin-bottom: 18px;
+    padding: 20px 24px;
+    background: #ffffff;
+    border: 1px solid #cfe2f8;
+    border-left: 5px solid var(--primary);
+    border-radius: 10px;
+}
+
+.config-eyebrow {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+}
+
+.config-intro h3 {
+    margin-bottom: 4px;
+    font-size: 22px;
+}
+
+.config-intro p {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.config-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    padding: 9px 13px;
+    color: #137333;
+    background: #e8f5e9;
+    border: 1px solid #b7dfba;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.config-status span {
+    width: 8px;
+    height: 8px;
+    background: #22a447;
+    border-radius: 50%;
+}
+
+.config-layout {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 28px;
+    grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.95fr);
+    align-items: start;
+    gap: 18px;
     max-width: 1200px;
 }
 
-.config-card {
+.config-main-column,
+.config-side-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0 24px;
     background: var(--bg-primary);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 32px;
+    border-radius: 14px;
     box-shadow: var(--shadow-sm);
-    transition: all 0.3s ease;
 }
 
-.config-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-4px);
-    border-color: var(--primary);
+.config-panel {
+    padding: 22px 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    box-shadow: none;
 }
 
-.config-card h3 {
-    font-size: 20px;
-    margin-bottom: 12px;
-    color: var(--text-primary);
-    font-weight: 700;
+.config-panel:last-child {
+    border-bottom: 0;
 }
 
-.config-card > p {
-    color: var(--text-secondary);
-    font-size: 14px;
-    margin-bottom: 24px;
-    line-height: 1.6;
+.config-panel:hover {
+    border-color: var(--border);
+    box-shadow: none;
 }
 
-.config-actions {
+.config-panel-heading {
     display: flex;
-    flex-direction: column;
+    align-items: flex-start;
     gap: 12px;
+    margin-bottom: 18px;
 }
 
-.config-actions .btn {
-    width: 100%;
-    justify-content: center;
-}
-
-.info-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.info-item {
-    display: flex;
-    justify-content: space-between;
+.config-panel-heading.compact {
     align-items: center;
-    padding: 14px 16px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 14px;
-    transition: all 0.2s ease;
+    margin-bottom: 14px;
 }
 
-.info-item:hover {
-    border-color: var(--primary);
-    background: var(--primary-light);
+.config-panel-heading h3 {
+    margin-bottom: 4px;
+    color: var(--text-primary);
+    font-size: 18px;
 }
 
-.info-item span {
+.config-panel-heading p,
+.config-panel > p {
     color: var(--text-secondary);
-    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.45;
 }
 
-.info-item strong {
-    color: var(--primary);
-    font-weight: 700;
+.config-icon {
+    display: grid;
+    flex: 0 0 38px;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    font-size: 19px;
 }
 
-.theme-buttons {
+.config-icon-blue { background: #e5f1ff; }
+.config-icon-green { background: #e8f7ee; }
+.config-icon-purple { background: #f0eaff; }
+.config-icon-slate { background: #edf1f5; }
+.config-icon-gold { background: #fff5d9; }
+.config-icon-orange { background: #fff0df; }
+
+.config-action-row {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 10px;
 }
 
-.theme-buttons .btn {
+.config-action-row .btn {
+    flex: 1 1 160px;
+}
+
+.config-api-row {
+    display: flex;
+    gap: 10px;
+}
+
+.config-api-row .input {
+    min-width: 0;
+    flex: 1;
+}
+
+.config-api-row .btn {
+    flex: 0 0 auto;
+}
+
+.config-facts {
+    display: grid;
+    gap: 8px;
+}
+
+.config-facts div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.config-facts span {
+    color: var(--text-secondary);
+}
+
+.config-facts strong {
+    color: var(--primary);
+    text-align: right;
+}
+
+.config-panel-accent {
+    border-left: 0;
+}
+
+.config-panel-accent > p {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.config-full-button {
     width: 100%;
     justify-content: center;
+}
+
+@media (max-width: 900px) {
+    .config-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .config-side-column {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 0 18px;
+    }
+}
+
+@media (max-width: 600px) {
+    .config-intro {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px;
+    }
+
+    .config-side-column {
+        display: flex;
+        padding: 0 18px;
+    }
+
+    .config-panel {
+        padding: 18px 0;
+    }
+
+    .config-api-row {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .config-api-row .btn {
+        width: 100%;
+    }
 }
 
 /* ============================================
@@ -1111,6 +1244,35 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     flex-direction: column;
     gap: 0;
+}
+
+.empty-state {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    max-width: 620px;
+    margin: 40px auto;
+    padding: 48px 24px;
+    text-align: center;
+    background: var(--bg-primary);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.empty-state-icon {
+    margin-bottom: 12px;
+    font-size: 42px;
+}
+
+.empty-state h3 {
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.empty-state p {
+    margin-bottom: 20px;
+    color: var(--text-secondary);
 }
 
 /* ============================================
@@ -1696,6 +1858,51 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: var(--shadow-sm);
 }
 
+.fluxo-controls {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px;
+    margin-bottom: 24px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.fluxo-control-group, .fluxo-color-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 180px;
+}
+
+.fluxo-controls label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.fluxo-colors {
+    display: flex;
+    gap: 8px;
+}
+
+.fluxo-colors input[type="color"] {
+    width: 32px;
+    height: 32px;
+    padding: 2px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-primary);
+    cursor: pointer;
+}
+
+@media (max-width: 700px) {
+    .fluxo-controls { align-items: stretch; }
+    .fluxo-control-group, .fluxo-color-group { min-width: 100%; }
+}
+
 .fluxo-canvas {
     width: 100%;
     display: flex;
@@ -1709,10 +1916,6 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
 }
 
-/* Ajustes para o Mermaid no modo escuro */
-html.dark .mermaid {
-    filter: invert(0.9) hue-rotate(180deg);
-}
 
 /* ============================================
    ESTILOS PARA A TELA DE CRIAÇÃO IA

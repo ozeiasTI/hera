@@ -102,7 +102,7 @@
         <div class="brand-icon"><img src="favicon.png" id="logo" /></div>
         <div class="brand-text">
           <h1>SEI PLUS</h1>
-          <span>v2.0</span>
+          <span>v1.0</span>
         </div>
       </div>
 
@@ -135,7 +135,7 @@
 
       <div class="sidebar-footer">
         <p>Desenvolvido por</p>
-        <strong>OZEIAS SOUZA</strong>
+        <strong>Ozeias Souza e Gustavo Sales</strong>
       </div>
     </aside>
 
@@ -616,7 +616,15 @@
           <div class="instrucoes-container">
             <div class="hero">
               <h1>Manual do Usuário</h1>
-              <p>Tudo o que você precisa saber para dominar o SEI PLUS v2.0</p>
+              <p>Tudo o que você precisa saber para dominar o SEI PLUS v1.0</p>
+            </div>
+
+            <div class="content-section research-note">
+              <h2 class="section-title">🎓 Projeto de Pesquisa</h2>
+              <p>
+                Este software foi desenvolvido para uma abordagem de projeto de pesquisa intitulada:
+                <strong>Desenvolvimento de ferramenta low-code para gestão de fluxos processuais no SEI com foco em soberania digital do IFRO</strong>.
+              </p>
             </div>
 
             <div class="content-section" style="border: 2px solid var(--primary)">
@@ -962,34 +970,6 @@
               </div>
             </div>
 
-            <!-- Novidades v2.0 -->
-            <div class="content-section">
-              <h2 class="section-title">🚀 Novidades da Versão 2.0</h2>
-              <div class="card-grid">
-                <div class="card">
-                  <div class="card-title">🔀 Fluxos Não Lineares</div>
-                  <p>
-                    Agora você pode criar bifurcações, loops e múltiplos caminhos independentes.
-                    Cada etapa controla explicitamente para onde o fluxo deve seguir.
-                  </p>
-                </div>
-                <div class="card">
-                  <div class="card-title">📄 Geração de PDF</div>
-                  <p>
-                    Selecione múltiplos fluxos na tela de processos e gere um documento PDF
-                    consolidado com todas as instruções e modelos de texto.
-                  </p>
-                </div>
-                <div class="card">
-                  <div class="card-title">🧠 Assistente de IA</div>
-                  <p>
-                    Use o poder do ChatGPT para encontrar fluxos e montar documentos.
-                    Configure sua chave API na aba de Configurações.
-                  </p>
-                </div>
-              </div>
-            </div>
-
             <!-- FAQ -->
             <div class="content-section">
               <h2 class="section-title">❓ Perguntas Frequentes</h2>
@@ -1000,9 +980,10 @@
                   <span>▼</span>
                 </div>
                 <div class="faq-answer">
-                  Não! Após o primeiro acesso, o SEI PLUS funciona totalmente
-                  offline. Seus dados nunca saem do seu computador, garantindo
-                  total privacidade e segurança. A internet só é necessária para o Assistente de IA.
+                  Sim. O SEI PLUS está hospedado no GitHub e precisa de
+                  internet para ser acessado. Os dados dos fluxos são mantidos
+                  localmente no navegador, e a internet também é necessária
+                  para o Assistente de IA.
                 </div>
               </div>
 
@@ -1086,9 +1067,9 @@
                 📞 Suporte e Créditos
               </h2>
               <p>
-                Desenvolvido com excelência por <strong>OZEIAS SOUZA</strong>
+                Desenvolvido com excelência por <strong>Ozeias Souza e Gustavo Sales</strong>
               </p>
-              <p>Versão 2.0 | Maio de 2026</p>
+              <p>Versão v1.0 | Setembro de 2026</p>
               <p>(69) 9 9272-6386 | ozeeiiaass@gmail.com</p>
               <div class="alert alert-success" style="justify-content: center">
                 <strong>Obrigado por usar o SEI PLUS!</strong>
@@ -1099,92 +1080,93 @@
 
         <!-- Config Page -->
         <div id="page-config" class="page">
-          <div class="config-grid">
-            <div class="config-card">
-              <h3>💾 Dados</h3>
-              <p>Gerencie seus dados salvos</p>
-              <div class="config-actions">
-                <button class="btn btn-primary" id="btn-backup">
-                  Fazer Backup
-                </button>
-                <button class="btn btn-secondary" id="btn-restore">
-                  Restaurar
-                </button>
-                <button class="btn btn-danger" id="btn-reset">
-                  Resetar Tudo
-                </button>
-              </div>
+          <div class="config-intro">
+            <div>
+              <span class="config-eyebrow">CENTRAL DO SISTEMA</span>
+              <h3>Dados, integrações e informações</h3>
+              <p>Organize seus backups, recursos de apoio e preferências em um só lugar.</p>
             </div>
+            <div class="config-status"><span></span> Dados locais ativos</div>
+          </div>
 
-            <div class="config-card">
-              <h3>📥 Importar Dados</h3>
-              <p>Importe dados de um arquivo JSON</p>
-              <div class="config-actions">
-                <button class="btn btn-primary" id="btn-import-replace">
-                  Substituir Tudo
-                </button>
-                <button class="btn btn-secondary" id="btn-import-merge">
-                  Adicionar aos Existentes
-                </button>
-              </div>
-            </div>
-
-            <div class="config-card">
-              <h3>📊 Informações</h3>
-              <div class="info-list">
-                <div class="info-item">
-                  <span>Versão:</span>
-                  <strong>2.0</strong>
+          <div class="config-layout">
+            <div class="config-main-column">
+              <section class="config-panel config-panel-data">
+                <div class="config-panel-heading">
+                  <div class="config-icon config-icon-blue">💾</div>
+                  <div>
+                    <h3>Dados do sistema</h3>
+                    <p>Faça cópias de segurança ou restaure seus fluxos salvos.</p>
+                  </div>
                 </div>
-                <div class="info-item">
-                  <span>Armazenamento:</span>
-                  <strong id="info-storage">localStorage</strong>
+                <div class="config-action-row">
+                  <button class="btn btn-primary" id="btn-backup">Fazer Backup</button>
+                  <button class="btn btn-secondary" id="btn-restore">Restaurar</button>
+                  <button class="btn btn-danger" id="btn-reset">Resetar Tudo</button>
                 </div>
-                <div class="info-item">
-                  <span>Desenvolvido por:</span>
-                  <strong>OZEIAS SOUZA</strong>
+              </section>
+
+              <section class="config-panel">
+                <div class="config-panel-heading">
+                  <div class="config-icon config-icon-green">📥</div>
+                  <div>
+                    <h3>Importar dados</h3>
+                    <p>Adicione modelos de um arquivo JSON ou substitua a biblioteca atual.</p>
+                  </div>
                 </div>
-              </div>
+                <div class="config-action-row">
+                  <button class="btn btn-primary" id="btn-import-merge">Adicionar aos Existentes</button>
+                  <button class="btn btn-secondary" id="btn-import-replace">Substituir Tudo</button>
+                </div>
+              </section>
+
+              <section class="config-panel config-panel-api">
+                <div class="config-panel-heading">
+                  <div class="config-icon config-icon-purple">🔑</div>
+                  <div>
+                    <h3>API ChatGPT</h3>
+                    <p>Ative o assistente inteligente para localizar fluxos e montar documentos.</p>
+                  </div>
+                </div>
+                <div class="config-api-row">
+                  <input type="password" id="openai-api-key" class="input" placeholder="Cole sua chave OpenAI (sk-...)" />
+                  <button class="btn btn-primary" id="btn-save-api-key">Salvar Chave</button>
+                </div>
+              </section>
             </div>
 
-            <div class="config-card">
-              <h3>🎨 Tema</h3>
-              <p>Escolha o tema da aplicação</p>
-              <div class="theme-buttons">
-                <button class="btn btn-sm" id="btn-theme-light">
-                  ☀️ Claro
-                </button>
-                <button class="btn btn-sm" id="btn-theme-dark">
-                  🌙 Escuro
-                </button>
-                <button class="btn btn-sm" id="btn-theme-auto">
-                  🔄 Auto
-                </button>
-              </div>
-            </div>
+            <aside class="config-side-column">
+              <section class="config-panel">
+                <div class="config-panel-heading compact">
+                  <div class="config-icon config-icon-slate">📊</div>
+                  <h3>Informações</h3>
+                </div>
+                <div class="config-facts">
+                  <div><span>Versão</span><strong>v1.0</strong></div>
+                  <div><span>Armazenamento</span><strong id="info-storage">localStorage</strong></div>
+                  <div><span>Criadores</span><strong>Ozeias Souza e Gustavo Sales</strong></div>
+                </div>
+              </section>
 
-            <div class="config-card">
-              <h3>🔑 API ChatGPT</h3>
-              <p>Configure sua chave para a IA</p>
-              <div class="form-group">
-                <input type="password" id="openai-api-key" class="input" placeholder="sk-..." />
-              </div>
-              <div class="config-actions">
-                <button class="btn btn-primary" id="btn-save-api-key">
-                  Salvar Chave
-                </button>
-              </div>
-            </div>
+              <section class="config-panel config-panel-accent">
+                <div class="config-panel-heading compact">
+                  <div class="config-icon config-icon-gold">🎓</div>
+                  <h3>Projeto de pesquisa</h3>
+                </div>
+                <p>Desenvolvimento de ferramenta low-code para gestão de fluxos processuais no SEI com foco em soberania digital do IFRO.</p>
+              </section>
 
-            <div class="config-card">
-              <h3>⚡ Autocomplete</h3>
-              <p>Gerencie atalhos para preenchimento rápido</p>
-              <div class="config-actions">
-                <button class="btn btn-primary" onclick="ui.goToPage('autocomplete')">
-                  Gerenciar Atalhos
-                </button>
-              </div>
-            </div>
+              <section class="config-panel">
+                <div class="config-panel-heading compact">
+                  <div class="config-icon config-icon-orange">⚡</div>
+                  <div>
+                    <h3>Autocomplete</h3>
+                    <p>Atalhos para preenchimento rápido.</p>
+                  </div>
+                </div>
+                <button class="btn btn-primary config-full-button" onclick="ui.goToPage('autocomplete')">Gerenciar Atalhos</button>
+              </section>
+            </aside>
           </div>
         </div>
 
@@ -1325,6 +1307,36 @@
             </div>
             <!-- View Fluxograma -->
             <div id="view-fluxo-container" class="view-container">
+              <div class="fluxo-controls" aria-label="Opções do fluxograma">
+                <div class="fluxo-control-group">
+                  <label for="mermaid-direction">Estrutura</label>
+                  <select id="mermaid-direction" class="select">
+                    <option value="TD">Vertical (cima para baixo)</option>
+                    <option value="LR">Horizontal (esquerda para direita)</option>
+                    <option value="BT">Vertical (baixo para cima)</option>
+                    <option value="RL">Horizontal (direita para esquerda)</option>
+                  </select>
+                </div>
+                <div class="fluxo-control-group">
+                  <label for="mermaid-node-shape">Formato das etapas</label>
+                  <select id="mermaid-node-shape" class="select">
+                    <option value="rect">Retângulo</option>
+                    <option value="rounded">Arredondado</option>
+                    <option value="stadium">Pílula</option>
+                    <option value="hexagon">Hexágono</option>
+                  </select>
+                </div>
+                <div class="fluxo-color-group">
+                  <label>Paleta</label>
+                  <div class="fluxo-colors">
+                    <label title="Cor das etapas"><input type="color" id="mermaid-color-default" aria-label="Cor das etapas"></label>
+                    <label title="Cor das decisões"><input type="color" id="mermaid-color-decision" aria-label="Cor das decisões"></label>
+                    <label title="Cor da primeira etapa"><input type="color" id="mermaid-color-start" aria-label="Cor da primeira etapa"></label>
+                    <label title="Cor das bordas"><input type="color" id="mermaid-color-border" aria-label="Cor das bordas"></label>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-secondary" id="btn-reset-mermaid-style">Restaurar padrão</button>
+              </div>
               <button id="btn-download-png" class="btn btn-primary"
                 style="width: 200px; text-align: center; align-items: center">
                 📥 Baixar PNG

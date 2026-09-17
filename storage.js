@@ -27,72 +27,7 @@ class Storage {
     }
 
     getDefaultData() {
-        return {
-            "Doação": {
-                "Consumo": {
-                    descricao: "Fluxo para doação de itens de consumo",
-                    inicio: "etapa_0",
-                    etapas: {
-                        etapa_0: {
-                            nome: "Termo de Abertura",
-                            tipo: "texto",
-                            icone: "📝",
-                            texto: `TERMO DE ABERTURA DE PROCESSO ELETRÔNICO\n\nProcesso sei nº {numero_processo}\n\nINTERESSADO(s): Campus Colorado do Oeste\nASSUNTO: Fornecimento de Alimentação [ {item} ] {destinatario}\n\nNesta data procedo à abertura do presente expediente administrativo, originado do Gabinete, para Fornecimento de Alimentação [ {item} ] para {destinatario}\n\nO presente é aberto com a juntada sucessiva do(s) seguinte(s) documento(s), o(s) qual(is) passa(m) a constituir os presentes autos.:\nI. Termo de abertura ({numero_termo});\nII. Anexo Ofício de solicitação ({numero_oficio});\nIII. Demais documentos pertinentes ao objeto desse processo.\n\n{data}\n{nome}\n{cargo}`,
-                            obs: "Preencha os campos entre {} com as informações específicas",
-                            proximo: "etapa_1"
-                        },
-                        etapa_1: {
-                            nome: "Anexar Ofício",
-                            tipo: "anexo",
-                            icone: "📎",
-                            obs: "Anexe o ofício escaneado recebido via e-mail",
-                            proximo: "etapa_2"
-                        },
-                        etapa_2: {
-                            nome: "Despacho do Gabinete",
-                            tipo: "texto",
-                            icone: "📋",
-                            texto: `Encaminhe-se para: DEPARTAMENTO DE INTEGRAÇÃO\n\nEncaminhe-se o presente ofício ao DIEPE, para análise quanto à viabilidade da doação solicitada.\n\n{data}\n{nome}\n{cargo}`,
-                            obs: "Despacho para encaminhar ao setor responsável",
-                            proximo: "etapa_3"
-                        },
-                        etapa_3: {
-                            nome: "Resposta do DIEPE",
-                            tipo: "anexo",
-                            icone: "📨",
-                            obs: "Aguardar e anexar o memorando de resposta",
-                            proximo: "etapa_4"
-                        },
-                        etapa_4: {
-                            nome: "Análise de Viabilidade",
-                            tipo: "decisao",
-                            icone: "🔀",
-                            pergunta: "O DIEPE confirmou a viabilidade?",
-                            opcoes: {
-                                "Sim": "etapa_5",
-                                "Não": "etapa_6"
-                            }
-                        },
-                        etapa_5: {
-                            nome: "Ofício de Aprovação",
-                            tipo: "texto",
-                            icone: "✅",
-                            texto: `Ofício nº {numero_oficio}/2025/COL\n\nPrezados,\n\nEm atenção ao Ofício nº {numero_oficio_solicitante}, informamos que o Campus Colorado do Oeste dispõe do quantitativo solicitado.\n\nAtenciosamente,\n{nome}\n{cargo}`,
-                            obs: "Ofício informando aprovação",
-                            proximo: null
-                        },
-                        etapa_6: {
-                            nome: "Ofício de Negação",
-                            tipo: "texto",
-                            icone: "❌",
-                            texto: `Ofício nº {numero_oficio}/2025/COL\n\nPrezados,\n\nEm atenção ao Ofício nº {numero_oficio_solicitante}, informamos que não há viabilidade para o atendimento no momento.\n\nAtenciosamente,\n{nome}\n{cargo}`,
-                            obs: "Ofício informando indisponibilidade",
-                            proximo: null
-                        }
-                    }
-                }
-            }
-        };
+        return {};
     }
 
     getAllProcessos() {
@@ -110,7 +45,17 @@ class Storage {
         return data[processo]?.[subtipo] || null;
     }
 
-    addFluxo(processo, subtipo, descricao, etapas) {
+    updateVisualizacao(processo, subtipo, visualizacao) {
+        const data = this.getAllProcessos();
+        const fluxo = data[processo]?.[subtipo];
+        if (!fluxo) return false;
+
+        fluxo.visualizacao = { ...visualizacao };
+        this.set(data);
+        return true;
+    }
+
+    addFluxo(processo, subtipo, descricao, etapas, visualizacao = null) {
         const data = this.getAllProcessos();
 
         if (!data[processo]) {
@@ -144,7 +89,8 @@ class Storage {
         data[processo][subtipo] = {
             descricao: descricao,
             inicio: 'etapa_0',
-            etapas: etapasMap
+            etapas: etapasMap,
+            ...(visualizacao && { visualizacao })
         };
 
         this.set(data);
