@@ -754,8 +754,9 @@
                     <p>
                       Preencha o <strong>Nome do Processo</strong> (ex:
                       Licitação), o <strong>Subtipo</strong> (ex: Pregão
-                      Eletrônico) e uma <strong>Descrição</strong> opcional
-                      que ajude a identificar o objetivo do fluxo.
+                      Eletrônico), a <strong>Descrição</strong> e o
+                      <strong>Prazo do processo</strong>, que vale para o
+                      fluxo inteiro.
                     </p>
                   </div>
                 </div>
@@ -777,9 +778,11 @@
                     <h3>Configurar as Etapas</h3>
                     <p>
                       Para cada etapa, defina o nome, o conteúdo e o tipo. Se
-                      for uma etapa de <strong>Decisão</strong> ou
-                      <strong>Triagem</strong>, não esqueça de configurar as
-                      opções de resposta e seus destinos.
+                      for uma etapa de <strong>Decisão</strong>, configure
+                      quantos caminhos forem necessários, seus destinos e a
+                      cor de cada opção. Na <strong>Triagem de
+                        Solicitação</strong>, cadastre itens, detalhes,
+                      obrigatoriedade, observações e a próxima etapa.
                     </p>
                   </div>
                 </div>
@@ -823,14 +826,14 @@
                     <tr>
                       <td>Decisão</td>
                       <td>🔀</td>
-                      <td>Pergunta de Sim/Não que ramifica o fluxo.</td>
-                      <td>Pergunta, Próximas Etapas</td>
+                      <td>Ramifica o fluxo em vários caminhos.</td>
+                      <td>Pergunta, destinos e cor por opção</td>
                     </tr>
                     <tr>
                       <td>Triagem</td>
                       <td>🔍</td>
-                      <td>Múltiplas opções de escolha para o usuário.</td>
-                      <td>Pergunta, Lista de Opções</td>
+                      <td>Conferência estruturada de uma solicitação ou documento.</td>
+                      <td>Descrição, itens, detalhes e obrigatoriedade</td>
                     </tr>
                     <tr>
                       <td>Link</td>
@@ -856,15 +859,27 @@
                       <td>Lista de verificação de itens obrigatórios.</td>
                       <td>Itens da Lista</td>
                     </tr>
+                    <tr>
+                      <td>Contatos</td>
+                      <td>👥</td>
+                      <td>Pessoas e setores relacionados ao processo.</td>
+                      <td>Nome, e-mail, telefone e setor</td>
+                    </tr>
+                    <tr>
+                      <td>Reunião</td>
+                      <td>📅</td>
+                      <td>Agendamento de alinhamentos e compromissos.</td>
+                      <td>Data, local, participantes e pauta</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
 
               <div class="alert alert-warning">
-                <strong>⚠️ Dica de Especialista:</strong> Ao usar Decisão ou
-                Triagem, certifique-se de que todas as opções levam a uma
-                etapa válida ou ao "Fim do Fluxo" para evitar erros no
-                fluxograma.
+                <strong>⚠️ Dica de Especialista:</strong> Toda opção de
+                Decisão deve apontar para uma etapa válida ou para o fim do
+                fluxo. A Triagem avança pela opção <strong>Próxima
+                  Etapa</strong>.
               </div>
             </div>
 
@@ -924,6 +939,21 @@
                     Perfeito para entender ramificações e decisões complexas.
                   </p>
                 </div>
+                <div class="card">
+                  <div class="card-title">🧭 Modo Linha do Tempo</div>
+                  <p>
+                    Exibe as etapas em sequência e permite abrir rapidamente
+                    cada detalhe do processo.
+                  </p>
+                </div>
+              </div>
+
+              <div class="alert alert-info">
+                <strong>🔗 Conexões:</strong> no editor, use as setas para
+                mover etapas. As conexões de etapas e decisões são atualizadas
+                automaticamente. Dentro de uma etapa, use
+                <strong>Etapa anterior</strong> para definir quem chega até
+                ela. Cada opção de decisão também pode receber uma cor própria.
               </div>
 
               <div class="alert alert-info">

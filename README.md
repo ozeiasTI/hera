@@ -30,20 +30,27 @@ A proposta é simples: permitir que qualquer usuário consiga estruturar process
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 ### 🧩 Criação de Fluxos
 
 - Interface simples e intuitiva
-- Criação de etapas encadeadas
-- Definição de sequência lógica
+- Criação de etapas encadeadas e ramificadas
+- Prazo geral para o processo
+- Reordenação das etapas com atualização automática das conexões
 
 ### 🧱 Tipos de Etapas
 
-- 📝 **Texto** → documentos com templates
-- 📎 **Anexo** → upload de arquivos
-- ✍️ **Assinatura** → aprovação digital
-- 📋 **Formulário** → coleta de dados estruturados
+- 📝 **Texto / Modelo** → documentos e instruções com editor rico
+- 📎 **Anexo de Documento** → indicação de arquivo a juntar
+- 🔀 **Decisão** → vários caminhos, destinos e cores por opção
+- 🔍 **Triagem de Solicitação** → itens de análise, detalhes, obrigatoriedade, observações e avanço
+- 🔗 **Link Externo** → acesso a recursos externos
+- ⚠️ **Alerta / Aviso** → mensagens com nível de severidade
+- 📧 **E-mail** → modelos de comunicação
+- 👥 **Contatos** → pessoas e setores relacionados
+- 📅 **Reunião / Agendamento** → data, local e participantes
+- ✅ **Checklist de Documentos** → conferência de itens
 
 ### 📚 Gerenciamento
 
@@ -53,9 +60,10 @@ A proposta é simples: permitir que qualquer usuário consiga estruturar process
 
 ### 📊 Visualização
 
-- Geração automática de fluxogramas
-- Uso de diagramas com Mermaid
-- Visual claro da sequência do processo
+- Modo Lista para execução detalhada
+- Modo Fluxograma com Mermaid e cores configuráveis
+- Modo Linha do Tempo para leitura sequencial
+- Exportação do fluxograma em PNG
 
 ### 💾 Dados e Segurança
 
@@ -63,6 +71,9 @@ A proposta é simples: permitir que qualquer usuário consiga estruturar process
 - Backup completo em JSON
 - Restauração de dados
 - Importação (mesclar ou substituir)
+
+O arquivo `fluxo-demo-completo.json` contém um exemplo importável com todos os
+tipos de etapa, múltiplas conexões, decisões coloridas e triagens.
 
 ### 🔄 Compartilhamento
 

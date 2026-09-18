@@ -1,0 +1,292 @@
+{
+    "Visita Institucional": {
+        "Recebimento e Organizacao": {
+            "descricao": "Fluxo hipotetico completo para receber, analisar e executar uma visita institucional ao campus.",
+            "prazo": "Ate 15 dias uteis",
+            "inicio": "etapa_0",
+            "visualizacao": {
+                "direcao": "LR",
+                "formato": "rounded",
+                "corEtapa": "#f8fafc",
+                "corDecisao": "#fff3cd",
+                "corInicio": "#d1e7dd",
+                "corBorda": "#334155"
+            },
+            "etapas": {
+                "etapa_0": {
+                    "nome": "Receber oficio da visita",
+                    "tipo": "anexo",
+                    "icone": "📎",
+                    "obs": "Anexe o oficio escaneado e confira se todas as paginas foram recebidas.",
+                    "proximo": "etapa_1"
+                },
+                "etapa_1": {
+                    "nome": "Triar dados da solicitacao",
+                    "tipo": "triagem",
+                    "icone": "🔍",
+                    "descricaoTriagem": "Conferir a solicitacao de visita antes da abertura do processo.",
+                    "observacoesTriagem": "Validar datas, publico, setor visitado, alimentacao e necessidade de transporte.",
+                    "itensTriagem": [
+                        {
+                            "titulo": "Data pretendida",
+                            "detalhes": "Registrar dia e horario de chegada e saida.",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Setor ou local a visitar",
+                            "detalhes": "Identificar laboratorio, unidade ou setor responsavel.",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Publico presente",
+                            "detalhes": "Quantidade de visitantes, faixa etaria e instituicao.",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Alimentacao",
+                            "detalhes": "Verificar se o grupo fara refeicao no campus.",
+                            "obrigatorio": false
+                        },
+                        {
+                            "titulo": "Transporte",
+                            "detalhes": "Registrar se sera necessario buscar ou levar visitantes.",
+                            "obrigatorio": false
+                        }
+                    ],
+                    "proximo": "etapa_2"
+                },
+                "etapa_2": {
+                    "nome": "Termo de abertura",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Termo de Abertura</h2><p>Registra-se a abertura do processo referente a visita institucional solicitada.</p><p><strong>Data:</strong> ____________________<br><strong>Setor:</strong> ____________________<br><strong>Responsavel:</strong> ____________________</p>",
+                    "obs": "Preencha os campos do modelo com os dados confirmados na triagem.",
+                    "proximo": "etapa_3"
+                },
+                "etapa_3": {
+                    "nome": "Conferir documentacao",
+                    "tipo": "checklist",
+                    "icone": "✅",
+                    "itens": [
+                        "Oficio ou solicitacao assinado",
+                        "Lista de visitantes",
+                        "Autorizacao do setor visitado",
+                        "Informacoes de contato do solicitante"
+                    ],
+                    "proximo": "etapa_4"
+                },
+                "etapa_4": {
+                    "nome": "Documentacao esta completa?",
+                    "tipo": "decisao",
+                    "icone": "🔀",
+                    "pergunta": "A documentacao recebida permite continuar o atendimento?",
+                    "opcoes": {
+                        "Sim": {
+                            "destino": "etapa_7",
+                            "cor": "#198754"
+                        },
+                        "Nao": {
+                            "destino": "etapa_5",
+                            "cor": "#dc3545"
+                        },
+                        "Parcialmente": {
+                            "destino": "etapa_6",
+                            "cor": "#fd7e14"
+                        }
+                    },
+                    "proximo": null
+                },
+                "etapa_5": {
+                    "nome": "Solicitar complementacao",
+                    "tipo": "email",
+                    "icone": "📧",
+                    "modelo": "Assunto: Complementacao de informacoes sobre a visita\n\nPrezado solicitante, precisamos dos documentos e dados indicados para concluir a analise da visita.",
+                    "obs": "Enviar ao solicitante e aguardar o retorno.",
+                    "proximo": "etapa_0"
+                },
+                "etapa_6": {
+                    "nome": "Registrar pendencias",
+                    "tipo": "alerta",
+                    "icone": "⚠️",
+                    "mensagem": "A solicitacao possui pendencias. Registre o que falta e acompanhe o retorno antes de autorizar a visita.",
+                    "nivel": "warning",
+                    "proximo": "etapa_5"
+                },
+                "etapa_7": {
+                    "nome": "Consultar setor visitado",
+                    "tipo": "contato",
+                    "icone": "👥",
+                    "contatos": [
+                        {
+                            "nome": "Coordenacao do setor",
+                            "email": "coordenacao@campus.edu.br",
+                            "telefone": "(00) 0000-0000",
+                            "cargo": "Coordenador",
+                            "departamento": "Setor visitado"
+                        },
+                        {
+                            "nome": "Responsavel pela visita",
+                            "email": "visitas@campus.edu.br",
+                            "telefone": "(00) 0000-0001",
+                            "cargo": "Assistente",
+                            "departamento": "Cerimonial"
+                        }
+                    ],
+                    "proximo": "etapa_8"
+                },
+                "etapa_8": {
+                    "nome": "Agendar reuniao de alinhamento",
+                    "tipo": "reuniao",
+                    "icone": "📅",
+                    "dataHora": "A definir com o setor visitado",
+                    "local": "Sala de reunioes ou videoconferencia",
+                    "participantes": "Setor visitado, cerimonial e solicitante",
+                    "descricao": "Confirmar roteiro, recepcao, acessibilidade e responsabilidades.",
+                    "proximo": "etapa_9"
+                },
+                "etapa_9": {
+                    "nome": "Visita exige transporte?",
+                    "tipo": "decisao",
+                    "icone": "🔀",
+                    "pergunta": "O grupo precisa de transporte institucional?",
+                    "opcoes": {
+                        "Sim": {
+                            "destino": "etapa_10",
+                            "cor": "#0d6efd"
+                        },
+                        "Nao": {
+                            "destino": "etapa_12",
+                            "cor": "#6c757d"
+                        },
+                        "A confirmar": {
+                            "destino": "etapa_11",
+                            "cor": "#e83e8c"
+                        }
+                    },
+                    "proximo": null
+                },
+                "etapa_10": {
+                    "nome": "Solicitar transporte",
+                    "tipo": "link",
+                    "icone": "🔗",
+                    "url": "https://exemplo.edu.br/transportes/solicitacao",
+                    "obs": "Acesse o formulario institucional de transporte e anexe o comprovante ao processo.",
+                    "proximo": "etapa_12"
+                },
+                "etapa_11": {
+                    "nome": "Confirmar transporte com solicitante",
+                    "tipo": "triagem",
+                    "icone": "🔍",
+                    "descricaoTriagem": "Confirmar origem, destino, quantidade de pessoas e horario necessario.",
+                    "observacoesTriagem": "Se nao houver resposta, registrar a tentativa de contato e manter o atendimento pendente.",
+                    "itensTriagem": [
+                        {
+                            "titulo": "Origem e destino",
+                            "detalhes": "Endereco de embarque e retorno.",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Quantidade de passageiros",
+                            "detalhes": "Comparar com a lista de visitantes.",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Horario do transporte",
+                            "detalhes": "Considerar ida e retorno.",
+                            "obrigatorio": true
+                        }
+                    ],
+                    "proximo": "etapa_12"
+                },
+                "etapa_12": {
+                    "nome": "Preparar comunicacao aos participantes",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<p><strong>Orientacoes para a visita</strong></p><ul><li>Chegar com antecedencia.</li><li>Seguir as regras de acesso e seguranca.</li><li>Informar necessidades especiais previamente.</li></ul>",
+                    "obs": "Enviar a comunicacao somente depois de confirmar data, setor e logistica.",
+                    "proximo": "etapa_13"
+                },
+                "etapa_13": {
+                    "nome": "Avisar equipe de recepcao",
+                    "tipo": "email",
+                    "icone": "📧",
+                    "modelo": "Assunto: Visita institucional confirmada\n\nData, horario, setor, quantidade de visitantes e orientacoes de recepcao.",
+                    "obs": "Copiar o setor visitado e a equipe de seguranca.",
+                    "proximo": "etapa_14"
+                },
+                "etapa_14": {
+                    "nome": "Roteiro da visita",
+                    "tipo": "checklist",
+                    "icone": "✅",
+                    "itens": [
+                        "Recepcao confirmada",
+                        "Crachas ou identificacao preparados",
+                        "Sala e equipamentos reservados",
+                        "Acessibilidade verificada",
+                        "Alimentacao confirmada"
+                    ],
+                    "proximo": "etapa_15"
+                },
+                "etapa_15": {
+                    "nome": "Alimentacao sera necessaria?",
+                    "tipo": "decisao",
+                    "icone": "🔀",
+                    "pergunta": "O grupo fara refeicao no campus?",
+                    "opcoes": {
+                        "Sim": {
+                            "destino": "etapa_16",
+                            "cor": "#20c997"
+                        },
+                        "Nao": {
+                            "destino": "etapa_17",
+                            "cor": "#6c757d"
+                        },
+                        "Cortesia externa": {
+                            "destino": "etapa_18",
+                            "cor": "#e83e8c"
+                        }
+                    },
+                    "proximo": null
+                },
+                "etapa_16": {
+                    "nome": "Organizar refeicao",
+                    "tipo": "anexo",
+                    "icone": "📎",
+                    "obs": "Anexe autorizacao, quantidade de refeicoes e comprovante de reserva.",
+                    "proximo": "etapa_17"
+                },
+                "etapa_17": {
+                    "nome": "Registrar aviso operacional",
+                    "tipo": "alerta",
+                    "icone": "⚠️",
+                    "mensagem": "Confirme novamente horario, recepcao e responsaveis no dia anterior a visita.",
+                    "nivel": "info",
+                    "proximo": "etapa_19"
+                },
+                "etapa_18": {
+                    "nome": "Confirmar cortesia externa",
+                    "tipo": "contato",
+                    "icone": "👥",
+                    "contatos": [
+                        {
+                            "nome": "Instituicao visitante",
+                            "email": "contato@instituicao.edu.br",
+                            "telefone": "(00) 0000-0002",
+                            "cargo": "Responsavel pelo grupo",
+                            "departamento": "Visitante"
+                        }
+                    ],
+                    "proximo": "etapa_19"
+                },
+                "etapa_19": {
+                    "nome": "Encerrar processo da visita",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Registro de Encerramento</h2><p>A visita foi realizada ou cancelada conforme os registros deste processo.</p><p><strong>Resultado:</strong> ____________________</p>",
+                    "obs": "Inclua fotos, relatorio ou documentos finais antes de concluir.",
+                    "proximo": null
+                }
+            }
+        }
+    }
+}
