@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="SEI PLUS - Sistema Avançado de Fluxos Processuais" />
-  <title>SEI PLUS - Fluxos Processuais</title>
+  <meta name="description" content="HERA - Sistema Avançado de Fluxos Processuais" />
+  <title>HERA - Fluxos Processuais</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
@@ -101,7 +101,7 @@
       <div class="sidebar-brand">
         <div class="brand-icon"><img src="favicon.png" id="logo" /></div>
         <div class="brand-text">
-          <h1>SEI PLUS</h1>
+          <h1>HERA</h1>
           <span>v1.0</span>
         </div>
       </div>
@@ -127,6 +127,10 @@
           <span class="icon">📖</span>
           <span class="label">Instruções</span>
         </a>
+        <a href="#" class="menu-item" data-page="hera">
+          <span class="icon">🌱</span>
+          <span class="label">HERA</span>
+        </a>
         <a href="#" class="menu-item" data-page="config">
           <span class="icon">⚙️</span>
           <span class="label">Configurações</span>
@@ -144,7 +148,7 @@
       <!-- Header -->
       <header class="header">
         <div class="header-content">
-          <h2 id="page-title">Bem-vindo ao SEI PLUS</h2>
+          <h2 id="page-title">Bem-vindo ao HERA</h2>
           <p id="page-subtitle">
             Gerencie seus fluxos processuais com facilidade
           </p>
@@ -172,7 +176,7 @@
         <!-- Home Page -->
         <div id="page-home" class="page active">
           <div class="welcome-section">
-            <img src="logo.png" alt="SEI PLUS Logo" class="welcome-logo" />
+            <img src="logo.png" alt="HERA Logo" class="welcome-logo" />
             <div class="quick-actions">
               <button class="btn btn-primary btn-lg" id="btn-novo-fluxo">
                 ✨ Criar Novo Fluxo
@@ -621,7 +625,7 @@
           <div class="instrucoes-container">
             <div class="hero">
               <h1>Manual do Usuário</h1>
-              <p>Tudo o que você precisa saber para dominar o SEI PLUS v1.0</p>
+              <p>Tudo o que você precisa saber para dominar o HERA v1.0</p>
             </div>
 
             <div class="content-section research-note">
@@ -634,16 +638,16 @@
             </div>
 
             <div class="content-section" style="border: 2px solid var(--primary)">
-              <h2 class="section-title">🧩 Extensão Oficial do SEI PLUS</h2>
+              <h2 class="section-title">🧩 Extensão Oficial do HERA</h2>
 
               <div class="alert alert-warning">
                 <strong>⚠️ Atenção:</strong> A extensão funciona apenas em
-                conjunto com o sistema SEI PLUS aberto neste site.
+                conjunto com o sistema HERA aberto neste site.
               </div>
 
               <p style="font-size: 1.1rem; margin-bottom: 20px">
                 Para uma experiência completa e mais produtiva, recomendamos
-                instalar a extensão oficial do SEI PLUS no navegador. Com ela,
+                instalar a extensão oficial do HERA no navegador. Com ela,
                 você poderá acessar seus fluxos de forma rápida, visualizar em
                 lista ou fluxograma e até exportar como imagem.
               </p>
@@ -701,7 +705,7 @@
             <div class="content-section">
               <h2 class="section-title">🚀 Primeiros Passos</h2>
               <p>
-                O <strong>SEI PLUS</strong> é um sistema avançado projetado
+                O <strong>HERA</strong> é um sistema avançado projetado
                 para facilitar a criação, gerenciamento e visualização de
                 fluxos processuais complexos. Com uma interface intuitiva e
                 recursos poderosos como o autocomplete dinâmico e visualização
@@ -918,7 +922,7 @@
             <div class="content-section">
               <h2 class="section-title">👁️ Visualização e Exportação</h2>
               <p>
-                O SEI PLUS oferece flexibilidade total na hora de consultar
+                O HERA oferece flexibilidade total na hora de consultar
                 seus processos:
               </p>
               <br />
@@ -967,7 +971,7 @@
             <div class="content-section">
               <h2 class="section-title">💾 Segurança dos Dados</h2>
               <p>
-                Como o SEI PLUS funciona localmente, você é o dono dos seus
+                Como o HERA funciona localmente, você é o dono dos seus
                 dados. Gerencie-os na aba de Configurações:
               </p>
 
@@ -1016,7 +1020,7 @@
                   <span>▼</span>
                 </div>
                 <div class="faq-answer">
-                  Sim. O SEI PLUS está hospedado no GitHub e precisa de
+                  Sim. O HERA está hospedado no GitHub e precisa de
                   internet para ser acessado. Os dados dos fluxos são mantidos
                   localmente no navegador, e a internet também é necessária
                   para o Assistente de IA.
@@ -1108,8 +1112,311 @@
               <p>Versão v1.0 | Setembro de 2026</p>
               <p>(69) 9 9272-6386 | ozeeiiaass@gmail.com</p>
               <div class="alert alert-success" style="justify-content: center">
-                <strong>Obrigado por usar o SEI PLUS!</strong>
+                <strong>Obrigado por usar o HERA!</strong>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- HERA Page -->
+        <div id="page-hera" class="page">
+          <style>
+            .hera-page {
+              color: var(--text-primary);
+              line-height: 1.7;
+            }
+
+            .hera-hero {
+              background: linear-gradient(135deg, rgba(18, 110, 71, 0.12), rgba(0, 102, 204, 0.12)),
+                linear-gradient(135deg, #f6fff9 0%, #edf6ff 100%);
+              border: 1px solid rgba(16, 185, 129, 0.2);
+              border-radius: 28px;
+              padding: 2.5rem;
+              margin-bottom: 2rem;
+              box-shadow: var(--shadow-lg);
+              position: relative;
+              overflow: hidden;
+            }
+
+            .hera-hero::before,
+            .hera-hero::after {
+              content: "";
+              position: absolute;
+              border-radius: 50%;
+              background: rgba(60, 179, 113, 0.08);
+            }
+
+            .hera-hero::before {
+              width: 220px;
+              height: 220px;
+              right: -60px;
+              top: -60px;
+            }
+
+            .hera-hero::after {
+              width: 180px;
+              height: 180px;
+              left: -40px;
+              bottom: -30px;
+            }
+
+            .hera-brand {
+              display: flex;
+              align-items: center;
+              gap: 1.25rem;
+              position: relative;
+              z-index: 1;
+            }
+
+            .hera-brand-badge {
+              width: 90px;
+              height: 90px;
+              border-radius: 24px;
+              display: grid;
+              place-items: center;
+              font-size: 2.6rem;
+              background: linear-gradient(135deg, #1d9d67, #0f6f46);
+              color: white;
+              box-shadow: 0 18px 40px rgba(16, 185, 129, 0.25);
+            }
+
+            .hera-brand h1 {
+              font-size: clamp(2.2rem, 4vw, 4rem);
+              margin: 0;
+              color: #114d35;
+            }
+
+            .hera-brand p {
+              margin: 0.5rem 0 0;
+              font-size: 1.1rem;
+              color: var(--text-secondary);
+            }
+
+            .hera-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+              gap: 1.5rem;
+              margin: 2rem 0;
+            }
+
+            .hera-card {
+              background: var(--bg-primary);
+              border: 1px solid var(--border);
+              border-radius: 22px;
+              padding: 1.5rem;
+              box-shadow: var(--shadow-md);
+            }
+
+            .hera-card .icon {
+              font-size: 2rem;
+              margin-bottom: 0.75rem;
+            }
+
+            .hera-card h3 {
+              font-size: 1.3rem;
+              margin-bottom: 0.6rem;
+              color: var(--text-primary);
+            }
+
+            .hera-card p {
+              margin: 0;
+              color: var(--text-secondary);
+            }
+
+            .hera-branch {
+              display: grid;
+              grid-template-columns: 1.2fr 1fr;
+              gap: 2rem;
+              align-items: center;
+              margin: 2rem 0;
+            }
+
+            .hera-figure {
+              background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(59, 130, 246, 0.06));
+              border: 1px solid rgba(34, 197, 94, 0.2);
+              border-radius: 26px;
+              padding: 2rem;
+              min-height: 330px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              position: relative;
+            }
+
+            .hera-tree {
+              position: relative;
+              width: 100%;
+              max-width: 420px;
+              height: 250px;
+            }
+
+            .hera-trunk {
+              position: absolute;
+              left: 50%;
+              bottom: 0;
+              width: 12px;
+              height: 110px;
+              transform: translateX(-50%);
+              background: linear-gradient(180deg, #7c4a2e, #4f2f1d);
+              border-radius: 12px;
+            }
+
+            .hera-branch-line {
+              position: absolute;
+              background: linear-gradient(90deg, #5cbf74, #8ad7a4);
+              border-radius: 999px;
+              box-shadow: 0 0 18px rgba(92, 191, 116, 0.3);
+            }
+
+            .hera-branch-line.one { width: 140px; height: 8px; left: 48%; bottom: 96px; transform: rotate(-26deg); }
+            .hera-branch-line.two { width: 140px; height: 8px; right: 18%; bottom: 96px; transform: rotate(26deg); }
+            .hera-branch-line.three { width: 120px; height: 8px; left: 34%; bottom: 142px; transform: rotate(-18deg); }
+            .hera-branch-line.four { width: 120px; height: 8px; right: 28%; bottom: 142px; transform: rotate(18deg); }
+
+            .hera-node {
+              position: absolute;
+              display: grid;
+              place-items: center;
+              width: 52px;
+              height: 52px;
+              border-radius: 50%;
+              font-weight: 700;
+              font-size: 0.8rem;
+              color: #fff;
+              box-shadow: 0 12px 22px rgba(15, 118, 110, 0.25);
+            }
+
+            .hera-node.a { left: 44%; bottom: 64px; background: linear-gradient(135deg, #0ea5a4, #14b8a6); }
+            .hera-node.b { right: 14%; bottom: 64px; background: linear-gradient(135deg, #2563eb, #3b82f6); }
+            .hera-node.c { left: 24%; bottom: 114px; background: linear-gradient(135deg, #22c55e, #16a34a); }
+            .hera-node.d { right: 24%; bottom: 114px; background: linear-gradient(135deg, #f59e0b, #f97316); }
+
+            .hera-copy {
+              background: rgba(255, 255, 255, 0.5);
+              border: 1px solid var(--border);
+              border-radius: 20px;
+              padding: 1.5rem;
+            }
+
+            .hera-copy h2 {
+              font-size: 2rem;
+              margin-bottom: 1rem;
+              color: #0f5132;
+            }
+
+            .hera-copy p {
+              margin-bottom: 1rem;
+              color: var(--text-secondary);
+            }
+
+            .hera-quote {
+              background: linear-gradient(135deg, #0f172a, #123b2d);
+              color: #ecfeff;
+              border-radius: 22px;
+              padding: 1.6rem 1.8rem;
+              margin: 2rem 0;
+              box-shadow: var(--shadow-md);
+            }
+
+            .hera-quote strong {
+              display: block;
+              font-size: 1.1rem;
+              margin-bottom: 0.6rem;
+            }
+
+            .hera-points {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+              gap: 1rem;
+              list-style: none;
+              margin: 2rem 0 0;
+              padding: 0;
+            }
+
+            .hera-points li {
+              background: var(--bg-primary);
+              border: 1px solid var(--border);
+              border-radius: 16px;
+              padding: 1rem 1.1rem;
+              color: var(--text-secondary);
+            }
+
+            .hera-points li strong {
+              display: block;
+              margin-bottom: 0.35rem;
+              color: var(--text-primary);
+            }
+          </style>
+
+          <div class="hera-page">
+            <div class="hera-hero">
+              <div class="hera-brand">
+                <div class="hera-brand-badge">🌿</div>
+                <div>
+                  <h1>HERA</h1>
+                  <p>Fluxos que nascem, crescem, ramificam e se conectam.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="hera-grid">
+              <div class="hera-card">
+                <div class="icon">🌱</div>
+                <h3>Origem</h3>
+                <p>HERA foi pensado como um nome simbólico para representar crescimento orgânico, estrutura e evolução contínua.</p>
+              </div>
+
+              <div class="hera-card">
+                <div class="icon">🌳</div>
+                <h3>Ramificação</h3>
+                <p>Assim como uma planta, o sistema desenvolve caminhos, decisões e múltiplos desdobramentos sem perder a organização.</p>
+              </div>
+
+              <div class="hera-card">
+                <div class="icon">🔄</div>
+                <h3>Fluxo</h3>
+                <p>Todo processo tem início, etapas, bifurcações e desfechos. A planta traduz essa lógica de forma intuitiva e visual.</p>
+              </div>
+            </div>
+
+            <div class="hera-branch">
+              <div class="hera-figure">
+                <div class="hera-tree" aria-label="Representação visual da ramificação do HERA">
+                  <div class="hera-trunk"></div>
+                  <div class="hera-branch-line one"></div>
+                  <div class="hera-branch-line two"></div>
+                  <div class="hera-branch-line three"></div>
+                  <div class="hera-branch-line four"></div>
+                  <div class="hera-node a">INÍCIO</div>
+                  <div class="hera-node b">AÇÃO</div>
+                  <div class="hera-node c">DECISÃO</div>
+                  <div class="hera-node d">FIM</div>
+                </div>
+              </div>
+
+              <div class="hera-copy">
+                <h2>Por que esse nome?</h2>
+                <p>Uma planta não cresce em linha reta. Ela parte de uma raiz, se fortalece, abre galhos e cria novos caminhos. É uma metáfora perfeita para processos administrativos, jurídicos, operacionais e de gestão.</p>
+                <p>O HERA representa um sistema que organiza o que pode se ramificar: etapas, decisões, critérios, pendências, aprovações e resultados. Cada ramo tem lógica, mas também permite adaptação.</p>
+              </div>
+            </div>
+
+            <div class="hera-quote">
+              <strong>HERA é a ideia de um sistema vivo.</strong>
+              Ele nasce com uma intenção, cresce com regras, se organiza em etapas e se adapta conforme a realidade do processo.
+            </div>
+
+            <div class="hera-copy">
+              <h2>Conexão com processos e fluxos</h2>
+              <p>Em um processo, tudo pode parecer linear à primeira vista. Mas qualquer fluxo real apresenta ramificações: aprovações, solicitações, exceções, rejeições, prazos e decisões.</p>
+              <p>O nome HERA comunica exatamente isso: não é apenas um fluxo estático, mas um ecossistema de decisões e passos interligados. Da mesma forma que uma planta distribui energia e nutrientes entre seus galhos, o sistema distribui responsabilidade e lógica entre cada etapa do processo.</p>
+
+              <ul class="hera-points">
+                <li><strong>Raiz</strong>Representa a base do processo: objetivo, regra e origem.</li>
+                <li><strong>Galho</strong>Corresponde às etapas e subdivisões do fluxo.</li>
+                <li><strong>Folha</strong>Simboliza a resolução, a entrega ou o resultado final.</li>
+                <li><strong>Fruto</strong>É o impacto de um processo bem estruturado e executado.</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -1333,7 +1640,13 @@
               <button class="btn btn-sm btn-secondary" id="btn-view-linha">
                 🧭 Linha do tempo
               </button>
+              <button class="btn btn-sm btn-secondary" id="btn-view-execucao">
+                ⚙️ Execução
+              </button>
             </div>
+            <button class="btn btn-primary btn-sm" id="btn-fullscreen" type="button">
+              🖥️ Tela cheia
+            </button>
           </div>
 
           <div class="detalhes-content">
@@ -1381,6 +1694,15 @@
                         aria-label="Cor das bordas"></label>
                   </div>
                 </div>
+                <div class="fluxo-zoom-group">
+                  <label>Zoom</label>
+                  <div class="fluxo-zoom-controls">
+                    <button type="button" class="btn btn-sm btn-secondary" id="btn-zoom-out">−</button>
+                    <span id="fluxo-zoom-level">100%</span>
+                    <button type="button" class="btn btn-sm btn-secondary" id="btn-zoom-in">+</button>
+                    <button type="button" class="btn btn-sm btn-secondary" id="btn-zoom-reset">Reset</button>
+                  </div>
+                </div>
                 <button type="button" class="btn btn-sm btn-secondary" id="btn-reset-mermaid-style">Restaurar
                   padrão</button>
               </div>
@@ -1395,6 +1717,23 @@
             <div id="view-linha-container" class="view-container">
               <div id="linha-do-tempo" class="timeline"></div>
             </div>
+
+            <div id="view-execucao-container" class="view-container">
+              <div class="execucao-summary">
+                <div class="execucao-summary-head">
+                  <div>
+                    <span class="execucao-summary-label">Progresso do fluxo</span>
+                    <strong id="execucao-percentual">0%</strong>
+                  </div>
+                  <span id="execucao-remaining">0 etapas restantes</span>
+                </div>
+                <div class="execucao-progress-bar">
+                  <span id="execucao-progress-fill"></span>
+                </div>
+              </div>
+              <div class="execucao-board" id="execucao-board"></div>
+            </div>
+
           </div>
         </div>
       </div>

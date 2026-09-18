@@ -1,5 +1,5 @@
 /**
- * SEI PLUS - UI Manager
+ * HERA - UI Manager
  * Gerencia navegação, renderização e interações da interface
  */
 
@@ -9,6 +9,9 @@ class UI {
     this.currentProcess = null;
     this.currentSubtype = null;
     this.currentEtapa = null;
+    this.fullscreenMode = false;
+    this.zoomLevel = 1;
+    this.compareFluxoTarget = null;
     this.etapasEmCriacao = [];
     this.visualizacaoEmCriacao = this._getDefaultVisualizacao();
     this.etapaEditandoIndex = null;
@@ -45,7 +48,7 @@ class UI {
       .getElementById("btn-help")
       .addEventListener("click", () =>
         alert(
-          "SEI PLUS v1.0\n\nSistema de gerenciamento de fluxos processuais.\n\nDesenvolvido por: Ozeias Souza e Gustavo Sales",
+          "HERA v1.0\n\nSistema de gerenciamento de fluxos processuais.\n\nDesenvolvido por: Ozeias Souza e Gustavo Sales",
         ),
       );
 
@@ -140,6 +143,21 @@ class UI {
     document
       .getElementById("btn-view-linha")
       .addEventListener("click", () => this.switchView("linha"));
+    document
+      .getElementById("btn-view-execucao")
+      .addEventListener("click", () => this.switchView("execucao"));
+    document
+      .getElementById("btn-zoom-in")
+      .addEventListener("click", () => this.adjustZoom(0.1));
+    document
+      .getElementById("btn-zoom-out")
+      .addEventListener("click", () => this.adjustZoom(-0.1));
+    document
+      .getElementById("btn-zoom-reset")
+      .addEventListener("click", () => this.resetZoom());
+    document
+      .getElementById("btn-fullscreen")
+      .addEventListener("click", () => this.toggleFullscreen());
     ["mermaid-direction", "mermaid-node-shape", "mermaid-color-default", "mermaid-color-decision", "mermaid-color-start", "mermaid-color-border"].forEach((id) => {
       document.getElementById(id).addEventListener("change", (event) => {
         this.visualizacaoEmCriacao[this._getVisualizacaoField(id)] = event.target.value;
@@ -187,7 +205,7 @@ class UI {
 
     const titles = {
       home: {
-        title: "Bem-vindo ao SEI PLUS",
+        title: "Bem-vindo ao HERA",
         subtitle: "Gerencie seus fluxos processuais com facilidade",
       },
       processos: {
@@ -205,6 +223,10 @@ class UI {
       instrucoes: {
         title: "Instruções",
         subtitle: "Manual do Usuário e Dicas",
+      },
+      hera: {
+        title: "Sobre o HERA",
+        subtitle: "A origem do nome e sua relação com fluxos e processos",
       },
       detalhes: {
         title: "Detalhes do Fluxo",
@@ -501,7 +523,7 @@ class UI {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `seiplus_export_${new Date().getTime()}.json`;
+    a.download = `hera_export_${new Date().getTime()}.json`;
     a.click();
   }
 
@@ -515,7 +537,7 @@ class UI {
     let html = `
       <html>
       <head>
-        <title>Relatório de Fluxos SEI PLUS</title>
+        <title>Relatório de Fluxos HERA</title>
         <style>
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
           body { font-family: 'Inter', sans-serif; padding: 40px; color: #1a1a1a; line-height: 1.5; }
@@ -539,7 +561,7 @@ class UI {
       <body>
         <div class="header">
           <h1>Relatório de Fluxos Processuais</h1>
-          <p>Sistema SEI PLUS v1.0 • Gerado em ${new Date().toLocaleString('pt-BR')}</p>
+          <p>Sistema HERA v1.0 • Gerado em ${new Date().toLocaleString('pt-BR')}</p>
         </div>
     `;
 
@@ -587,7 +609,7 @@ class UI {
 
     html += `
         <div class="footer">
-          <p>SEI PLUS v1.0 - Desenvolvido por Ozeias Souza e Gustavo Sales</p>
+          <p>HERA v1.0 - Desenvolvido por Ozeias Souza e Gustavo Sales</p>
           <p>Este documento é para fins de consulta e padronização processual.</p>
         </div>
         <script>window.onload = () => { window.print(); }</script>
@@ -637,10 +659,63 @@ class UI {
       document.getElementById("view-fluxo-container").classList.add("active");
       document.getElementById("btn-view-fluxo").classList.add("active");
       this.renderFluxograma();
-    } else {
+    } else if (view === "linha") {
       document.getElementById("view-linha-container").classList.add("active");
       document.getElementById("btn-view-linha").classList.add("active");
       this.renderLinhaDoTempo();
+    } else if (view === "execucao") {
+      document.getElementById("view-execucao-container").classList.add("active");
+      document.getElementById("btn-view-execucao").classList.add("active");
+      this.renderExecucao();
+    }
+  }
+
+  toggleFullscreen() {
+    this.fullscreenMode = !this.fullscreenMode;
+    document.body.classList.toggle("fullscreen-mode", this.fullscreenMode);
+
+    const btn = document.getElementById("btn-fullscreen");
+    if (btn) btn.textContent = this.fullscreenMode ? "✕ Sair tela cheia" : "🖥️ Tela cheia";
+
+    if (this.fullscreenMode) {
+      document.addEventListener("keydown", this._handleFullscreenKeydown);
+    } else {
+      document.removeEventListener("keydown", this._handleFullscreenKeydown);
+    }
+  }
+
+  _handleFullscreenKeydown = (event) => {
+    if (!this.fullscreenMode) return;
+    if (event.target && ["INPUT", "TEXTAREA", "SELECT"].includes(event.target.tagName)) return;
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      this.avancarEtapaFullScreen();
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      this.voltarEtapaFullScreen();
+    }
+  };
+
+  avancarEtapaFullScreen() {
+    const fluxo = storage.getSubtipo(this.currentProcess, this.currentSubtype);
+    if (!fluxo) return;
+    const keys = this._getEtapasOrdemGrafo(fluxo);
+    const index = keys.indexOf(this.currentEtapa);
+    if (index >= 0 && index < keys.length - 1) {
+      this.currentEtapa = keys[index + 1];
+      this.renderDetalhes();
+    }
+  }
+
+  voltarEtapaFullScreen() {
+    const fluxo = storage.getSubtipo(this.currentProcess, this.currentSubtype);
+    if (!fluxo) return;
+    const keys = this._getEtapasOrdemGrafo(fluxo);
+    const index = keys.indexOf(this.currentEtapa);
+    if (index > 0) {
+      this.currentEtapa = keys[index - 1];
+      this.renderDetalhes();
     }
   }
 
@@ -666,12 +741,132 @@ class UI {
     }).join("");
   }
 
+  renderExecucao() {
+    const fluxo = storage.getSubtipo(this.currentProcess, this.currentSubtype);
+    const container = document.getElementById("execucao-board");
+    if (!fluxo || !container) return;
+
+    const progresso = this._getExecucaoProgresso();
+    const ordem = this._getEtapasOrdemGrafo(fluxo);
+    const grupos = {
+      todo: [],
+      doing: [],
+      done: [],
+    };
+
+    ordem.forEach((key) => {
+      const etapa = fluxo.etapas[key];
+      const estado = progresso[key] || "todo";
+      grupos[estado].push({
+        key,
+        nome: etapa.nome,
+        tipo: this._getTipoLabel(etapa.tipo),
+      });
+    });
+
+    const labels = {
+      todo: "A Fazer",
+      doing: "Em Andamento",
+      done: "Concluído",
+    };
+
+    const totalEtapas = ordem.length || 1;
+    const concluidas = grupos.done.length;
+    const percentual = Math.round((concluidas / totalEtapas) * 100);
+
+    const percentualEl = document.getElementById("execucao-percentual");
+    const remainingEl = document.getElementById("execucao-remaining");
+    const progressFill = document.getElementById("execucao-progress-fill");
+
+    if (percentualEl) percentualEl.textContent = `${percentual}%`;
+    if (remainingEl) remainingEl.textContent = `${Math.max(totalEtapas - concluidas, 0)} etapas restantes`;
+    if (progressFill) progressFill.style.width = `${percentual}%`;
+
+    container.innerHTML = Object.entries(grupos).map(([estado, etapas]) => `
+      <div class="execucao-coluna" data-estado="${estado}">
+        <div class="execucao-cabecalho">${labels[estado]}</div>
+        <div class="execucao-lista">
+          ${etapas.length ? etapas.map((etapa) => `
+            <div class="execucao-card" draggable="true" data-etapa-key="${etapa.key}">
+              <div class="execucao-card-topo">
+                <span class="execucao-tag">${etapa.tipo}</span>
+                <button class="execucao-card-btn" data-etapa-key="${etapa.key}" title="Abrir etapa">↗</button>
+              </div>
+              <strong>${this._esc(etapa.nome)}</strong>
+            </div>
+          `).join("") : '<div class="execucao-vazia">Sem etapas</div>'}
+        </div>
+      </div>
+    `).join("");
+
+    container.querySelectorAll(".execucao-card").forEach((card) => {
+      card.addEventListener("dragstart", (event) => {
+        event.dataTransfer.setData("text/plain", card.dataset.etapaKey);
+      });
+      card.querySelector(".execucao-card-btn").addEventListener("click", () => {
+        this.currentEtapa = card.dataset.etapaKey;
+        this.renderDetalhes();
+        this.switchView("lista");
+      });
+    });
+
+    container.querySelectorAll(".execucao-coluna").forEach((coluna) => {
+      coluna.addEventListener("dragover", (event) => event.preventDefault());
+      coluna.addEventListener("drop", (event) => {
+        event.preventDefault();
+        const etapaKey = event.dataTransfer.getData("text/plain");
+        const novoEstado = coluna.dataset.estado;
+        if (!etapaKey || !novoEstado) return;
+        this._setExecucaoProgresso(etapaKey, novoEstado);
+        this.renderExecucao();
+      });
+    });
+  }
+
+  _getExecucaoStorageKey() {
+    return `hera_execucao_${this.currentProcess}_${this.currentSubtype}`;
+  }
+
+  _getExecucaoProgresso() {
+    const storageKey = this._getExecucaoStorageKey();
+    try {
+      return JSON.parse(localStorage.getItem(storageKey) || "{}") || {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  _setExecucaoProgresso(etapaKey, estado) {
+    const progresso = this._getExecucaoProgresso();
+    progresso[etapaKey] = estado;
+    localStorage.setItem(this._getExecucaoStorageKey(), JSON.stringify(progresso));
+  }
+
+  adjustZoom(value) {
+    const container = document.getElementById("mermaid-graph");
+    if (!container) return;
+
+    this.zoomLevel = Math.min(1.8, Math.max(0.7, Number((this.zoomLevel + value).toFixed(2))));
+    container.style.transform = `scale(${this.zoomLevel})`;
+    const label = document.getElementById("fluxo-zoom-level");
+    if (label) label.textContent = `${Math.round(this.zoomLevel * 100)}%`;
+  }
+
+  resetZoom() {
+    this.zoomLevel = 1;
+    const container = document.getElementById("mermaid-graph");
+    if (container) container.style.transform = "scale(1)";
+    const label = document.getElementById("fluxo-zoom-level");
+    if (label) label.textContent = "100%";
+  }
+
   renderFluxograma() {
     const fluxo = storage.getSubtipo(this.currentProcess, this.currentSubtype);
     if (!fluxo) return;
 
     const container = document.getElementById("mermaid-graph");
     container.removeAttribute("data-processed");
+    this.resetZoom();
 
     const visualizacao = { ...this._getDefaultVisualizacao(), ...(fluxo.visualizacao || {}), ...this.visualizacaoEmCriacao };
     this.visualizacaoEmCriacao = visualizacao;

@@ -1,4 +1,4 @@
-# 🚀 SEI PLUS v1.0
+# 🚀 HERA v1.0
 
 **Sistema Avançado de Gerenciamento de Fluxos Processuais do SEI**
 
@@ -14,7 +14,7 @@ Este software foi desenvolvido para uma abordagem de projeto de pesquisa intitul
 
 **Criadores:** Ozeias Souza e Gustavo Sales.
 
-O **SEI PLUS** é uma aplicação web desenvolvida para **criar, gerenciar e padronizar fluxos processuais administrativos**, especialmente voltados ao uso com o **SEI (Sistema Eletrônico de Informações)**.
+O **HERA** é uma aplicação web desenvolvida para **criar, gerenciar e padronizar fluxos processuais administrativos**, especialmente voltados ao uso com o **SEI (Sistema Eletrônico de Informações)**.
 
 A proposta é simples: permitir que qualquer usuário consiga estruturar processos completos de forma **visual, organizada e sem necessidade de programação**.
 

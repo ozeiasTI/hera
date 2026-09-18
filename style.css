@@ -1,5 +1,5 @@
 /* ============================================
-    SEIPLUS PRO v1.0 - Design System
+    HERA PRO v1.0 - Design System
    ============================================ */
 
 * {
@@ -2043,6 +2043,7 @@ h6 {
     padding: 4px;
     border-radius: 8px;
     gap: 4px;
+    flex-wrap: wrap;
 }
 
 .view-toggle .btn {
@@ -2097,6 +2098,218 @@ h6 {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 32px;
+}
+
+#view-execucao-container.active {
+    display: block;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    min-height: 520px;
+}
+
+#view-colaborativo-container.active {
+    display: none;
+}
+
+.execucao-summary {
+    background: linear-gradient(180deg, rgba(248,250,252,0.95), rgba(255,255,255,0.9));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.04);
+}
+
+.execucao-summary-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.execucao-summary-label {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+#execucao-percentual {
+    font-size: clamp(1.5rem, 2vw, 2.2rem);
+    color: var(--primary);
+}
+
+#execucao-remaining {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.execucao-progress-bar {
+    width: 100%;
+    height: 12px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(148, 163, 184, 0.2);
+    border: 1px solid rgba(148, 163, 184, 0.24);
+}
+
+#execucao-progress-fill {
+    display: block;
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #22c55e 0%, #3b82f6 100%);
+    transition: width 0.25s ease;
+}
+
+.execucao-board {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 20px;
+    min-height: 420px;
+}
+
+.execucao-coluna {
+    background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(248,250,252,0.95));
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    border-radius: 18px;
+    padding: 12px 12px 16px;
+    min-height: 320px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 10px 24px rgba(15, 23, 42, 0.04);
+}
+
+.execucao-coluna[data-estado="todo"] .execucao-cabecalho {
+    background: linear-gradient(135deg, rgba(96, 165, 250, 0.12), rgba(59, 130, 246, 0.18));
+    color: #1d4ed8;
+}
+
+.execucao-coluna[data-estado="doing"] .execucao-cabecalho {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(245, 158, 11, 0.18));
+    color: #b45309;
+}
+
+.execucao-coluna[data-estado="done"] .execucao-cabecalho {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(16, 185, 129, 0.18));
+    color: #0f766e;
+}
+
+.execucao-cabecalho {
+    font-weight: 800;
+    margin-bottom: 14px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    letter-spacing: 0.02em;
+}
+
+.execucao-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 240px;
+}
+
+.execucao-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    border-left: 4px solid var(--primary);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+    cursor: grab;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.execucao-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px rgba(15, 23, 42, 0.08);
+}
+
+.execucao-card strong {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.96rem;
+    line-height: 1.4;
+    color: var(--text-primary);
+}
+
+.execucao-card-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.execucao-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: rgba(0, 102, 204, 0.1);
+    color: var(--primary);
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.execucao-card-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 26px;
+    height: 26px;
+}
+
+.execucao-card-btn:hover {
+    background: var(--bg-secondary);
+    color: var(--primary);
+}
+
+.execucao-vazia {
+    border: 1px dashed rgba(148, 163, 184, 0.7);
+    border-radius: 12px;
+    padding: 18px 12px;
+    text-align: center;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.3);
+}
+
+body.fullscreen-mode .sidebar,
+body.fullscreen-mode .header,
+body.fullscreen-mode .sidebar-menu,
+body.fullscreen-mode .sidebar-footer,
+body.fullscreen-mode .page:not(.active),
+body.fullscreen-mode .detalhes-header > *:first-child {
+    display: none !important;
+}
+
+body.fullscreen-mode .main {
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+body.fullscreen-mode .main .page.active {
+    padding: 0 !important;
+}
+
+body.fullscreen-mode .view-container.active {
+    min-height: 100vh;
+}
+
+body.fullscreen-mode .mermaid {
+    font-size: 1.3rem;
+}
+
+body.fullscreen-mode .detalhes-header {
+    justify-content: flex-end;
+    margin-bottom: 12px;
 }
 
 .timeline {
@@ -2156,13 +2369,15 @@ h6 {
     gap: 16px;
     padding: 16px;
     margin-bottom: 24px;
-    background: var(--bg-secondary);
+    background: linear-gradient(180deg, rgba(248,250,252,0.9), rgba(255,255,255,0.85));
     border: 1px solid var(--border);
     border-radius: var(--radius);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
 }
 
 .fluxo-control-group,
-.fluxo-color-group {
+.fluxo-color-group,
+.fluxo-zoom-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -2190,6 +2405,29 @@ h6 {
     cursor: pointer;
 }
 
+.fluxo-zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.fluxo-zoom-controls .btn {
+    min-width: 36px;
+    padding: 7px 10px;
+    font-size: 18px;
+    line-height: 1;
+}
+
+#fluxo-zoom-level {
+    min-width: 56px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--primary);
+    background: rgba(0, 102, 204, 0.08);
+    border-radius: 8px;
+    padding: 6px 8px;
+}
+
 @media (max-width: 700px) {
     .fluxo-controls {
         align-items: stretch;
@@ -2206,12 +2444,21 @@ h6 {
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    overflow: auto;
+    padding: 12px 0 4px;
+    min-height: 420px;
+    background: linear-gradient(180deg, rgba(248,250,252,0.5), rgba(255,255,255,0.6));
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
 }
 
 .mermaid {
     width: 100%;
     background: transparent;
     text-align: center;
+    transition: transform 0.18s ease;
+    transform-origin: center top;
+    display: inline-block;
 }
 
 
