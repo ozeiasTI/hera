@@ -1,289 +1,1989 @@
 {
-    "Visita Institucional": {
-        "Recebimento e Organizacao": {
-            "descricao": "Fluxo hipotetico completo para receber, analisar e executar uma visita institucional ao campus.",
-            "prazo": "Ate 15 dias uteis",
+    "Gestão de Pessoas": {
+        "Admissão de Servidor": {
+            "descricao": "Fluxo completo para admissão de novos servidores no IFRO, desde a abertura do processo até a posse e exercício.",
+            "prazo": "Até 30 dias úteis",
             "inicio": "etapa_0",
             "visualizacao": {
                 "direcao": "LR",
                 "formato": "rounded",
-                "corEtapa": "#f8fafc",
-                "corDecisao": "#fff3cd",
-                "corInicio": "#d1e7dd",
-                "corBorda": "#334155"
+                "corEtapa": "#f0f9ff",
+                "corDecisao": "#fef3c7",
+                "corInicio": "#dcfce7",
+                "corBorda": "#1e40af"
             },
             "etapas": {
                 "etapa_0": {
-                    "nome": "Receber oficio da visita",
+                    "nome": "Receber documentação do candidato",
                     "tipo": "anexo",
                     "icone": "📎",
-                    "obs": "Anexe o oficio escaneado e confira se todas as paginas foram recebidas.",
+                    "obs": "Anexar todos os documentos pessoais, diplomas, certificados e declarações exigidas no edital.",
                     "proximo": "etapa_1"
                 },
                 "etapa_1": {
-                    "nome": "Triar dados da solicitacao",
+                    "nome": "Triagem inicial da documentação",
                     "tipo": "triagem",
                     "icone": "🔍",
-                    "descricaoTriagem": "Conferir a solicitacao de visita antes da abertura do processo.",
-                    "observacoesTriagem": "Validar datas, publico, setor visitado, alimentacao e necessidade de transporte.",
+                    "descricaoTriagem": "Conferir se toda a documentação obrigatória foi entregue e está dentro da validade.",
+                    "observacoesTriagem": "Documentos vencidos ou ilegíveis devem ser solicitados novamente. Verificar autenticidade das certidões.",
                     "itensTriagem": [
                         {
-                            "titulo": "Data pretendida",
-                            "detalhes": "Registrar dia e horario de chegada e saida.",
+                            "titulo": "RG e CPF",
+                            "detalhes": "Cópias autenticadas ou originais digitalizados",
                             "obrigatorio": true
                         },
                         {
-                            "titulo": "Setor ou local a visitar",
-                            "detalhes": "Identificar laboratorio, unidade ou setor responsavel.",
+                            "titulo": "Diploma de graduação",
+                            "detalhes": "Reconhecido pelo MEC",
                             "obrigatorio": true
                         },
                         {
-                            "titulo": "Publico presente",
-                            "detalhes": "Quantidade de visitantes, faixa etaria e instituicao.",
+                            "titulo": "Certidão de nascimento/casamento",
+                            "detalhes": "Atualizada",
                             "obrigatorio": true
                         },
                         {
-                            "titulo": "Alimentacao",
-                            "detalhes": "Verificar se o grupo fara refeicao no campus.",
-                            "obrigatorio": false
+                            "titulo": "Comprovante de residência",
+                            "detalhes": "Últimos 3 meses",
+                            "obrigatorio": true
                         },
                         {
-                            "titulo": "Transporte",
-                            "detalhes": "Registrar se sera necessario buscar ou levar visitantes.",
+                            "titulo": "Certidão negativa de antecedentes",
+                            "detalhes": "Federal e Estadual",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Exame médico admissional",
+                            "detalhes": "Realizado nos últimos 30 dias",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Declaração de acumulação de cargos",
+                            "detalhes": "Conforme modelo do órgão",
+                            "obrigatorio": true
+                        }
+                    ],
+                    "proximo": "etapa_2"
+                },
+                "etapa_2": {
+                    "nome": "Documentação completa?",
+                    "tipo": "decisao",
+                    "icone": "🔀",
+                    "pergunta": "Toda a documentação obrigatória foi entregue e está válida?",
+                    "opcoes": {
+                        "Sim": {
+                            "destino": "etapa_4",
+                            "cor": "#16a34a"
+                        },
+                        "Não": {
+                            "destino": "etapa_3",
+                            "cor": "#dc2626"
+                        },
+                        "Parcialmente": {
+                            "destino": "etapa_3",
+                            "cor": "#f59e0b"
+                        }
+                    },
+                    "proximo": null
+                },
+                "etapa_3": {
+                    "nome": "Notificar pendências ao candidato",
+                    "tipo": "email",
+                    "icone": "📧",
+                    "modelo": "Assunto: Pendências na documentação - Admissão\n\nPrezado(a) candidato(a),\n\nIdentificamos pendências na documentação enviada para o processo de admissão. Por favor, regularize os itens listados abaixo no prazo de 5 dias úteis:\n\n[Listar pendências]\n\nAtenciosamente,\nCoordenação de Gestão de Pessoas",
+                    "obs": "Enviar e-mail com cópia para o setor de RH e aguardar retorno.",
+                    "proximo": "etapa_0"
+                },
+                "etapa_4": {
+                    "nome": "Emitir termo de posse",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Termo de Posse</h2><p>Aos ____ dias do mês de ________ de 20____, no(a) ________________________, compareceu o(a) Sr(a). ____________________________, portador(a) do RG nº ________________ e CPF nº ________________, aprovado(a) no concurso público para o cargo de ________________, para tomar posse no referido cargo, conforme Edital nº ______/20____.</p><p>O(a) empossado(a) declarou aceitar o cargo e cumprir as determinações legais.</p><br><p>___________________________<br>Autoridade Competente</p><br><p>___________________________<br>Empossado(a)</p>",
+                    "obs": "Preencher com os dados do candidato e da autoridade que dará posse. Colher assinaturas.",
+                    "proximo": "etapa_5"
+                },
+                "etapa_5": {
+                    "nome": "Checklist de posse",
+                    "tipo": "checklist",
+                    "icone": "✅",
+                    "itens": [
+                        "Termo de posse assinado e arquivado",
+                        "Cadastro no sistema de RH realizado",
+                        "Crachá funcional confeccionado",
+                        "E-mail institucional criado",
+                        "Acesso aos sistemas concedido",
+                        "Local de trabalho definido",
+                        "Equipamentos e materiais entregues",
+                        "Registro no ponto eletrônico"
+                    ],
+                    "proximo": "etapa_6"
+                },
+                "etapa_6": {
+                    "nome": "Agendar reunião de boas-vindas",
+                    "tipo": "reuniao",
+                    "icone": "📅",
+                    "dataHora": "Primeiro dia útil após a posse, às 09:00",
+                    "local": "Sala de reuniões da Direção ou videoconferência",
+                    "participantes": "Novo servidor, chefe imediato, equipe de RH e colegas de setor",
+                    "descricao": "Apresentar a instituição, o setor, as normas internas e os fluxos de trabalho. Entregar manual do servidor.",
+                    "proximo": "etapa_7"
+                },
+                "etapa_7": {
+                    "nome": "Cadastrar em sistemas institucionais",
+                    "tipo": "link",
+                    "icone": "🔗",
+                    "url": "https://sistemas.ifro.edu.br/rh/cadastro",
+                    "obs": "Acessar o portal do servidor e realizar o cadastro completo. Anexar comprovante ao processo.",
+                    "proximo": "etapa_8"
+                },
+                "etapa_8": {
+                    "nome": "Alerta: Prazo de exercício",
+                    "tipo": "alerta",
+                    "icone": "⚠️",
+                    "mensagem": "O servidor tem até 15 dias para entrar em exercício a partir da data de posse. Caso não compareça, o ato de posse será tornado sem efeito.",
+                    "nivel": "warning",
+                    "proximo": "etapa_9"
+                },
+                "etapa_9": {
+                    "nome": "Registrar exercício",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Termo de Exercício</h2><p>Declaro que o(a) servidor(a) ____________________________, matrícula nº ____________, iniciou o exercício no cargo de ________________ no dia ____/____/20____.</p><br><p>___________________________<br>Chefia Imediata</p>",
+                    "obs": "Arquivar cópia no prontuário do servidor e enviar para o setor de frequência.",
+                    "proximo": "etapa_10"
+                },
+                "etapa_10": {
+                    "nome": "Contatos para suporte",
+                    "tipo": "contato",
+                    "icone": "👥",
+                    "contatos": [
+                        {
+                            "nome": "Coordenação de Gestão de Pessoas",
+                            "email": "rh@ifro.edu.br",
+                            "telefone": "(69) 3211-0000",
+                            "cargo": "Coordenador",
+                            "departamento": "RH"
+                        },
+                        {
+                            "nome": "Divisão de Capacitação",
+                            "email": "capacitacao@ifro.edu.br",
+                            "telefone": "(69) 3211-0001",
+                            "cargo": "Chefe",
+                            "departamento": "Desenvolvimento"
+                        },
+                        {
+                            "nome": "Suporte de TI",
+                            "email": "ti@ifro.edu.br",
+                            "telefone": "(69) 3211-0002",
+                            "cargo": "Analista",
+                            "departamento": "Tecnologia"
+                        }
+                    ],
+                    "proximo": "etapa_11"
+                },
+                "etapa_11": {
+                    "nome": "Encerrar processo de admissão",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Encerramento do Processo de Admissão</h2><p>O processo de admissão do(a) servidor(a) ____________________________ foi concluído com sucesso.</p><p><strong>Data de encerramento:</strong> ____/____/20____</p><p><strong>Responsável:</strong> ____________________________</p><p><strong>Observações finais:</strong> ____________________________________________________________</p>",
+                    "obs": "Incluir todos os documentos digitalizados e arquivar no prontuário eletrônico.",
+                    "proximo": null
+                }
+            }
+        },
+        "Licença para Capacitação": {
+            "descricao": "Fluxo para solicitação e concessão de licença para capacitação de servidores, conforme legislação vigente.",
+            "prazo": "Até 45 dias úteis",
+            "inicio": "etapa_0",
+            "visualizacao": {
+                "direcao": "TD",
+                "formato": "stadium",
+                "corEtapa": "#fdf4ff",
+                "corDecisao": "#fce7f3",
+                "corInicio": "#e0f2fe",
+                "corBorda": "#7c3aed"
+            },
+            "etapas": {
+                "etapa_0": {
+                    "nome": "Receber solicitação de licença",
+                    "tipo": "anexo",
+                    "icone": "📎",
+                    "obs": "Anexar formulário de solicitação assinado, comprovante de matrícula ou inscrição no curso, e justificativa.",
+                    "proximo": "etapa_1"
+                },
+                "etapa_1": {
+                    "nome": "Verificar elegibilidade",
+                    "tipo": "triagem",
+                    "icone": "🔍",
+                    "descricaoTriagem": "Conferir se o servidor cumpre os requisitos legais para a licença para capacitação.",
+                    "observacoesTriagem": "Verificar interstício de 5 anos, não ter usufruído nos últimos 12 meses, e compatibilidade do curso com as atribuições do cargo.",
+                    "itensTriagem": [
+                        {
+                            "titulo": "Interstício de 5 anos",
+                            "detalhes": "Conferir data da última licença para capacitação",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Compatibility do curso",
+                            "detalhes": "Curso deve ser compatível com as atribuições do cargo",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Instituição de ensino",
+                            "detalhes": "Credenciada pelo MEC ou órgão competente",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Carga horária",
+                            "detalhes": "Mínimo de 30 horas",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Período de afastamento",
+                            "detalhes": "Não superior a 3 meses",
+                            "obrigatorio": true
+                        }
+                    ],
+                    "proximo": "etapa_2"
+                },
+                "etapa_2": {
+                    "nome": "Servidor é elegível?",
+                    "tipo": "decisao",
+                    "icone": "🔀",
+                    "pergunta": "O servidor atende a todos os requisitos para a licença para capacitação?",
+                    "opcoes": {
+                        "Sim": {
+                            "destino": "etapa_3",
+                            "cor": "#16a34a"
+                        },
+                        "Não": {
+                            "destino": "etapa_5",
+                            "cor": "#dc2626"
+                        },
+                        "Em análise": {
+                            "destino": "etapa_4",
+                            "cor": "#f59e0b"
+                        }
+                    },
+                    "proximo": null
+                },
+                "etapa_3": {
+                    "nome": "Emitir parecer favorável",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Parecer Técnico - Licença para Capacitação</h2><p>Após análise da solicitação do(a) servidor(a) ____________________________, matrícula nº ____________, referente ao curso de ____________________________, na instituição ____________________________, com carga horária de ______ horas, no período de ____/____/20____ a ____/____/20____, manifestamo-nos FAVORAVELMENTE à concessão da licença para capacitação, uma vez que foram atendidos todos os requisitos legais.</p><br><p>___________________________<br>Chefia Imediata</p><br><p>___________________________<br>Coordenação de Gestão de Pessoas</p>",
+                    "obs": "Anexar comprovantes de elegibilidade e cronograma do curso.",
+                    "proximo": "etapa_6"
+                },
+                "etapa_4": {
+                    "nome": "Solicitar informações complementares",
+                    "tipo": "email",
+                    "icone": "📧",
+                    "modelo": "Assunto: Informações complementares - Licença para Capacitação\n\nPrezado(a) servidor(a),\n\nPara darmos continuidade à análise do seu pedido de licença para capacitação, necessitamos das seguintes informações complementares:\n\n[Listar informações]\n\nFavor enviar no prazo de 5 dias úteis.\n\nAtenciosamente,\nCoordenação de Gestão de Pessoas",
+                    "obs": "Enviar e-mail e aguardar retorno. Se não houver resposta em 10 dias, arquivar o processo.",
+                    "proximo": "etapa_1"
+                },
+                "etapa_5": {
+                    "nome": "Emitir parecer desfavorável",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Parecer Técnico - Licença para Capacitação</h2><p>Após análise da solicitação do(a) servidor(a) ____________________________, matrícula nº ____________, manifestamo-nos DESFAVORAVELMENTE à concessão da licença para capacitação, pelos seguintes motivos:</p><ul><li>________________________________________________________________</li><li>________________________________________________________________</li><li>________________________________________________________________</li></ul><p>O servidor poderá apresentar recurso no prazo de 10 dias.</p><br><p>___________________________<br>Coordenação de Gestão de Pessoas</p>",
+                    "obs": "Notificar o servidor e informar sobre o prazo de recurso.",
+                    "proximo": "etapa_7"
+                },
+                "etapa_6": {
+                    "nome": "Checklist de concessão",
+                    "tipo": "checklist",
+                    "icone": "✅",
+                    "itens": [
+                        "Parecer favorável anexado",
+                        "Portaria de concessão publicada",
+                        "Substituição temporária definida",
+                        "Acesso ao sistema de frequência ajustado",
+                        "Comunicação ao setor de origem",
+                        "Registro no prontuário do servidor"
+                    ],
+                    "proximo": "etapa_8"
+                },
+                "etapa_7": {
+                    "nome": "Registrar recurso",
+                    "tipo": "alerta",
+                    "icone": "⚠️",
+                    "mensagem": "O servidor tem 10 dias para apresentar recurso. Caso não haja recurso, o processo será arquivado.",
+                    "nivel": "info",
+                    "proximo": "etapa_8"
+                },
+                "etapa_8": {
+                    "nome": "Agendar reunião de alinhamento",
+                    "tipo": "reuniao",
+                    "icone": "📅",
+                    "dataHora": "A definir com o servidor e a chefia",
+                    "local": "Sala de reuniões ou videoconferência",
+                    "participantes": "Servidor, chefia imediata, coordenação de RH",
+                    "descricao": "Alinhar o plano de capacitação, cronograma, metas e formas de comprovação.",
+                    "proximo": "etapa_9"
+                },
+                "etapa_9": {
+                    "nome": "Encerrar processo",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Encerramento - Licença para Capacitação</h2><p>O processo de licença para capacitação do(a) servidor(a) ____________________________ foi concluído.</p><p><strong>Resultado:</strong> ____________________________________</p><p><strong>Data de encerramento:</strong> ____/____/20____</p><p><strong>Responsável:</strong> ____________________________</p>",
+                    "obs": "Arquivar toda a documentação e enviar cópia para o setor de frequência.",
+                    "proximo": null
+                }
+            }
+        }
+    },
+    "Licitações e Contratos": {
+        "Pregão Eletrônico": {
+            "descricao": "Fluxo completo para realização de pregão eletrônico, desde a abertura do processo até a homologação e contratação.",
+            "prazo": "Até 60 dias úteis",
+            "inicio": "etapa_0",
+            "visualizacao": {
+                "direcao": "LR",
+                "formato": "hexagon",
+                "corEtapa": "#ecfdf5",
+                "corDecisao": "#fef9c3",
+                "corInicio": "#dbeafe",
+                "corBorda": "#059669"
+            },
+            "etapas": {
+                "etapa_0": {
+                    "nome": "Abrir processo de licitação",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Termo de Abertura de Processo Licitatório</h2><p><strong>Modalidade:</strong> Pregão Eletrônico</p><p><strong>Objeto:</strong> ____________________________________________________________</p><p><strong>Valor estimado:</strong> R$ ________________</p><p><strong>Dotacão orçamentária:</strong> ________________</p><p><strong>Data de abertura:</strong> ____/____/20____</p><p><strong>Responsável:</strong> ____________________________</p>",
+                    "obs": "Preencher com os dados da demanda e anexar a requisição do setor solicitante.",
+                    "proximo": "etapa_1"
+                },
+                "etapa_1": {
+                    "nome": "Triagem da demanda",
+                    "tipo": "triagem",
+                    "icone": "🔍",
+                    "descricaoTriagem": "Analisar a demanda e verificar a viabilidade da contratação.",
+                    "observacoesTriagem": "Verificar se há previsão orçamentária, se o objeto é compatível com a modalidade e se há estudos técnicos preliminares.",
+                    "itensTriagem": [
+                        {
+                            "titulo": "Previsão orçamentária",
+                            "detalhes": "Verificar dotação e saldo disponível",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Estudo Técnico Preliminar",
+                            "detalhes": "Documento que comprova a necessidade",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Termo de Referência",
+                            "detalhes": "Especificações do objeto",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Justificativa de preço",
+                            "detalhes": "Pesquisa de mercado com no mínimo 3 cotações",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Declaração de adequação orçamentária",
+                            "detalhes": "Assinada pelo ordenador de despesas",
+                            "obrigatorio": true
+                        }
+                    ],
+                    "proximo": "etapa_2"
+                },
+                "etapa_2": {
+                    "nome": "Demanda viável?",
+                    "tipo": "decisao",
+                    "icone": "🔀",
+                    "pergunta": "A demanda está apta para prosseguir com o pregão eletrônico?",
+                    "opcoes": {
+                        "Sim": {
+                            "destino": "etapa_3",
+                            "cor": "#16a34a"
+                        },
+                        "Não": {
+                            "destino": "etapa_9",
+                            "cor": "#dc2626"
+                        },
+                        "Ajustes necessários": {
+                            "destino": "etapa_8",
+                            "cor": "#f59e0b"
+                        }
+                    },
+                    "proximo": null
+                },
+                "etapa_3": {
+                    "nome": "Elaborar edital",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Edital de Pregão Eletrônico nº ______/20____</h2><p><strong>Processo Administrativo nº:</strong> ________________</p><p><strong>Objeto:</strong> ____________________________________________________________</p><p><strong>Data da sessão pública:</strong> ____/____/20____ às ____:____</p><p><strong>Local:</strong> Portal de Compras do Governo Federal</p><p><strong>Critério de julgamento:</strong> Menor Preço</p><p><strong>Modo de disputa:</strong> Aberto</p><p><strong>Prazo de execução:</strong> ________________</p><p><strong>Vigência do contrato:</strong> ________________</p><br><p>O edital completo e seus anexos estão disponíveis no portal.</p>",
+                    "obs": "Elaborar com base no Termo de Referência e na legislação vigente (Lei 14.133/2021).",
+                    "proximo": "etapa_4"
+                },
+                "etapa_4": {
+                    "nome": "Publicar edital",
+                    "tipo": "link",
+                    "icone": "🔗",
+                    "url": "https://www.gov.br/compras/pt-br",
+                    "obs": "Publicar no Diário Oficial, no portal de compras e no site do órgão. Anexar comprovante de publicação.",
+                    "proximo": "etapa_5"
+                },
+                "etapa_5": {
+                    "nome": "Checklist pré-sessão",
+                    "tipo": "checklist",
+                    "icone": "✅",
+                    "itens": [
+                        "Edital publicado no DOU e portal",
+                        "Prazo legal de publicidade cumprido",
+                        "Sessão agendada no sistema",
+                        "Pregoeiro designado por portaria",
+                        "Equipe de apoio designada",
+                        "Sala virtual configurada",
+                        "Documentação de habilitação disponível",
+                        "Sistema de pregão testado"
+                    ],
+                    "proximo": "etapa_6"
+                },
+                "etapa_6": {
+                    "nome": "Realizar sessão pública",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Ata da Sessão Pública do Pregão Eletrônico nº ______/20____</h2><p>Aos ____ dias do mês de ________ de 20____, às ____:____, reuniram-se o Pregoeiro e a Equipe de Apoio para a realização da sessão pública do pregão em epígrafe.</p><p><strong>Fornecedores participantes:</strong> ____________________________________________________________</p><p><strong>Lances registrados:</strong> ____________________________________________________________</p><p><strong>Fornecedor vencedor:</strong> ____________________________________________________________</p><p><strong>Valor final:</strong> R$ ________________</p><p><strong>Observações:</strong> ____________________________________________________________</p><br><p>___________________________<br>Pregoeiro</p>",
+                    "obs": "Registrar todas as ocorrências da sessão e anexar os comprovantes de lances.",
+                    "proximo": "etapa_7"
+                },
+                "etapa_7": {
+                    "nome": "Homologar e adjudicar",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Termo de Homologação e Adjudicação</h2><p>Após análise da documentação e do resultado do pregão eletrônico nº ______/20____, HOMOLOGO o resultado e ADJUDICO o objeto ao fornecedor ____________________________, inscrito no CNPJ nº ________________, pelo valor total de R$ ________________.</p><p><strong>Data:</strong> ____/____/20____</p><br><p>___________________________<br>Autoridade Competente</p>",
+                    "obs": "Publicar o resultado no DOU e no portal de compras. Comunicar o fornecedor vencedor.",
+                    "proximo": "etapa_10"
+                },
+                "etapa_8": {
+                    "nome": "Devolver para ajustes",
+                    "tipo": "alerta",
+                    "icone": "⚠️",
+                    "mensagem": "A demanda precisa de ajustes. Notifique o setor solicitante e aguarde a correção antes de prosseguir.",
+                    "nivel": "warning",
+                    "proximo": "etapa_1"
+                },
+                "etapa_9": {
+                    "nome": "Arquivar processo",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Termo de Arquivamento</h2><p>O processo licitatório nº ______/20____ foi arquivado pelos seguintes motivos:</p><p>____________________________________________________________</p><p><strong>Data:</strong> ____/____/20____</p><br><p>___________________________<br>Autoridade Competente</p>",
+                    "obs": "Notificar o setor solicitante sobre o arquivamento.",
+                    "proximo": null
+                },
+                "etapa_10": {
+                    "nome": "Contatos do processo",
+                    "tipo": "contato",
+                    "icone": "👥",
+                    "contatos": [
+                        {
+                            "nome": "Pregoeiro",
+                            "email": "pregao@ifro.edu.br",
+                            "telefone": "(69) 3211-1000",
+                            "cargo": "Pregoeiro",
+                            "departamento": "Licitações"
+                        },
+                        {
+                            "nome": "Equipe de Apoio",
+                            "email": "apoio.licitacao@ifro.edu.br",
+                            "telefone": "(69) 3211-1001",
+                            "cargo": "Membro",
+                            "departamento": "Licitações"
+                        },
+                        {
+                            "nome": "Setor de Contratos",
+                            "email": "contratos@ifro.edu.br",
+                            "telefone": "(69) 3211-1002",
+                            "cargo": "Coordenador",
+                            "departamento": "Contratos"
+                        },
+                        {
+                            "nome": "Fornecedor Vencedor",
+                            "email": "fornecedor@empresa.com.br",
+                            "telefone": "(00) 0000-0000",
+                            "cargo": "Representante",
+                            "departamento": "Comercial"
+                        }
+                    ],
+                    "proximo": "etapa_11"
+                },
+                "etapa_11": {
+                    "nome": "Agendar reunião de contratação",
+                    "tipo": "reuniao",
+                    "icone": "📅",
+                    "dataHora": "Até 5 dias úteis após a homologação",
+                    "local": "Sala de reuniões da Direção ou videoconferência",
+                    "participantes": "Fornecedor, setor de contratos, fiscal do contrato e setor solicitante",
+                    "descricao": "Alinhar prazos, formas de entrega, obrigações e assinatura do contrato.",
+                    "proximo": "etapa_12"
+                },
+                "etapa_12": {
+                    "nome": "Encerrar processo licitatório",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Encerramento do Processo Licitatório</h2><p>O processo licitatório nº ______/20____ foi concluído com a contratação do fornecedor ____________________________.</p><p><strong>Valor final:</strong> R$ ________________</p><p><strong>Data de encerramento:</strong> ____/____/20____</p><p><strong>Responsável:</strong> ____________________________</p>",
+                    "obs": "Arquivar todos os documentos e enviar cópia para o setor de contratos.",
+                    "proximo": null
+                }
+            }
+        },
+        "Dispensa Eletrônica": {
+            "descricao": "Fluxo para contratação direta por dispensa eletrônica, conforme Lei 14.133/2021.",
+            "prazo": "Até 30 dias úteis",
+            "inicio": "etapa_0",
+            "visualizacao": {
+                "direcao": "TD",
+                "formato": "rect",
+                "corEtapa": "#fff7ed",
+                "corDecisao": "#fef2f2",
+                "corInicio": "#f0fdf4",
+                "corBorda": "#ea580c"
+            },
+            "etapas": {
+                "etapa_0": {
+                    "nome": "Receber demanda de dispensa",
+                    "tipo": "anexo",
+                    "icone": "📎",
+                    "obs": "Anexar solicitação do setor, justificativa, termo de referência e pesquisa de preços.",
+                    "proximo": "etapa_1"
+                },
+                "etapa_1": {
+                    "nome": "Verificar enquadramento",
+                    "tipo": "triagem",
+                    "icone": "🔍",
+                    "descricaoTriagem": "Verificar se a contratação se enquadra nas hipóteses de dispensa eletrônica.",
+                    "observacoesTriagem": "Analisar o valor estimado e a natureza do objeto. Verificar se não é caso de inexigibilidade.",
+                    "itensTriagem": [
+                        {
+                            "titulo": "Valor estimado",
+                            "detalhes": "Até R$ 50.000,00 para compras e serviços",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Natureza do objeto",
+                            "detalhes": "Compatível com dispensa eletrônica",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Pesquisa de preços",
+                            "detalhes": "Mínimo de 3 cotações válidas",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Justificativa da escolha",
+                            "detalhes": "Motivo da contratação direta",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Declaração de disponibilidade orçamentária",
+                            "detalhes": "Assinada pelo ordenador",
+                            "obrigatorio": true
+                        }
+                    ],
+                    "proximo": "etapa_2"
+                },
+                "etapa_2": {
+                    "nome": "Dispensa é viável?",
+                    "tipo": "decisao",
+                    "icone": "🔀",
+                    "pergunta": "A contratação atende aos requisitos para dispensa eletrônica?",
+                    "opcoes": {
+                        "Sim": {
+                            "destino": "etapa_3",
+                            "cor": "#16a34a"
+                        },
+                        "Não": {
+                            "destino": "etapa_6",
+                            "cor": "#dc2626"
+                        },
+                        "Encaminhar para licitação": {
+                            "destino": "etapa_7",
+                            "cor": "#f59e0b"
+                        }
+                    },
+                    "proximo": null
+                },
+                "etapa_3": {
+                    "nome": "Emitir aviso de dispensa",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Aviso de Dispensa Eletrônica nº ______/20____</h2><p><strong>Objeto:</strong> ____________________________________________________________</p><p><strong>Valor estimado:</strong> R$ ________________</p><p><strong>Fundamento legal:</strong> Art. 75, inciso ____, da Lei 14.133/2021</p><p><strong>Prazo para manifestação:</strong> 3 dias úteis</p><p><strong>Data de abertura:</strong> ____/____/20____</p><p><strong>Local:</strong> Portal de Compras do Governo Federal</p>",
+                    "obs": "Publicar no portal e aguardar manifestações de interesse.",
+                    "proximo": "etapa_4"
+                },
+                "etapa_4": {
+                    "nome": "Checklist de dispensa",
+                    "tipo": "checklist",
+                    "icone": "✅",
+                    "itens": [
+                        "Aviso publicado no portal",
+                        "Prazo de manifestação cumprido",
+                        "Propostas recebidas e analisadas",
+                        "Documentação de habilitação conferida",
+                        "Parecer jurídico anexado",
+                        "Autorização do ordenador de despesas",
+                        "Contrato ou empenho emitido",
+                        "Publicação do resultado"
+                    ],
+                    "proximo": "etapa_5"
+                },
+                "etapa_5": {
+                    "nome": "Homologar dispensa",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Termo de Homologação - Dispensa Eletrônica</h2><p>Após análise da documentação e do resultado da dispensa eletrônica nº ______/20____, HOMOLOGO o resultado e AUTORIZO a contratação do fornecedor ____________________________, inscrito no CNPJ nº ________________, pelo valor total de R$ ________________.</p><p><strong>Data:</strong> ____/____/20____</p><br><p>___________________________<br>Autoridade Competente</p>",
+                    "obs": "Publicar o resultado e comunicar o fornecedor.",
+                    "proximo": "etapa_8"
+                },
+                "etapa_6": {
+                    "nome": "Notificar impossibilidade",
+                    "tipo": "email",
+                    "icone": "📧",
+                    "modelo": "Assunto: Impossibilidade de Dispensa Eletrônica\n\nPrezado(a) solicitante,\n\nInformamos que a demanda encaminhada não atende aos requisitos para dispensa eletrônica, pelos seguintes motivos:\n\n[Listar motivos]\n\nSugerimos que a demanda seja encaminhada para o setor de licitações para análise de outra modalidade.\n\nAtenciosamente,\nSetor de Contratos",
+                    "obs": "Enviar e-mail e arquivar o processo.",
+                    "proximo": null
+                },
+                "etapa_7": {
+                    "nome": "Encaminhar para licitação",
+                    "tipo": "alerta",
+                    "icone": "⚠️",
+                    "mensagem": "A demanda será encaminhada para o setor de licitações para análise de modalidade adequada (Pregão, Concorrência, etc.).",
+                    "nivel": "info",
+                    "proximo": null
+                },
+                "etapa_8": {
+                    "nome": "Agendar assinatura do contrato",
+                    "tipo": "reuniao",
+                    "icone": "📅",
+                    "dataHora": "A definir",
+                    "local": "Sala da Direção",
+                    "participantes": "Fornecedor, setor de contratos, fiscal do contrato",
+                    "descricao": "Assinatura do contrato ou emissão da nota de empenho. Alinhar prazos e obrigações.",
+                    "proximo": "etapa_9"
+                },
+                "etapa_9": {
+                    "nome": "Encerrar processo",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Encerramento - Dispensa Eletrônica</h2><p>O processo de dispensa eletrônica nº ______/20____ foi concluído com a contratação do fornecedor ____________________________.</p><p><strong>Valor final:</strong> R$ ________________</p><p><strong>Data de encerramento:</strong> ____/____/20____</p>",
+                    "obs": "Arquivar documentação e enviar cópia para o setor de contratos.",
+                    "proximo": null
+                }
+            }
+        }
+    },
+    "Gestão Acadêmica": {
+        "Matrícula de Aluno": {
+            "descricao": "Fluxo completo para matrícula de novos alunos nos cursos técnicos e superiores do IFRO.",
+            "prazo": "Até 15 dias úteis",
+            "inicio": "etapa_0",
+            "visualizacao": {
+                "direcao": "LR",
+                "formato": "rounded",
+                "corEtapa": "#f5f3ff",
+                "corDecisao": "#fef3c7",
+                "corInicio": "#ecfdf5",
+                "corBorda": "#6d28d9"
+            },
+            "etapas": {
+                "etapa_0": {
+                    "nome": "Receber documentação de matrícula",
+                    "tipo": "anexo",
+                    "icone": "📎",
+                    "obs": "Anexar documentos pessoais, histórico escolar, comprovante de residência e foto 3x4.",
+                    "proximo": "etapa_1"
+                },
+                "etapa_1": {
+                    "nome": "Triagem da documentação",
+                    "tipo": "triagem",
+                    "icone": "🔍",
+                    "descricaoTriagem": "Conferir se toda a documentação obrigatória foi entregue e está dentro dos requisitos do edital.",
+                    "observacoesTriagem": "Verificar se o candidato foi aprovado no processo seletivo e se o curso tem vagas disponíveis.",
+                    "itensTriagem": [
+                        {
+                            "titulo": "Documentos pessoais",
+                            "detalhes": "RG, CPF, certidão de nascimento",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Histórico escolar",
+                            "detalhes": "Ensino médio completo ou equivalente",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Comprovante de residência",
+                            "detalhes": "Atualizado",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Foto 3x4",
+                            "detalhes": "Recente",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Comprovante de aprovação no processo seletivo",
+                            "detalhes": "Lista de classificação",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Declaração de vacinação",
+                            "detalhes": "Conforme exigência institucional",
                             "obrigatorio": false
                         }
                     ],
                     "proximo": "etapa_2"
                 },
                 "etapa_2": {
-                    "nome": "Termo de abertura",
-                    "tipo": "texto",
-                    "icone": "📝",
-                    "texto": "<h2>Termo de Abertura</h2><p>Registra-se a abertura do processo referente a visita institucional solicitada.</p><p><strong>Data:</strong> ____________________<br><strong>Setor:</strong> ____________________<br><strong>Responsavel:</strong> ____________________</p>",
-                    "obs": "Preencha os campos do modelo com os dados confirmados na triagem.",
-                    "proximo": "etapa_3"
-                },
-                "etapa_3": {
-                    "nome": "Conferir documentacao",
-                    "tipo": "checklist",
-                    "icone": "✅",
-                    "itens": [
-                        "Oficio ou solicitacao assinado",
-                        "Lista de visitantes",
-                        "Autorizacao do setor visitado",
-                        "Informacoes de contato do solicitante"
-                    ],
-                    "proximo": "etapa_4"
-                },
-                "etapa_4": {
-                    "nome": "Documentacao esta completa?",
+                    "nome": "Documentação está completa?",
                     "tipo": "decisao",
                     "icone": "🔀",
-                    "pergunta": "A documentacao recebida permite continuar o atendimento?",
+                    "pergunta": "Toda a documentação obrigatória foi entregue e está válida?",
                     "opcoes": {
                         "Sim": {
-                            "destino": "etapa_7",
-                            "cor": "#198754"
+                            "destino": "etapa_4",
+                            "cor": "#16a34a"
                         },
-                        "Nao": {
-                            "destino": "etapa_5",
-                            "cor": "#dc3545"
+                        "Não": {
+                            "destino": "etapa_3",
+                            "cor": "#dc2626"
                         },
                         "Parcialmente": {
-                            "destino": "etapa_6",
-                            "cor": "#fd7e14"
+                            "destino": "etapa_3",
+                            "cor": "#f59e0b"
                         }
                     },
                     "proximo": null
                 },
-                "etapa_5": {
-                    "nome": "Solicitar complementacao",
+                "etapa_3": {
+                    "nome": "Notificar pendências",
                     "tipo": "email",
                     "icone": "📧",
-                    "modelo": "Assunto: Complementacao de informacoes sobre a visita\n\nPrezado solicitante, precisamos dos documentos e dados indicados para concluir a analise da visita.",
-                    "obs": "Enviar ao solicitante e aguardar o retorno.",
-                    "proximo": "etapa_0"
+                    "modelo": "Assunto: Pendências na Matrícula\n\nPrezado(a) aluno(a),\n\nIdentificamos pendências na documentação de matrícula. Por favor, regularize os itens abaixo no prazo de 3 dias úteis:\n\n[Listar pendências]\n\nAtenciosamente,\nSecretaria Acadêmica",
+                    "obs": "Enviar e-mail e aguardar retorno. Se não houver resposta, cancelar a matrícula.",
+                    "proximo": "etapa_1"
                 },
-                "etapa_6": {
-                    "nome": "Registrar pendencias",
-                    "tipo": "alerta",
-                    "icone": "⚠️",
-                    "mensagem": "A solicitacao possui pendencias. Registre o que falta e acompanhe o retorno antes de autorizar a visita.",
-                    "nivel": "warning",
+                "etapa_4": {
+                    "nome": "Efetivar matrícula no sistema",
+                    "tipo": "link",
+                    "icone": "🔗",
+                    "url": "https://academico.ifro.edu.br/matricula",
+                    "obs": "Acessar o sistema acadêmico e registrar a matrícula do aluno. Anexar comprovante.",
                     "proximo": "etapa_5"
                 },
+                "etapa_5": {
+                    "nome": "Checklist de matrícula",
+                    "tipo": "checklist",
+                    "icone": "✅",
+                    "itens": [
+                        "Matrícula registrada no sistema",
+                        "Documentação arquivada",
+                        "Carteira de estudante solicitada",
+                        "E-mail institucional criado",
+                        "Acesso ao portal do aluno configurado",
+                        "Turma e horário definidos",
+                        "Comunicação ao coordenador do curso",
+                        "Kit do aluno entregue (se aplicável)"
+                    ],
+                    "proximo": "etapa_6"
+                },
+                "etapa_6": {
+                    "nome": "Agendar reunião de boas-vindas",
+                    "tipo": "reuniao",
+                    "icone": "📅",
+                    "dataHora": "Primeiro dia de aula, às 08:00",
+                    "local": "Auditório do campus",
+                    "participantes": "Novos alunos, coordenação, professores e equipe pedagógica",
+                    "descricao": "Apresentar a instituição, o curso, as normas acadêmicas e os recursos disponíveis.",
+                    "proximo": "etapa_7"
+                },
                 "etapa_7": {
-                    "nome": "Consultar setor visitado",
+                    "nome": "Contatos de suporte acadêmico",
                     "tipo": "contato",
                     "icone": "👥",
                     "contatos": [
                         {
-                            "nome": "Coordenacao do setor",
-                            "email": "coordenacao@campus.edu.br",
-                            "telefone": "(00) 0000-0000",
+                            "nome": "Secretaria Acadêmica",
+                            "email": "secretaria@ifro.edu.br",
+                            "telefone": "(69) 3211-2000",
                             "cargo": "Coordenador",
-                            "departamento": "Setor visitado"
+                            "departamento": "Secretaria"
                         },
                         {
-                            "nome": "Responsavel pela visita",
-                            "email": "visitas@campus.edu.br",
-                            "telefone": "(00) 0000-0001",
-                            "cargo": "Assistente",
-                            "departamento": "Cerimonial"
+                            "nome": "Coordenação do Curso",
+                            "email": "coordenacao.curso@ifro.edu.br",
+                            "telefone": "(69) 3211-2001",
+                            "cargo": "Coordenador",
+                            "departamento": "Ensino"
+                        },
+                        {
+                            "nome": "Assistência Estudantil",
+                            "email": "assistencia@ifro.edu.br",
+                            "telefone": "(69) 3211-2002",
+                            "cargo": "Assistente Social",
+                            "departamento": "Assistência"
+                        },
+                        {
+                            "nome": "Biblioteca",
+                            "email": "biblioteca@ifro.edu.br",
+                            "telefone": "(69) 3211-2003",
+                            "cargo": "Bibliotecário",
+                            "departamento": "Biblioteca"
                         }
                     ],
                     "proximo": "etapa_8"
                 },
                 "etapa_8": {
-                    "nome": "Agendar reuniao de alinhamento",
-                    "tipo": "reuniao",
-                    "icone": "📅",
-                    "dataHora": "A definir com o setor visitado",
-                    "local": "Sala de reunioes ou videoconferencia",
-                    "participantes": "Setor visitado, cerimonial e solicitante",
-                    "descricao": "Confirmar roteiro, recepcao, acessibilidade e responsabilidades.",
-                    "proximo": "etapa_9"
+                    "nome": "Encerrar processo de matrícula",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Encerramento - Matrícula de Aluno</h2><p>A matrícula do(a) aluno(a) ____________________________, no curso de ____________________________, foi efetivada com sucesso.</p><p><strong>Data de encerramento:</strong> ____/____/20____</p><p><strong>Responsável:</strong> ____________________________</p>",
+                    "obs": "Arquivar documentação e enviar cópia para a coordenação do curso.",
+                    "proximo": null
+                }
+            }
+        },
+        "Trancamento de Matrícula": {
+            "descricao": "Fluxo para solicitação e processamento de trancamento de matrícula de alunos.",
+            "prazo": "Até 10 dias úteis",
+            "inicio": "etapa_0",
+            "visualizacao": {
+                "direcao": "TD",
+                "formato": "stadium",
+                "corEtapa": "#fef2f2",
+                "corDecisao": "#fff7ed",
+                "corInicio": "#f0fdf4",
+                "corBorda": "#b91c1c"
+            },
+            "etapas": {
+                "etapa_0": {
+                    "nome": "Receber solicitação de trancamento",
+                    "tipo": "anexo",
+                    "icone": "📎",
+                    "obs": "Anexar formulário de solicitação assinado pelo aluno e/ou responsável, com justificativa.",
+                    "proximo": "etapa_1"
                 },
-                "etapa_9": {
-                    "nome": "Visita exige transporte?",
+                "etapa_1": {
+                    "nome": "Verificar elegibilidade",
+                    "tipo": "triagem",
+                    "icone": "🔍",
+                    "descricaoTriagem": "Conferir se o aluno atende aos requisitos para trancamento de matrícula.",
+                    "observacoesTriagem": "Verificar se o aluno está regularmente matriculado, se não está em período de conclusão e se não possui pendências financeiras.",
+                    "itensTriagem": [
+                        {
+                            "titulo": "Matrícula ativa",
+                            "detalhes": "Aluno regularmente matriculado",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Período letivo",
+                            "detalhes": "Trancamento permitido até o prazo estabelecido no calendário",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Justificativa",
+                            "detalhes": "Documentada e assinada",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Sem pendências financeiras",
+                            "detalhes": "Verificar situação na tesouraria",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Não estar em período de conclusão",
+                            "detalhes": "Verificar se não é o último semestre",
+                            "obrigatorio": true
+                        }
+                    ],
+                    "proximo": "etapa_2"
+                },
+                "etapa_2": {
+                    "nome": "Trancamento é permitido?",
                     "tipo": "decisao",
                     "icone": "🔀",
-                    "pergunta": "O grupo precisa de transporte institucional?",
+                    "pergunta": "O aluno atende aos requisitos para o trancamento de matrícula?",
                     "opcoes": {
                         "Sim": {
-                            "destino": "etapa_10",
-                            "cor": "#0d6efd"
+                            "destino": "etapa_3",
+                            "cor": "#16a34a"
                         },
-                        "Nao": {
-                            "destino": "etapa_12",
-                            "cor": "#6c757d"
+                        "Não": {
+                            "destino": "etapa_5",
+                            "cor": "#dc2626"
                         },
-                        "A confirmar": {
-                            "destino": "etapa_11",
-                            "cor": "#e83e8c"
+                        "Análise pedagógica": {
+                            "destino": "etapa_4",
+                            "cor": "#f59e0b"
                         }
                     },
                     "proximo": null
                 },
-                "etapa_10": {
-                    "nome": "Solicitar transporte",
-                    "tipo": "link",
-                    "icone": "🔗",
-                    "url": "https://exemplo.edu.br/transportes/solicitacao",
-                    "obs": "Acesse o formulario institucional de transporte e anexe o comprovante ao processo.",
-                    "proximo": "etapa_12"
-                },
-                "etapa_11": {
-                    "nome": "Confirmar transporte com solicitante",
-                    "tipo": "triagem",
-                    "icone": "🔍",
-                    "descricaoTriagem": "Confirmar origem, destino, quantidade de pessoas e horario necessario.",
-                    "observacoesTriagem": "Se nao houver resposta, registrar a tentativa de contato e manter o atendimento pendente.",
-                    "itensTriagem": [
-                        {
-                            "titulo": "Origem e destino",
-                            "detalhes": "Endereco de embarque e retorno.",
-                            "obrigatorio": true
-                        },
-                        {
-                            "titulo": "Quantidade de passageiros",
-                            "detalhes": "Comparar com a lista de visitantes.",
-                            "obrigatorio": true
-                        },
-                        {
-                            "titulo": "Horario do transporte",
-                            "detalhes": "Considerar ida e retorno.",
-                            "obrigatorio": true
-                        }
-                    ],
-                    "proximo": "etapa_12"
-                },
-                "etapa_12": {
-                    "nome": "Preparar comunicacao aos participantes",
+                "etapa_3": {
+                    "nome": "Emitir despacho de deferimento",
                     "tipo": "texto",
                     "icone": "📝",
-                    "texto": "<p><strong>Orientacoes para a visita</strong></p><ul><li>Chegar com antecedencia.</li><li>Seguir as regras de acesso e seguranca.</li><li>Informar necessidades especiais previamente.</li></ul>",
-                    "obs": "Enviar a comunicacao somente depois de confirmar data, setor e logistica.",
-                    "proximo": "etapa_13"
+                    "texto": "<h2>Despacho de Deferimento - Trancamento de Matrícula</h2><p>Após análise da solicitação de trancamento de matrícula do(a) aluno(a) ____________________________, matrícula nº ____________, do curso de ____________________________, manifestamo-nos pelo DEFERIMENTO do pedido, uma vez que foram atendidos todos os requisitos regimentais.</p><p><strong>Período de trancamento:</strong> ____/____/20____ a ____/____/20____</p><p><strong>Data:</strong> ____/____/20____</p><br><p>___________________________<br>Coordenação de Registros Acadêmicos</p>",
+                    "obs": "Registrar no sistema acadêmico e notificar o aluno e a coordenação do curso.",
+                    "proximo": "etapa_6"
                 },
-                "etapa_13": {
-                    "nome": "Avisar equipe de recepcao",
+                "etapa_4": {
+                    "nome": "Encaminhar para análise pedagógica",
                     "tipo": "email",
                     "icone": "📧",
-                    "modelo": "Assunto: Visita institucional confirmada\n\nData, horario, setor, quantidade de visitantes e orientacoes de recepcao.",
-                    "obs": "Copiar o setor visitado e a equipe de seguranca.",
-                    "proximo": "etapa_14"
+                    "modelo": "Assunto: Encaminhamento para Análise Pedagógica - Trancamento de Matrícula\n\nPrezado(a) Coordenador(a),\n\nEncaminhamos a solicitação de trancamento de matrícula do(a) aluno(a) ____________________________ para análise pedagógica.\n\nFavor emitir parecer no prazo de 5 dias úteis.\n\nAtenciosamente,\nSecretaria Acadêmica",
+                    "obs": "Enviar e-mail com a documentação anexada e aguardar parecer.",
+                    "proximo": "etapa_5"
                 },
-                "etapa_14": {
-                    "nome": "Roteiro da visita",
+                "etapa_5": {
+                    "nome": "Emitir despacho de indeferimento",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Despacho de Indeferimento - Trancamento de Matrícula</h2><p>Após análise da solicitação de trancamento de matrícula do(a) aluno(a) ____________________________, matrícula nº ____________, manifestamo-nos pelo INDEFERIMENTO do pedido, pelos seguintes motivos:</p><ul><li>________________________________________________________________</li><li>________________________________________________________________</li><li>________________________________________________________________</li></ul><p>O aluno poderá apresentar recurso no prazo de 5 dias úteis.</p><br><p>___________________________<br>Coordenação de Registros Acadêmicos</p>",
+                    "obs": "Notificar o aluno e informar sobre o prazo de recurso.",
+                    "proximo": "etapa_7"
+                },
+                "etapa_6": {
+                    "nome": "Checklist de trancamento",
                     "tipo": "checklist",
                     "icone": "✅",
                     "itens": [
-                        "Recepcao confirmada",
-                        "Crachas ou identificacao preparados",
-                        "Sala e equipamentos reservados",
-                        "Acessibilidade verificada",
-                        "Alimentacao confirmada"
+                        "Trancamento registrado no sistema",
+                        "Despacho arquivado no prontuário",
+                        "Aluno notificado por e-mail",
+                        "Coordenação do curso comunicada",
+                        "Biblioteca notificada (devolução de livros)",
+                        "Setor financeiro informado",
+                        "Carteira de estudante recolhida",
+                        "Acesso ao portal suspenso temporariamente"
                     ],
-                    "proximo": "etapa_15"
+                    "proximo": "etapa_8"
                 },
-                "etapa_15": {
-                    "nome": "Alimentacao sera necessaria?",
-                    "tipo": "decisao",
-                    "icone": "🔀",
-                    "pergunta": "O grupo fara refeicao no campus?",
-                    "opcoes": {
-                        "Sim": {
-                            "destino": "etapa_16",
-                            "cor": "#20c997"
-                        },
-                        "Nao": {
-                            "destino": "etapa_17",
-                            "cor": "#6c757d"
-                        },
-                        "Cortesia externa": {
-                            "destino": "etapa_18",
-                            "cor": "#e83e8c"
-                        }
-                    },
-                    "proximo": null
-                },
-                "etapa_16": {
-                    "nome": "Organizar refeicao",
-                    "tipo": "anexo",
-                    "icone": "📎",
-                    "obs": "Anexe autorizacao, quantidade de refeicoes e comprovante de reserva.",
-                    "proximo": "etapa_17"
-                },
-                "etapa_17": {
-                    "nome": "Registrar aviso operacional",
+                "etapa_7": {
+                    "nome": "Registrar recurso",
                     "tipo": "alerta",
                     "icone": "⚠️",
-                    "mensagem": "Confirme novamente horario, recepcao e responsaveis no dia anterior a visita.",
+                    "mensagem": "O aluno tem 5 dias úteis para apresentar recurso. Caso não haja recurso, o processo será arquivado.",
                     "nivel": "info",
-                    "proximo": "etapa_19"
+                    "proximo": "etapa_8"
                 },
-                "etapa_18": {
-                    "nome": "Confirmar cortesia externa",
+                "etapa_8": {
+                    "nome": "Contatos para suporte",
                     "tipo": "contato",
                     "icone": "👥",
                     "contatos": [
                         {
-                            "nome": "Instituicao visitante",
-                            "email": "contato@instituicao.edu.br",
-                            "telefone": "(00) 0000-0002",
-                            "cargo": "Responsavel pelo grupo",
-                            "departamento": "Visitante"
+                            "nome": "Coordenação de Registros Acadêmicos",
+                            "email": "registros@ifro.edu.br",
+                            "telefone": "(69) 3211-2000",
+                            "cargo": "Coordenador",
+                            "departamento": "Registros"
+                        },
+                        {
+                            "nome": "Coordenação do Curso",
+                            "email": "coordenacao.curso@ifro.edu.br",
+                            "telefone": "(69) 3211-2001",
+                            "cargo": "Coordenador",
+                            "departamento": "Ensino"
+                        },
+                        {
+                            "nome": "Assistência Estudantil",
+                            "email": "assistencia@ifro.edu.br",
+                            "telefone": "(69) 3211-2002",
+                            "cargo": "Assistente Social",
+                            "departamento": "Assistência"
                         }
                     ],
-                    "proximo": "etapa_19"
+                    "proximo": "etapa_9"
                 },
-                "etapa_19": {
-                    "nome": "Encerrar processo da visita",
+                "etapa_9": {
+                    "nome": "Encerrar processo",
                     "tipo": "texto",
                     "icone": "📝",
-                    "texto": "<h2>Registro de Encerramento</h2><p>A visita foi realizada ou cancelada conforme os registros deste processo.</p><p><strong>Resultado:</strong> ____________________</p>",
-                    "obs": "Inclua fotos, relatorio ou documentos finais antes de concluir.",
+                    "texto": "<h2>Encerramento - Trancamento de Matrícula</h2><p>O processo de trancamento de matrícula do(a) aluno(a) ____________________________ foi concluído.</p><p><strong>Resultado:</strong> ____________________________________</p><p><strong>Data de encerramento:</strong> ____/____/20____</p>",
+                    "obs": "Arquivar documentação e enviar cópia para a coordenação do curso.",
+                    "proximo": null
+                }
+            }
+        }
+    },
+    "Gestão de Patrimônio": {
+        "Incorporação de Bem Móvel": {
+            "descricao": "Fluxo para incorporação de bens móveis ao patrimônio da instituição, incluindo tombamento e registro.",
+            "prazo": "Até 20 dias úteis",
+            "inicio": "etapa_0",
+            "visualizacao": {
+                "direcao": "LR",
+                "formato": "rounded",
+                "corEtapa": "#f0fdf4",
+                "corDecisao": "#fef9c3",
+                "corInicio": "#dbeafe",
+                "corBorda": "#16a34a"
+            },
+            "etapas": {
+                "etapa_0": {
+                    "nome": "Receber termo de recebimento",
+                    "tipo": "anexo",
+                    "icone": "📎",
+                    "obs": "Anexar nota fiscal, termo de recebimento provisório e definitivo, e laudo técnico (se aplicável).",
+                    "proximo": "etapa_1"
+                },
+                "etapa_1": {
+                    "nome": "Triagem da documentação",
+                    "tipo": "triagem",
+                    "icone": "🔍",
+                    "descricaoTriagem": "Conferir se toda a documentação necessária para a incorporação está presente e correta.",
+                    "observacoesTriagem": "Verificar se o bem atende às especificações do edital, se a nota fiscal está correta e se o recebimento foi atestado.",
+                    "itensTriagem": [
+                        {
+                            "titulo": "Nota fiscal",
+                            "detalhes": "Em nome da instituição, com descrição detalhada",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Termo de recebimento provisório",
+                            "detalhes": "Assinado pelo responsável",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Termo de recebimento definitivo",
+                            "detalhes": "Assinado após verificação",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Laudo técnico",
+                            "detalhes": "Para bens que exigem avaliação técnica",
+                            "obrigatorio": false
+                        },
+                        {
+                            "titulo": "Garantia",
+                            "detalhes": "Termo de garantia do fornecedor",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Manual de uso",
+                            "detalhes": "Quando aplicável",
+                            "obrigatorio": false
+                        }
+                    ],
+                    "proximo": "etapa_2"
+                },
+                "etapa_2": {
+                    "nome": "Documentação está completa?",
+                    "tipo": "decisao",
+                    "icone": "🔀",
+                    "pergunta": "Toda a documentação necessária para a incorporação está presente?",
+                    "opcoes": {
+                        "Sim": {
+                            "destino": "etapa_4",
+                            "cor": "#16a34a"
+                        },
+                        "Não": {
+                            "destino": "etapa_3",
+                            "cor": "#dc2626"
+                        },
+                        "Pendência sanável": {
+                            "destino": "etapa_3",
+                            "cor": "#f59e0b"
+                        }
+                    },
+                    "proximo": null
+                },
+                "etapa_3": {
+                    "nome": "Notificar pendências",
+                    "tipo": "email",
+                    "icone": "📧",
+                    "modelo": "Assunto: Pendências na Incorporação de Bem Móvel\n\nPrezado(a) responsável,\n\nIdentificamos pendências na documentação para incorporação do bem. Por favor, regularize os itens abaixo no prazo de 5 dias úteis:\n\n[Listar pendências]\n\nAtenciosamente,\nSetor de Patrimônio",
+                    "obs": "Enviar e-mail e aguardar retorno. Se não houver resposta, arquivar o processo.",
+                    "proximo": "etapa_1"
+                },
+                "etapa_4": {
+                    "nome": "Realizar tombamento",
+                    "tipo": "link",
+                    "icone": "🔗",
+                    "url": "https://patrimonio.ifro.edu.br/tombamento",
+                    "obs": "Acessar o sistema de patrimônio e registrar o tombamento do bem. Gerar etiqueta de identificação.",
+                    "proximo": "etapa_5"
+                },
+                "etapa_5": {
+                    "nome": "Checklist de incorporação",
+                    "tipo": "checklist",
+                    "icone": "✅",
+                    "itens": [
+                        "Bem tombado no sistema",
+                        "Etiqueta de identificação afixada",
+                        "Registro no inventário",
+                        "Termo de responsabilidade assinado",
+                        "Seguro contratado (se aplicável)",
+                        "Manual arquivado",
+                        "Garantia registrada",
+                        "Comunicação ao setor responsável"
+                    ],
+                    "proximo": "etapa_6"
+                },
+                "etapa_6": {
+                    "nome": "Agendar entrega do bem",
+                    "tipo": "reuniao",
+                    "icone": "📅",
+                    "dataHora": "A definir com o setor responsável",
+                    "local": "Local de instalação do bem",
+                    "participantes": "Setor de patrimônio, setor responsável, fornecedor (se aplicável)",
+                    "descricao": "Realizar a entrega formal do bem, orientar sobre o uso correto e colher assinatura no termo de responsabilidade.",
+                    "proximo": "etapa_7"
+                },
+                "etapa_7": {
+                    "nome": "Contatos do setor de patrimônio",
+                    "tipo": "contato",
+                    "icone": "👥",
+                    "contatos": [
+                        {
+                            "nome": "Coordenação de Patrimônio",
+                            "email": "patrimonio@ifro.edu.br",
+                            "telefone": "(69) 3211-3000",
+                            "cargo": "Coordenador",
+                            "departamento": "Patrimônio"
+                        },
+                        {
+                            "nome": "Setor de Compras",
+                            "email": "compras@ifro.edu.br",
+                            "telefone": "(69) 3211-3001",
+                            "cargo": "Chefe",
+                            "departamento": "Compras"
+                        },
+                        {
+                            "nome": "Contabilidade",
+                            "email": "contabilidade@ifro.edu.br",
+                            "telefone": "(69) 3211-3002",
+                            "cargo": "Contador",
+                            "departamento": "Contabilidade"
+                        }
+                    ],
+                    "proximo": "etapa_8"
+                },
+                "etapa_8": {
+                    "nome": "Encerrar processo de incorporação",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Encerramento - Incorporação de Bem Móvel</h2><p>O processo de incorporação do bem ____________________________, tombado sob o nº ____________, foi concluído com sucesso.</p><p><strong>Valor:</strong> R$ ________________</p><p><strong>Data de encerramento:</strong> ____/____/20____</p><p><strong>Responsável:</strong> ____________________________</p>",
+                    "obs": "Arquivar documentação e enviar cópia para a contabilidade.",
+                    "proximo": null
+                }
+            }
+        },
+        "Baixa de Bem Móvel": {
+            "descricao": "Fluxo para baixa de bens móveis inservíveis, obsoletos ou danificados do patrimônio institucional.",
+            "prazo": "Até 25 dias úteis",
+            "inicio": "etapa_0",
+            "visualizacao": {
+                "direcao": "TD",
+                "formato": "rect",
+                "corEtapa": "#fef2f2",
+                "corDecisao": "#fff7ed",
+                "corInicio": "#f0fdf4",
+                "corBorda": "#b91c1c"
+            },
+            "etapas": {
+                "etapa_0": {
+                    "nome": "Receber solicitação de baixa",
+                    "tipo": "anexo",
+                    "icone": "📎",
+                    "obs": "Anexar laudo técnico de inservibilidade, termo de responsabilidade e justificativa.",
+                    "proximo": "etapa_1"
+                },
+                "etapa_1": {
+                    "nome": "Triagem da solicitação",
+                    "tipo": "triagem",
+                    "icone": "🔍",
+                    "descricaoTriagem": "Analisar se o bem realmente se enquadra nas hipóteses de baixa patrimonial.",
+                    "observacoesTriagem": "Verificar se o bem está inservível, obsoleto, danificado ou extraviado. Verificar se há possibilidade de recuperação ou doação.",
+                    "itensTriagem": [
+                        {
+                            "titulo": "Laudo técnico",
+                            "detalhes": "Assinado por técnico responsável",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Termo de responsabilidade",
+                            "detalhes": "Assinado pelo detentor do bem",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Justificativa da baixa",
+                            "detalhes": "Motivo da inservibilidade",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Verificação de recuperabilidade",
+                            "detalhes": "Se há possibilidade de conserto",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Verificação de doação",
+                            "detalhes": "Se há interesse de outros órgãos",
+                            "obrigatorio": false
+                        },
+                        {
+                            "titulo": "Registro fotográfico",
+                            "detalhes": "Fotos do estado do bem",
+                            "obrigatorio": true
+                        }
+                    ],
+                    "proximo": "etapa_2"
+                },
+                "etapa_2": {
+                    "nome": "Bem pode ser recuperado?",
+                    "tipo": "decisao",
+                    "icone": "🔀",
+                    "pergunta": "O bem pode ser recuperado ou doado antes da baixa?",
+                    "opcoes": {
+                        "Sim, recuperar": {
+                            "destino": "etapa_3",
+                            "cor": "#16a34a"
+                        },
+                        "Não, dar baixa": {
+                            "destino": "etapa_4",
+                            "cor": "#dc2626"
+                        },
+                        "Sim, doar": {
+                            "destino": "etapa_5",
+                            "cor": "#f59e0b"
+                        }
+                    },
+                    "proximo": null
+                },
+                "etapa_3": {
+                    "nome": "Encaminhar para recuperação",
+                    "tipo": "alerta",
+                    "icone": "⚠️",
+                    "mensagem": "O bem será encaminhado para recuperação. Após o conserto, retornará ao patrimônio.",
+                    "nivel": "info",
+                    "proximo": "etapa_6"
+                },
+                "etapa_4": {
+                    "nome": "Emitir termo de baixa",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Termo de Baixa de Bem Móvel</h2><p>Após análise da solicitação e verificação da inservibilidade do bem ____________________________, tombado sob o nº ____________, autorizamos a BAIXA do referido bem do patrimônio da instituição.</p><p><strong>Motivo:</strong> ____________________________________________________________</p><p><strong>Destinação:</strong> ____________________________________________________________</p><p><strong>Data:</strong> ____/____/20____</p><br><p>___________________________<br>Coordenação de Patrimônio</p>",
+                    "obs": "Registrar a baixa no sistema de patrimônio e dar destinação adequada ao bem.",
+                    "proximo": "etapa_7"
+                },
+                "etapa_5": {
+                    "nome": "Processar doação",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Termo de Doação de Bem Móvel</h2><p>Após análise da solicitação, autorizamos a DOAÇÃO do bem ____________________________, tombado sob o nº ____________, para ____________________________, inscrito no CNPJ nº ________________.</p><p><strong>Justificativa:</strong> ____________________________________________________________</p><p><strong>Data:</strong> ____/____/20____</p><br><p>___________________________<br>Autoridade Competente</p>",
+                    "obs": "Publicar o termo de doação e providenciar a transferência do bem.",
+                    "proximo": "etapa_6"
+                },
+                "etapa_6": {
+                    "nome": "Checklist de baixa",
+                    "tipo": "checklist",
+                    "icone": "✅",
+                    "itens": [
+                        "Baixa registrada no sistema",
+                        "Termo arquivado",
+                        "Bem removido do inventário",
+                        "Comunicação à contabilidade",
+                        "Destinação final documentada",
+                        "Registro fotográfico arquivado",
+                        "Notificação ao setor responsável",
+                        "Atualização do seguro (se aplicável)"
+                    ],
+                    "proximo": "etapa_7"
+                },
+                "etapa_7": {
+                    "nome": "Agendar reunião de destinação",
+                    "tipo": "reuniao",
+                    "icone": "📅",
+                    "dataHora": "A definir",
+                    "local": "Sala de reuniões ou local de armazenamento",
+                    "participantes": "Setor de patrimônio, setor responsável, empresa de descarte (se aplicável)",
+                    "descricao": "Definir a destinação final do bem: leilão, doação, descarte ou recuperação.",
+                    "proximo": "etapa_8"
+                },
+                "etapa_8": {
+                    "nome": "Encerrar processo de baixa",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Encerramento - Baixa de Bem Móvel</h2><p>O processo de baixa do bem ____________________________ foi concluído.</p><p><strong>Destinação final:</strong> ____________________________________</p><p><strong>Data de encerramento:</strong> ____/____/20____</p><p><strong>Responsável:</strong> ____________________________</p>",
+                    "obs": "Arquivar documentação e enviar cópia para a contabilidade.",
+                    "proximo": null
+                }
+            }
+        }
+    },
+    "Gestão de Documentos": {
+        "Protocolo de Documentos": {
+            "descricao": "Fluxo para protocolo, registro e distribuição de documentos recebidos pela instituição.",
+            "prazo": "Até 5 dias úteis",
+            "inicio": "etapa_0",
+            "visualizacao": {
+                "direcao": "LR",
+                "formato": "rounded",
+                "corEtapa": "#f5f3ff",
+                "corDecisao": "#fef3c7",
+                "corInicio": "#ecfdf5",
+                "corBorda": "#7c3aed"
+            },
+            "etapas": {
+                "etapa_0": {
+                    "nome": "Receber documento",
+                    "tipo": "anexo",
+                    "icone": "📎",
+                    "obs": "Anexar o documento digitalizado (PDF) e o comprovante de recebimento.",
+                    "proximo": "etapa_1"
+                },
+                "etapa_1": {
+                    "nome": "Triagem do documento",
+                    "tipo": "triagem",
+                    "icone": "🔍",
+                    "descricaoTriagem": "Analisar o documento para classificá-lo e encaminhá-lo ao setor competente.",
+                    "observacoesTriagem": "Identificar o tipo de documento, a urgência, o remetente e o destinatário. Verificar se há anexos e se estão legíveis.",
+                    "itensTriagem": [
+                        {
+                            "titulo": "Tipo de documento",
+                            "detalhes": "Ofício, memorando, requerimento, etc.",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Remetente",
+                            "detalhes": "Nome, órgão ou empresa",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Destinatário",
+                            "detalhes": "Setor ou pessoa de destino",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Assunto",
+                            "detalhes": "Resumo do conteúdo",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Urgência",
+                            "detalhes": "Prazo para resposta",
+                            "obrigatorio": false
+                        },
+                        {
+                            "titulo": "Anexos",
+                            "detalhes": "Documentos complementares",
+                            "obrigatorio": false
+                        },
+                        {
+                            "titulo": "Legibilidade",
+                            "detalhes": "Documento digitalizado com qualidade",
+                            "obrigatorio": true
+                        }
+                    ],
+                    "proximo": "etapa_2"
+                },
+                "etapa_2": {
+                    "nome": "Documento está legível e completo?",
+                    "tipo": "decisao",
+                    "icone": "🔀",
+                    "pergunta": "O documento está em condições de ser protocolado?",
+                    "opcoes": {
+                        "Sim": {
+                            "destino": "etapa_4",
+                            "cor": "#16a34a"
+                        },
+                        "Não": {
+                            "destino": "etapa_3",
+                            "cor": "#dc2626"
+                        },
+                        "Aguardar complementação": {
+                            "destino": "etapa_3",
+                            "cor": "#f59e0b"
+                        }
+                    },
+                    "proximo": null
+                },
+                "etapa_3": {
+                    "nome": "Solicitar regularização",
+                    "tipo": "email",
+                    "icone": "📧",
+                    "modelo": "Assunto: Regularização de Documento - Protocolo\n\nPrezado(a) remetente,\n\nO documento enviado para protocolo apresenta problemas de legibilidade ou está incompleto. Por favor, regularize e reenvie os itens abaixo:\n\n[Listar pendências]\n\nAtenciosamente,\nSetor de Protocolo",
+                    "obs": "Enviar e-mail e aguardar reenvio.",
+                    "proximo": "etapa_0"
+                },
+                "etapa_4": {
+                    "nome": "Registrar protocolo",
+                    "tipo": "link",
+                    "icone": "🔗",
+                    "url": "https://sei.ifro.edu.br/protocolo",
+                    "obs": "Acessar o sistema SEI e registrar o protocolo do documento. Gerar número de protocolo e anexar o documento.",
+                    "proximo": "etapa_5"
+                },
+                "etapa_5": {
+                    "nome": "Checklist de protocolo",
+                    "tipo": "checklist",
+                    "icone": "✅",
+                    "itens": [
+                        "Documento protocolado no SEI",
+                        "Número de protocolo gerado",
+                        "Documento digitalizado anexado",
+                        "Setor de destino identificado",
+                        "Encaminhamento realizado",
+                        "Comprovante de recebimento arquivado",
+                        "Notificação ao remetente",
+                        "Registro no livro de protocolo"
+                    ],
+                    "proximo": "etapa_6"
+                },
+                "etapa_6": {
+                    "nome": "Encaminhar ao setor competente",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Despacho de Encaminhamento</h2><p>Encaminhamos o documento protocolado sob o nº ________________, para análise e providências do setor ____________________________.</p><p><strong>Assunto:</strong> ____________________________________________________________</p><p><strong>Prazo para manifestação:</strong> ____/____/20____</p><p><strong>Data:</strong> ____/____/20____</p><br><p>___________________________<br>Setor de Protocolo</p>",
+                    "obs": "Encaminhar via SEI e aguardar manifestação do setor.",
+                    "proximo": "etapa_7"
+                },
+                "etapa_7": {
+                    "nome": "Contatos do setor de protocolo",
+                    "tipo": "contato",
+                    "icone": "👥",
+                    "contatos": [
+                        {
+                            "nome": "Setor de Protocolo",
+                            "email": "protocolo@ifro.edu.br",
+                            "telefone": "(69) 3211-4000",
+                            "cargo": "Chefe",
+                            "departamento": "Protocolo"
+                        },
+                        {
+                            "nome": "Arquivo Central",
+                            "email": "arquivo@ifro.edu.br",
+                            "telefone": "(69) 3211-4001",
+                            "cargo": "Arquivista",
+                            "departamento": "Arquivo"
+                        },
+                        {
+                            "nome": "Ouvidoria",
+                            "email": "ouvidoria@ifro.edu.br",
+                            "telefone": "(69) 3211-4002",
+                            "cargo": "Ouvidor",
+                            "departamento": "Ouvidoria"
+                        }
+                    ],
+                    "proximo": "etapa_8"
+                },
+                "etapa_8": {
+                    "nome": "Encerrar processo de protocolo",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Encerramento - Protocolo de Documentos</h2><p>O documento protocolado sob o nº ________________ foi encaminhado ao setor competente e o processo de protocolo foi encerrado.</p><p><strong>Data de encerramento:</strong> ____/____/20____</p><p><strong>Responsável:</strong> ____________________________</p>",
+                    "obs": "Arquivar comprovante de encaminhamento e encerrar o processo no SEI.",
+                    "proximo": null
+                }
+            }
+        },
+        "Arquivamento de Documentos": {
+            "descricao": "Fluxo para arquivamento de documentos e processos administrativos, conforme tabela de temporalidade.",
+            "prazo": "Até 15 dias úteis",
+            "inicio": "etapa_0",
+            "visualizacao": {
+                "direcao": "TD",
+                "formato": "stadium",
+                "corEtapa": "#f0fdf4",
+                "corDecisao": "#fef9c3",
+                "corInicio": "#dbeafe",
+                "corBorda": "#16a34a"
+            },
+            "etapas": {
+                "etapa_0": {
+                    "nome": "Receber processo para arquivamento",
+                    "tipo": "anexo",
+                    "icone": "📎",
+                    "obs": "Anexar o processo completo e a folha de despacho de arquivamento.",
+                    "proximo": "etapa_1"
+                },
+                "etapa_1": {
+                    "nome": "Triagem do processo",
+                    "tipo": "triagem",
+                    "icone": "🔍",
+                    "descricaoTriagem": "Analisar o processo para verificar se está apto para arquivamento.",
+                    "observacoesTriagem": "Verificar se o processo está completo, se não há pendências e se o prazo de guarda foi respeitado.",
+                    "itensTriagem": [
+                        {
+                            "titulo": "Processo completo",
+                            "detalhes": "Todas as peças processuais presentes",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Sem pendências",
+                            "detalhes": "Nenhuma diligência em aberto",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Tabela de temporalidade",
+                            "detalhes": "Verificar prazo de guarda",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Classificação",
+                            "detalhes": "Definir se é arquivamento corrente, intermediário ou permanente",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Índice do processo",
+                            "detalhes": "Relação de documentos",
+                            "obrigatorio": false
+                        },
+                        {
+                            "titulo": "Termo de encerramento",
+                            "detalhes": "Assinado pela autoridade competente",
+                            "obrigatorio": true
+                        }
+                    ],
+                    "proximo": "etapa_2"
+                },
+                "etapa_2": {
+                    "nome": "Processo pode ser arquivado?",
+                    "tipo": "decisao",
+                    "icone": "🔀",
+                    "pergunta": "O processo atende aos requisitos para arquivamento?",
+                    "opcoes": {
+                        "Sim": {
+                            "destino": "etapa_3",
+                            "cor": "#16a34a"
+                        },
+                        "Não": {
+                            "destino": "etapa_6",
+                            "cor": "#dc2626"
+                        },
+                        "Arquivamento intermediário": {
+                            "destino": "etapa_5",
+                            "cor": "#f59e0b"
+                        }
+                    },
+                    "proximo": null
+                },
+                "etapa_3": {
+                    "nome": "Preparar documento para arquivamento",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Termo de Arquivamento</h2><p>O processo administrativo nº ________________, referente a ____________________________, foi considerado apto para arquivamento, conforme análise da Comissão de Avaliação de Documentos.</p><p><strong>Classificação:</strong> ____________________________________</p><p><strong>Prazo de guarda:</strong> ____________________________________</p><p><strong>Destinação final:</strong> ____________________________________</p><p><strong>Data:</strong> ____/____/20____</p><br><p>___________________________<br>Autoridade Competente</p>",
+                    "obs": "Assinar e arquivar o termo no processo.",
+                    "proximo": "etapa_4"
+                },
+                "etapa_4": {
+                    "nome": "Checklist de arquivamento",
+                    "tipo": "checklist",
+                    "icone": "✅",
+                    "itens": [
+                        "Termo de arquivamento assinado",
+                        "Processo classificado",
+                        "Prazo de guarda definido",
+                        "Local de arquivamento definido",
+                        "Registro no sistema de arquivo",
+                        "Etiqueta de identificação afixada",
+                        "Comunicação ao setor de origem",
+                        "Atualização do inventário"
+                    ],
+                    "proximo": "etapa_7"
+                },
+                "etapa_5": {
+                    "nome": "Encaminhar para arquivo intermediário",
+                    "tipo": "alerta",
+                    "icone": "⚠️",
+                    "mensagem": "O processo será encaminhado para o arquivo intermediário, onde aguardará o prazo de guarda para destinação final.",
+                    "nivel": "info",
+                    "proximo": "etapa_4"
+                },
+                "etapa_6": {
+                    "nome": "Devolver para regularização",
+                    "tipo": "email",
+                    "icone": "📧",
+                    "modelo": "Assunto: Processo com Pendências para Arquivamento\n\nPrezado(a) responsável,\n\nO processo encaminhado para arquivamento apresenta pendências que impedem seu arquivamento. Por favor, regularize os itens abaixo:\n\n[Listar pendências]\n\nAtenciosamente,\nSetor de Arquivo",
+                    "obs": "Enviar e-mail e aguardar regularização.",
+                    "proximo": "etapa_0"
+                },
+                "etapa_7": {
+                    "nome": "Agendar reunião de avaliação",
+                    "tipo": "reuniao",
+                    "icone": "📅",
+                    "dataHora": "A definir",
+                    "local": "Sala de reuniões do arquivo",
+                    "participantes": "Comissão de Avaliação de Documentos, arquivista, setor de origem",
+                    "descricao": "Reunião para avaliar processos com prazo de guarda vencido e definir destinação final (eliminação ou guarda permanente).",
+                    "proximo": "etapa_8"
+                },
+                "etapa_8": {
+                    "nome": "Contatos do arquivo",
+                    "tipo": "contato",
+                    "icone": "👥",
+                    "contatos": [
+                        {
+                            "nome": "Arquivo Central",
+                            "email": "arquivo@ifro.edu.br",
+                            "telefone": "(69) 3211-4001",
+                            "cargo": "Arquivista",
+                            "departamento": "Arquivo"
+                        },
+                        {
+                            "nome": "Comissão de Avaliação",
+                            "email": "avaliacao.documentos@ifro.edu.br",
+                            "telefone": "(69) 3211-4003",
+                            "cargo": "Presidente",
+                            "departamento": "Avaliação"
+                        },
+                        {
+                            "nome": "Setor de Protocolo",
+                            "email": "protocolo@ifro.edu.br",
+                            "telefone": "(69) 3211-4000",
+                            "cargo": "Chefe",
+                            "departamento": "Protocolo"
+                        }
+                    ],
+                    "proximo": "etapa_9"
+                },
+                "etapa_9": {
+                    "nome": "Encerrar processo de arquivamento",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Encerramento - Arquivamento de Documentos</h2><p>O processo de arquivamento do documento/processo nº ________________ foi concluído.</p><p><strong>Classificação:</strong> ____________________________________</p><p><strong>Destinação final:</strong> ____________________________________</p><p><strong>Data de encerramento:</strong> ____/____/20____</p><p><strong>Responsável:</strong> ____________________________</p>",
+                    "obs": "Arquivar documentação e atualizar o sistema de arquivo.",
+                    "proximo": null
+                }
+            }
+        }
+    },
+    "Gestão Financeira": {
+        "Liquidação de Despesa": {
+            "descricao": "Fluxo para liquidação de despesas, incluindo conferência de documentos fiscais e autorização de pagamento.",
+            "prazo": "Até 10 dias úteis",
+            "inicio": "etapa_0",
+            "visualizacao": {
+                "direcao": "LR",
+                "formato": "hexagon",
+                "corEtapa": "#f0f9ff",
+                "corDecisao": "#fef3c7",
+                "corInicio": "#dcfce7",
+                "corBorda": "#0369a1"
+            },
+            "etapas": {
+                "etapa_0": {
+                    "nome": "Receber nota fiscal",
+                    "tipo": "anexo",
+                    "icone": "📎",
+                    "obs": "Anexar nota fiscal, comprovante de entrega do material ou prestação do serviço, e termo de recebimento.",
+                    "proximo": "etapa_1"
+                },
+                "etapa_1": {
+                    "nome": "Triagem da documentação fiscal",
+                    "tipo": "triagem",
+                    "icone": "🔍",
+                    "descricaoTriagem": "Conferir se a documentação fiscal está correta e apta para liquidação.",
+                    "observacoesTriagem": "Verificar se a nota fiscal está em nome da instituição, se os dados do empenho estão corretos e se a entrega foi atestada.",
+                    "itensTriagem": [
+                        {
+                            "titulo": "Nota fiscal",
+                            "detalhes": "Em nome da instituição, com CNPJ correto",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Dados do empenho",
+                            "detalhes": "Número do empenho e valor conferem",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Comprovante de entrega",
+                            "detalhes": "Atestado pelo setor competente",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Termo de recebimento definitivo",
+                            "detalhes": "Assinado",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Certidões negativas",
+                            "detalhes": "FGTS, INSS, Fazenda, Trabalhista",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Dados bancários",
+                            "detalhes": "Conferem com o cadastro do fornecedor",
+                            "obrigatorio": true
+                        }
+                    ],
+                    "proximo": "etapa_2"
+                },
+                "etapa_2": {
+                    "nome": "Documentação está regular?",
+                    "tipo": "decisao",
+                    "icone": "🔀",
+                    "pergunta": "A documentação fiscal está apta para liquidação?",
+                    "opcoes": {
+                        "Sim": {
+                            "destino": "etapa_4",
+                            "cor": "#16a34a"
+                        },
+                        "Não": {
+                            "destino": "etapa_3",
+                            "cor": "#dc2626"
+                        },
+                        "Pendência sanável": {
+                            "destino": "etapa_3",
+                            "cor": "#f59e0b"
+                        }
+                    },
+                    "proximo": null
+                },
+                "etapa_3": {
+                    "nome": "Notificar pendências ao fornecedor",
+                    "tipo": "email",
+                    "icone": "📧",
+                    "modelo": "Assunto: Pendências na Documentação Fiscal\n\nPrezado(a) fornecedor(a),\n\nIdentificamos pendências na documentação fiscal enviada para liquidação. Por favor, regularize os itens abaixo no prazo de 5 dias úteis:\n\n[Listar pendências]\n\nAtenciosamente,\nSetor de Liquidação",
+                    "obs": "Enviar e-mail e aguardar regularização.",
+                    "proximo": "etapa_0"
+                },
+                "etapa_4": {
+                    "nome": "Registrar liquidação no sistema",
+                    "tipo": "link",
+                    "icone": "🔗",
+                    "url": "https://financeiro.ifro.edu.br/liquidacao",
+                    "obs": "Acessar o sistema financeiro e registrar a liquidação da despesa. Anexar documentos.",
+                    "proximo": "etapa_5"
+                },
+                "etapa_5": {
+                    "nome": "Checklist de liquidação",
+                    "tipo": "checklist",
+                    "icone": "✅",
+                    "itens": [
+                        "Liquidação registrada no sistema",
+                        "Documentos fiscais anexados",
+                        "Atesto de recebimento",
+                        "Certidões negativas conferidas",
+                        "Dados bancários validados",
+                        "Autorização do ordenador de despesas",
+                        "Nota de liquidação emitida",
+                        "Comunicação ao fornecedor"
+                    ],
+                    "proximo": "etapa_6"
+                },
+                "etapa_6": {
+                    "nome": "Autorizar pagamento",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Autorização de Pagamento</h2><p>Após conferência da documentação fiscal e registro da liquidação, AUTORIZO o pagamento da despesa referente à nota fiscal nº ________________, no valor de R$ ________________, em favor do fornecedor ____________________________, CNPJ nº ________________.</p><p><strong>Data:</strong> ____/____/20____</p><br><p>___________________________<br>Ordenador de Despesas</p>",
+                    "obs": "Encaminhar para o setor de pagamentos.",
+                    "proximo": "etapa_7"
+                },
+                "etapa_7": {
+                    "nome": "Contatos financeiros",
+                    "tipo": "contato",
+                    "icone": "👥",
+                    "contatos": [
+                        {
+                            "nome": "Setor de Liquidação",
+                            "email": "liquidacao@ifro.edu.br",
+                            "telefone": "(69) 3211-5000",
+                            "cargo": "Chefe",
+                            "departamento": "Liquidação"
+                        },
+                        {
+                            "nome": "Setor de Pagamentos",
+                            "email": "pagamentos@ifro.edu.br",
+                            "telefone": "(69) 3211-5001",
+                            "cargo": "Chefe",
+                            "departamento": "Pagamentos"
+                        },
+                        {
+                            "nome": "Contabilidade",
+                            "email": "contabilidade@ifro.edu.br",
+                            "telefone": "(69) 3211-5002",
+                            "cargo": "Contador",
+                            "departamento": "Contabilidade"
+                        },
+                        {
+                            "nome": "Ordenador de Despesas",
+                            "email": "ordenador@ifro.edu.br",
+                            "telefone": "(69) 3211-5003",
+                            "cargo": "Ordenador",
+                            "departamento": "Direção"
+                        }
+                    ],
+                    "proximo": "etapa_8"
+                },
+                "etapa_8": {
+                    "nome": "Encerrar processo de liquidação",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Encerramento - Liquidação de Despesa</h2><p>O processo de liquidação da despesa referente à nota fiscal nº ________________ foi concluído.</p><p><strong>Valor:</strong> R$ ________________</p><p><strong>Fornecedor:</strong> ____________________________</p><p><strong>Data de encerramento:</strong> ____/____/20____</p>",
+                    "obs": "Arquivar documentação e enviar cópia para a contabilidade.",
+                    "proximo": null
+                }
+            }
+        },
+        "Prestação de Contas": {
+            "descricao": "Fluxo para prestação de contas de convênios, contratos e auxílios financeiros.",
+            "prazo": "Até 30 dias úteis",
+            "inicio": "etapa_0",
+            "visualizacao": {
+                "direcao": "TD",
+                "formato": "rounded",
+                "corEtapa": "#fdf4ff",
+                "corDecisao": "#fce7f3",
+                "corInicio": "#e0f2fe",
+                "corBorda": "#a21caf"
+            },
+            "etapas": {
+                "etapa_0": {
+                    "nome": "Receber prestação de contas",
+                    "tipo": "anexo",
+                    "icone": "📎",
+                    "obs": "Anexar relatório de execução, notas fiscais, comprovantes de pagamento e extratos bancários.",
+                    "proximo": "etapa_1"
+                },
+                "etapa_1": {
+                    "nome": "Triagem da prestação de contas",
+                    "tipo": "triagem",
+                    "icone": "🔍",
+                    "descricaoTriagem": "Conferir se a documentação da prestação de contas está completa e correta.",
+                    "observacoesTriagem": "Verificar se todos os recursos foram aplicados conforme o plano de trabalho e se há divergências.",
+                    "itensTriagem": [
+                        {
+                            "titulo": "Relatório de execução",
+                            "detalhes": "Físico e financeiro",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Notas fiscais",
+                            "detalhes": "Originais ou cópias autenticadas",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Comprovantes de pagamento",
+                            "detalhes": "Transferências, cheques, etc.",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Extratos bancários",
+                            "detalhes": "Da conta específica do convênio",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Conciliação bancária",
+                            "detalhes": "Conferência de saldos",
+                            "obrigatorio": true
+                        },
+                        {
+                            "titulo": "Relação de bens adquiridos",
+                            "detalhes": "Se aplicável",
+                            "obrigatorio": false
+                        },
+                        {
+                            "titulo": "Declaração de devolução de saldo",
+                            "detalhes": "Se houver",
+                            "obrigatorio": false
+                        }
+                    ],
+                    "proximo": "etapa_2"
+                },
+                "etapa_2": {
+                    "nome": "Documentação está completa?",
+                    "tipo": "decisao",
+                    "icone": "🔀",
+                    "pergunta": "A prestação de contas está apta para análise?",
+                    "opcoes": {
+                        "Sim": {
+                            "destino": "etapa_4",
+                            "cor": "#16a34a"
+                        },
+                        "Não": {
+                            "destino": "etapa_3",
+                            "cor": "#dc2626"
+                        },
+                        "Pendência sanável": {
+                            "destino": "etapa_3",
+                            "cor": "#f59e0b"
+                        }
+                    },
+                    "proximo": null
+                },
+                "etapa_3": {
+                    "nome": "Notificar pendências",
+                    "tipo": "email",
+                    "icone": "📧",
+                    "modelo": "Assunto: Pendências na Prestação de Contas\n\nPrezado(a) responsável,\n\nIdentificamos pendências na prestação de contas. Por favor, regularize os itens abaixo no prazo de 10 dias úteis:\n\n[Listar pendências]\n\nAtenciosamente,\nSetor de Prestação de Contas",
+                    "obs": "Enviar e-mail e aguardar regularização.",
+                    "proximo": "etapa_0"
+                },
+                "etapa_4": {
+                    "nome": "Emitir parecer técnico",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Parecer Técnico - Prestação de Contas</h2><p>Após análise da prestação de contas do convênio/contrato nº ________________, referente ao período de ____/____/20____ a ____/____/20____, manifestamo-nos pela APROVAÇÃO da prestação de contas, uma vez que os recursos foram aplicados conforme o plano de trabalho e a documentação está regular.</p><p><strong>Valor total:</strong> R$ ________________</p><p><strong>Valor executado:</strong> R$ ________________</p><p><strong>Saldo devolvido:</strong> R$ ________________</p><p><strong>Data:</strong> ____/____/20____</p><br><p>___________________________<br>Analista Responsável</p>",
+                    "obs": "Anexar relatório de análise e encaminhar para aprovação.",
+                    "proximo": "etapa_5"
+                },
+                "etapa_5": {
+                    "nome": "Checklist de prestação de contas",
+                    "tipo": "checklist",
+                    "icone": "✅",
+                    "itens": [
+                        "Parecer técnico emitido",
+                        "Documentação arquivada",
+                        "Saldo devolvido (se aplicável)",
+                        "Registro no sistema de convênios",
+                        "Comunicação ao concedente",
+                        "Aprovação da autoridade competente",
+                        "Publicação do resultado",
+                        "Arquivamento do processo"
+                    ],
+                    "proximo": "etapa_6"
+                },
+                "etapa_6": {
+                    "nome": "Agendar reunião de avaliação",
+                    "tipo": "reuniao",
+                    "icone": "📅",
+                    "dataHora": "A definir",
+                    "local": "Sala de reuniões da Direção",
+                    "participantes": "Setor de prestação de contas, concedente, responsável pelo convênio",
+                    "descricao": "Reunião para avaliar a prestação de contas e definir encaminhamentos finais.",
+                    "proximo": "etapa_7"
+                },
+                "etapa_7": {
+                    "nome": "Contatos do setor",
+                    "tipo": "contato",
+                    "icone": "👥",
+                    "contatos": [
+                        {
+                            "nome": "Setor de Prestação de Contas",
+                            "email": "prestacao@ifro.edu.br",
+                            "telefone": "(69) 3211-6000",
+                            "cargo": "Coordenador",
+                            "departamento": "Prestação de Contas"
+                        },
+                        {
+                            "nome": "Concedente",
+                            "email": "concedente@orgao.gov.br",
+                            "telefone": "(00) 0000-0000",
+                            "cargo": "Gestor",
+                            "departamento": "Convênios"
+                        },
+                        {
+                            "nome": "Contabilidade",
+                            "email": "contabilidade@ifro.edu.br",
+                            "telefone": "(69) 3211-6001",
+                            "cargo": "Contador",
+                            "departamento": "Contabilidade"
+                        }
+                    ],
+                    "proximo": "etapa_8"
+                },
+                "etapa_8": {
+                    "nome": "Encerrar processo de prestação de contas",
+                    "tipo": "texto",
+                    "icone": "📝",
+                    "texto": "<h2>Encerramento - Prestação de Contas</h2><p>O processo de prestação de contas do convênio/contrato nº ________________ foi concluído com a APROVAÇÃO da prestação de contas.</p><p><strong>Valor total:</strong> R$ ________________</p><p><strong>Data de encerramento:</strong> ____/____/20____</p><p><strong>Responsável:</strong> ____________________________</p>",
+                    "obs": "Arquivar documentação e enviar cópia para o concedente.",
                     "proximo": null
                 }
             }
