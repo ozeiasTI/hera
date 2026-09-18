@@ -137,6 +137,9 @@ class UI {
     document
       .getElementById("btn-view-fluxo")
       .addEventListener("click", () => this.switchView("fluxo"));
+    document
+      .getElementById("btn-view-linha")
+      .addEventListener("click", () => this.switchView("linha"));
     ["mermaid-direction", "mermaid-node-shape", "mermaid-color-default", "mermaid-color-decision", "mermaid-color-start", "mermaid-color-border"].forEach((id) => {
       document.getElementById(id).addEventListener("change", (event) => {
         this.visualizacaoEmCriacao[this._getVisualizacaoField(id)] = event.target.value;
@@ -571,7 +574,7 @@ class UI {
               
               <div class="etapa-next">
                 ${etapa.proximo ? `➔ Próximo passo: ${fluxo.etapas[etapa.proximo]?.nome || etapa.proximo}` : ''}
-                ${etapa.opcoes ? `➔ Decisões: ${Object.entries(etapa.opcoes).map(([label, target]) => `<br>&nbsp;&nbsp;&nbsp;• ${label} ➔ ${fluxo.etapas[target]?.nome || target}`).join('')}` : ''}
+                ${etapa.opcoes ? `➔ Decisões: ${Object.entries(etapa.opcoes).map(([label, config]) => { const target = this._getOpcaoDestino(config); return `<br>&nbsp;&nbsp;&nbsp;• ${label} ➔ ${fluxo.etapas[target]?.nome || target}`; }).join('')}` : ''}
                 ${!etapa.proximo && !etapa.opcoes ? '🏁 Fim do Fluxo' : ''}
               </div>
             </div>
@@ -612,6 +615,7 @@ class UI {
     this.currentSubtype = subtipo;
     const fluxo = storage.getSubtipo(processo, subtipo);
     this.visualizacaoEmCriacao = { ...this._getDefaultVisualizacao(), ...(fluxo.visualizacao || {}) };
+    this.fluxoPrazo = fluxo.prazo || "";
     this.currentEtapa = fluxo.inicio;
     this.renderDetalhes();
     this.switchView("lista"); // Resetar para vista de lista ao abrir
@@ -629,11 +633,37 @@ class UI {
     if (view === "lista") {
       document.getElementById("view-lista-container").classList.add("active");
       document.getElementById("btn-view-lista").classList.add("active");
-    } else {
+    } else if (view === "fluxo") {
       document.getElementById("view-fluxo-container").classList.add("active");
       document.getElementById("btn-view-fluxo").classList.add("active");
       this.renderFluxograma();
+    } else {
+      document.getElementById("view-linha-container").classList.add("active");
+      document.getElementById("btn-view-linha").classList.add("active");
+      this.renderLinhaDoTempo();
     }
+  }
+
+  renderLinhaDoTempo() {
+    const fluxo = storage.getSubtipo(this.currentProcess, this.currentSubtype);
+    const container = document.getElementById("linha-do-tempo");
+    if (!fluxo || !container) return;
+
+    container.innerHTML = this._getEtapasOrdemGrafo(fluxo).map((key, index) => {
+      const etapa = fluxo.etapas[key];
+      const destino = etapa.proximo ? fluxo.etapas[etapa.proximo] : null;
+      return `
+        <article class="timeline-step">
+          <div class="timeline-marker">${index + 1}</div>
+          <div class="timeline-card">
+            <div class="etapa-tipo">${this._getTipoLabel(etapa.tipo)}</div>
+            <h3>${this._esc(etapa.nome)}</h3>
+            ${etapa.tipo === "texto" && etapa.texto ? `<div class="timeline-text">${this._sanitizarHtml(etapa.texto)}</div>` : ""}
+            <button class="btn btn-sm btn-secondary" onclick="ui.selectEtapa('${key}'); ui.switchView('lista')">Abrir etapa</button>
+            <div class="timeline-next">${destino ? `Depois: ${this._esc(destino.nome)}` : "Fim do fluxo"}</div>
+          </div>
+        </article>`;
+    }).join("");
   }
 
   renderFluxograma() {
@@ -647,6 +677,7 @@ class UI {
     this.visualizacaoEmCriacao = visualizacao;
     this._syncVisualizacaoControls();
     let definition = `graph ${visualizacao.direcao}\n`;
+    let edgeIndex = 0;
 
     // Estilos
     definition +=
@@ -667,7 +698,7 @@ class UI {
       const nome = etapa.nome.replace(/"/g, "'");
 
       // Formato do nó baseado no tipo
-      if (etapa.tipo === "decisao" || etapa.tipo === "triagem") {
+      if (etapa.tipo === "decisao") {
         definition += `  ${id}{"${nome}"}\n`;
         definition += `  class ${id} decisao\n`;
       } else {
@@ -677,18 +708,23 @@ class UI {
       }
 
       // Conexões
-      if (etapa.tipo === "decisao" || etapa.tipo === "triagem") {
+      if (etapa.tipo === "decisao") {
         if (etapa.opcoes) {
-          Object.entries(etapa.opcoes).forEach(([label, target]) => {
+          Object.entries(etapa.opcoes).forEach(([label, opcaoConfig]) => {
+            const target = this._getOpcaoDestino(opcaoConfig);
             if (target) {
               const targetId = target.replace("etapa_", "E");
               definition += `  ${id} -- "${label}" --> ${targetId}\n`;
+              const cor = this._getOpcaoCor(opcaoConfig);
+              if (cor) definition += `  linkStyle ${edgeIndex} stroke:${cor},stroke-width:2px\n`;
+              edgeIndex += 1;
             }
           });
         }
       } else if (etapa.proximo) {
         const targetId = etapa.proximo.replace("etapa_", "E");
         definition += `  ${id} --> ${targetId}\n`;
+        edgeIndex += 1;
       }
     });
 
@@ -789,10 +825,14 @@ class UI {
       html += `<div class="etapa-alert info">ℹ️ ${etapa.obs}</div>`;
     }
 
+    if (fluxo.prazo) {
+      html += `<div class="triagem-meta"><strong>Prazo do processo:</strong> ${this._esc(fluxo.prazo)}</div>`;
+    }
+
     if (etapa.tipo === "texto") {
       html += `
-                <div class="etapa-content">${etapa.texto}</div>
-                <button class="btn btn-primary" onclick="navigator.clipboard.writeText(\`${etapa.texto.replace(/`/g, "\\`")}\`); alert('Copiado!')">
+                <div class="etapa-content">${this._sanitizarHtml(etapa.texto || "")}</div>
+                <button class="btn btn-primary" onclick="ui.copiarTextoEtapa()">
                     📋 Copiar Texto
                 </button>
             `;
@@ -809,13 +849,15 @@ class UI {
                     <p style="font-weight: 600; margin-bottom: 16px; font-size: 16px;">${etapa.pergunta}</p>
                     <div class="decision-buttons">
             `;
-      Object.entries(etapa.opcoes).forEach(([opcao, proxima]) => {
+      Object.entries(etapa.opcoes || {}).forEach(([opcao, opcaoConfig]) => {
+        const proxima = this._getOpcaoDestino(opcaoConfig);
+        const cor = this._getOpcaoCor(opcaoConfig);
         const isYes =
           opcao.toLowerCase() === "sim" ||
           opcao.toLowerCase() === "yes" ||
           opcao.toLowerCase() === "ok";
         html += `
-                    <button class="btn-decision ${isYes ? "yes" : "no"}" onclick="ui.selectEtapa('${proxima}')">
+                    <button class="btn-decision ${isYes ? "yes" : "no"}" style="background:${cor || ""}" onclick="ui.selectEtapa('${proxima}')">
                         ${isYes ? "✓" : "✗"} ${opcao}
                     </button>
                 `;
@@ -837,19 +879,20 @@ class UI {
             `;
     } else if (etapa.tipo === "triagem") {
       html += `
-                <div style="margin: 20px 0;">
-                    <p style="font-weight: 600; margin-bottom: 16px; font-size: 16px;">${etapa.pergunta}</p>
-                    <div class="triagem-list">
+                <div class="triagem-viewer">
+                    ${etapa.descricaoTriagem ? `<div class="etapa-content">${this._sanitizarHtml(etapa.descricaoTriagem)}</div>` : ""}
+                    <div class="triagem-checklist">
             `;
-      Object.entries(etapa.opcoes).forEach(([opcao, proxima]) => {
+      (etapa.itensTriagem || []).forEach((item, idx) => {
+        const itemData = typeof item === "string" ? { titulo: item } : item;
         html += `
-                    <button class="triagem-item" onclick="ui.selectEtapa('${proxima}')">
-                        <span>${opcao}</span>
-                        <span>➔</span>
-                    </button>
+                    <label class="triagem-check-item">
+                        <input type="checkbox" class="checklist-checkbox" id="triagem-item-${idx}">
+                        <span><strong>${this._esc(itemData.titulo || "Item sem título")}${itemData.obrigatorio ? " *" : ""}</strong>${itemData.detalhes ? `<small>${this._esc(itemData.detalhes)}</small>` : ""}</span>
+                    </label>
                 `;
       });
-      html += `</div></div>`;
+      html += `</div>${etapa.observacoesTriagem ? `<div class="etapa-alert info"><strong>Observações:</strong><br>${this._esc(etapa.observacoesTriagem)}</div>` : ""}</div>`;
     } else if (etapa.tipo === "email") {
       html += `
                 <div class="etapa-content">${etapa.modelo}</div>
@@ -897,7 +940,7 @@ class UI {
       html += `</div>`;
     }
 
-    if (etapa.proximo && etapa.tipo !== "decisao" && etapa.tipo !== "triagem") {
+    if (etapa.proximo && etapa.tipo !== "decisao") {
       html += `
                 <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border);">
                     <button class="btn btn-primary" onclick="ui.selectEtapa('${etapa.proximo}')">
@@ -907,7 +950,14 @@ class UI {
             `;
     }
 
-    viewer.innerHTML = html;
+    if (viewer) viewer.innerHTML = html;
+  }
+
+  copiarTextoEtapa() {
+    const fluxo = storage.getSubtipo(this.currentProcess, this.currentSubtype);
+    const etapa = fluxo?.etapas?.[this.currentEtapa];
+    const texto = etapa ? new DOMParser().parseFromString(this._sanitizarHtml(etapa.texto || ""), "text/html").body.textContent : "";
+    navigator.clipboard.writeText(texto).then(() => alert("Copiado!"));
   }
 
   _getTipoLabel(tipo) {
@@ -917,13 +967,22 @@ class UI {
       decisao: "🔀 Decisão",
       link: "🔗 Link Externo",
       alerta: "⚠️ Alerta / Aviso",
-      triagem: "🔍 Triagem / Escolha",
+      triagem: "🔍 Triagem de Solicitação",
       email: "📧 E-mail",
       contato: "👥 Contatos",
       reuniao: "📅 Reunião/Agendamento",
       checklist: "✅ Checklist de Documentos",
     };
     return labels[tipo] || tipo;
+  }
+
+  _getOpcaoDestino(config) {
+    return typeof config === "string" ? config : (config?.destino || "");
+  }
+
+  _getOpcaoCor(config) {
+    const cor = typeof config === "object" ? config.cor || "" : "";
+    return /^#[0-9a-f]{6}$/i.test(cor) ? cor : "";
   }
 
   _getEtapasOrdemGrafo(fluxo) {
@@ -965,6 +1024,9 @@ class UI {
           ...(etapa.obs && { obs: etapa.obs }),
           ...(etapa.pergunta && { pergunta: etapa.pergunta }),
           ...(etapa.opcoes && { opcoes: etapa.opcoes }),
+          ...(etapa.descricaoTriagem && { descricaoTriagem: etapa.descricaoTriagem }),
+          ...(etapa.observacoesTriagem && { observacoesTriagem: etapa.observacoesTriagem }),
+          ...(etapa.itensTriagem && { itensTriagem: etapa.itensTriagem }),
           ...(etapa.url && { url: etapa.url }),
           ...(etapa.mensagem && { mensagem: etapa.mensagem }),
           ...(etapa.nivel && { nivel: etapa.nivel }),
@@ -982,6 +1044,7 @@ class UI {
     document.getElementById("form-processo").value = processo;
     document.getElementById("form-subtipo").value = subtipo;
     document.getElementById("form-descricao").value = fluxo.descricao || "";
+    document.getElementById("form-prazo").value = fluxo.prazo || "";
 
     this.goToPage("novo");
   }
@@ -1003,7 +1066,7 @@ class UI {
         ...etapa
       }));
 
-      storage.addFluxo(processo, novoSubtipo, fluxo.descricao, etapasArray, fluxo.visualizacao);
+      storage.addFluxo(processo, novoSubtipo, fluxo.descricao, etapasArray, fluxo.visualizacao, fluxo.prazo || "");
       alert(`Fluxo "${subtipo}" duplicado como "${novoSubtipo}"`);
       this.renderProcessos();
       this.updateStats();
@@ -1024,6 +1087,7 @@ class UI {
       document.getElementById("form-processo").value = "";
       document.getElementById("form-subtipo").value = "";
       document.getElementById("form-descricao").value = "";
+      document.getElementById("form-prazo").value = "";
     }
 
     this._renderFluxoBuilder();
@@ -1057,6 +1121,8 @@ class UI {
                     <div class="etapa-tipo">${tipoLabel}</div>
                 </div>
                 <div class="etapa-actions">
+                  <button class="btn-icon-sm" title="Mover etapa para cima" onclick="ui.moverEtapa(${index}, -1)" ${index === 0 ? "disabled" : ""}>↑</button>
+                  <button class="btn-icon-sm" title="Mover etapa para baixo" onclick="ui.moverEtapa(${index}, 1)" ${index === this.etapasEmCriacao.length - 1 ? "disabled" : ""}>↓</button>
                     <button class="btn-icon-sm btn-icon-edit" title="Editar etapa" onclick="ui.toggleEditarEtapa(${index})">
                         ${isEditando ? "✖" : "✏️"}
                     </button>
@@ -1105,7 +1171,7 @@ class UI {
                     <option value="texto"   ${etapa.tipo === "texto" ? "selected" : ""}>📝 Texto / Modelo</option>
                     <option value="anexo"   ${etapa.tipo === "anexo" ? "selected" : ""}>📎 Anexo de Documento</option>
                     <option value="decisao" ${etapa.tipo === "decisao" ? "selected" : ""}>🔀 Decisão (Sim/Não)</option>
-                    <option value="triagem" ${etapa.tipo === "triagem" ? "selected" : ""}>🔍 Triagem (Múltipla Escolha)</option>
+                    <option value="triagem" ${etapa.tipo === "triagem" ? "selected" : ""}>🔍 Triagem de Solicitação</option>
                     <option value="link"    ${etapa.tipo === "link" ? "selected" : ""}>🔗 Link Externo</option>
                     <option value="alerta"  ${etapa.tipo === "alerta" ? "selected" : ""}>⚠️ Alerta / Aviso</option>
                     <option value="email"   ${etapa.tipo === "email" ? "selected" : ""}>📧 E-mail</option>
@@ -1116,6 +1182,7 @@ class UI {
             </div>
 
             <div id="editor-campos-extras-${index}">
+              ${this._buildEtapaAnteriorControl(index)}
                 ${camposExtras}
             </div>
 
@@ -1133,7 +1200,17 @@ class UI {
       return `
                 <div class="form-group">
                     <label>Texto / Modelo</label>
-                    <textarea class="textarea" id="editor-texto-${index}" placeholder="Digite o texto ou modelo do documento..." oninput="ui._atualizarCampo(${index}, 'texto', this.value)">${this._esc(etapa.texto || "")}</textarea>
+                    <div class="rich-toolbar" role="toolbar">
+                      <button type="button" class="btn-icon-sm" title="Negrito" onclick="ui.formatarTexto('bold', ${index})"><strong>B</strong></button>
+                      <button type="button" class="btn-icon-sm" title="Itálico" onclick="ui.formatarTexto('italic', ${index})"><em>I</em></button>
+                      <button type="button" class="btn-icon-sm" title="Sublinhado" onclick="ui.formatarTexto('underline', ${index})"><u>U</u></button>
+                      <button type="button" class="btn-icon-sm" title="Tachado" onclick="ui.formatarTexto('strikeThrough', ${index})"><s>S</s></button>
+                      <button type="button" class="btn-icon-sm" title="Aumentar texto" onclick="ui.formatarTexto('increaseFontSize', ${index})">A+</button>
+                      <button type="button" class="btn-icon-sm" title="Diminuir texto" onclick="ui.formatarTexto('decreaseFontSize', ${index})">A-</button>
+                      <button type="button" class="btn-icon-sm" title="Centralizar" onclick="ui.formatarTexto('justifyCenter', ${index})">≡</button>
+                      <input type="color" title="Cor do texto" onchange="ui.formatarTexto('foreColor', ${index}, this.value)" value="#222222">
+                    </div>
+                    <div class="rich-editor" id="editor-texto-${index}" contenteditable="true" data-placeholder="Digite o texto ou modelo do documento..." oninput="ui._atualizarCampo(${index}, 'texto', this.innerHTML)">${this._sanitizarHtml(etapa.texto || "")}</div>
                 </div>
                 <div class="form-group">
                     <label>Observação</label>
@@ -1177,18 +1254,29 @@ class UI {
                 </div>
             `;
     } else if (etapa.tipo === "triagem") {
-      const opcoesHtml = this._buildOpcoesList(index, etapa.opcoes || {});
+      const itensHtml = this._buildTriagemItens(index, etapa.itensTriagem || []);
       return `
                 <div class="form-group">
-                    <label>Pergunta de Triagem</label>
-                    <input type="text" class="input" id="editor-pergunta-${index}" value="${this._esc(etapa.pergunta || "")}" placeholder="Ex: Qual é a prioridade?" oninput="ui._atualizarCampo(${index}, 'pergunta', this.value)">
+            <label>O que deve ser analisado</label>
+            <textarea class="textarea" id="editor-descricao-triagem-${index}" placeholder="Ex: Conferir os dados do ofício de visita, público e logística..." oninput="ui._atualizarCampo(${index}, 'descricaoTriagem', this.value)">${this._esc(etapa.descricaoTriagem || "")}</textarea>
                 </div>
                 <div class="form-group">
-                    <label>Opções e Destinos</label>
-                    <div id="opcoes-list-${index}" class="opcoes-list">
-                        ${opcoesHtml}
+            <label>Itens da triagem</label>
+            <div id="triagem-itens-${index}" class="triagem-editor-list">
+              ${itensHtml}
                     </div>
-                    <button type="button" class="btn btn-sm btn-secondary" onclick="ui._addOpcao(${index})">+ Adicionar Opção</button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="ui._addTriagemItem(${index})">+ Adicionar item de análise</button>
+          </div>
+          <div class="form-group">
+            <label>Observações e critérios</label>
+            <textarea class="textarea" placeholder="Registre critérios, cuidados ou informações que não são itens..." oninput="ui._atualizarCampo(${index}, 'observacoesTriagem', this.value)">${this._esc(etapa.observacoesTriagem || "")}</textarea>
+          </div>
+          <div class="form-group">
+            <label>Próxima Etapa</label>
+            <select class="select" onchange="ui._atualizarCampo(${index}, 'proximo', this.value)">
+              <option value="">Nenhuma (Fim do Fluxo)</option>
+              ${this._buildEtapasOptions(index, etapa.proximo)}
+            </select>
                 </div>
             `;
     } else if (etapa.tipo === "link") {
@@ -1311,19 +1399,77 @@ class UI {
       .join("");
   }
 
+  _buildEtapaAnteriorControl(indexAtual) {
+    const anterior = this.etapasEmCriacao.findIndex((etapa, index) => index !== indexAtual && etapa.proximo === `etapa_${indexAtual}`);
+    return `
+      <div class="form-group">
+        <label>Etapa anterior (quem chega até esta etapa)</label>
+        <select class="select" onchange="ui._vincularAnterior(${indexAtual}, this.value)">
+          <option value="">Nenhuma (início ou ligação manual)</option>
+          ${this._buildEtapasOptions(indexAtual, anterior >= 0 ? `etapa_${anterior}` : "")}
+        </select>
+      </div>`;
+  }
+
+  _buildTriagemItens(index, itens) {
+    return itens.map((item, itemIndex) => {
+      const itemData = typeof item === "string" ? { titulo: item, detalhes: "", obrigatorio: false } : item;
+      return `
+        <div class="triagem-editor-item">
+          <input class="input" value="${this._esc(itemData.titulo || "")}" placeholder="Ex: Data pretendida da visita" oninput="ui._atualizarTriagemItem(${index}, ${itemIndex}, 'titulo', this.value)">
+          <input class="input" value="${this._esc(itemData.detalhes || "")}" placeholder="Detalhes ou evidência esperada" oninput="ui._atualizarTriagemItem(${index}, ${itemIndex}, 'detalhes', this.value)">
+          <label class="triagem-required"><input type="checkbox" ${itemData.obrigatorio ? "checked" : ""} onchange="ui._atualizarTriagemItem(${index}, ${itemIndex}, 'obrigatorio', this.checked)"> Obrigatório</label>
+          <button type="button" class="btn-icon-sm btn-icon-delete" onclick="ui._removerTriagemItem(${index}, ${itemIndex})" title="Remover item">✕</button>
+        </div>`;
+    }).join("");
+  }
+
+  _addTriagemItem(index) {
+    if (!this.etapasEmCriacao[index].itensTriagem) this.etapasEmCriacao[index].itensTriagem = [];
+    this.etapasEmCriacao[index].itensTriagem.push({ titulo: "", detalhes: "", obrigatorio: false });
+    this._renderFluxoBuilder();
+  }
+
+  _atualizarTriagemItem(index, itemIndex, campo, valor) {
+    const itens = this.etapasEmCriacao[index]?.itensTriagem;
+    if (!itens || !itens[itemIndex]) return;
+    if (typeof itens[itemIndex] === "string") itens[itemIndex] = { titulo: itens[itemIndex], detalhes: "", obrigatorio: false };
+    itens[itemIndex][campo] = valor;
+  }
+
+  _removerTriagemItem(index, itemIndex) {
+    this.etapasEmCriacao[index]?.itensTriagem?.splice(itemIndex, 1);
+    this._renderFluxoBuilder();
+  }
+
+  _vincularAnterior(indexAtual, origem) {
+    this.etapasEmCriacao.forEach((etapa, index) => {
+      if (etapa.proximo === `etapa_${indexAtual}`) etapa.proximo = null;
+      if (origem && `etapa_${index}` === origem && etapa.tipo !== "decisao") {
+        etapa.proximo = `etapa_${indexAtual}`;
+      }
+    });
+    this._renderFluxoBuilder();
+  }
+
   _buildOpcoesList(index, opcoes) {
     return Object.entries(opcoes)
       .map(
-        ([opcao, destino], oIdx) => `
+        ([opcao, config], oIdx) => {
+          const destino = this._getOpcaoDestino(config);
+          const cor = this._getOpcaoCor(config) || "#dc3545";
+          return `
             <div class="opcao-item">
                 <input type="text" class="input" style="flex:1;" value="${this._esc(opcao)}" placeholder="Nome da opção" onchange="ui._renomearOpcao(${index}, ${oIdx}, this.value)">
                 <select class="select" style="flex:1;margin-left:8px;" onchange="ui._vincularOpcao(${index}, ${oIdx}, this.value)">
                     <option value="">Nenhuma (Fim)</option>
                     ${this._buildEtapasOptionsForOpcao(index, destino)}
                 </select>
+                <input type="color" class="opcao-cor" value="${this._esc(cor)}" title="Cor desta opção" onchange="ui._colorirOpcao(${index}, ${oIdx}, this.value)">
                 <button type="button" class="btn-icon-sm btn-icon-delete" onclick="ui._removerOpcao(${index}, ${oIdx})" style="margin-left:8px;">✕</button>
             </div>
-        `,
+        `;
+        },
       )
       .join("");
   }
@@ -1360,7 +1506,18 @@ class UI {
   _vincularOpcao(index, oIdx, destino) {
     const opcoes = this.etapasEmCriacao[index].opcoes;
     const keys = Object.keys(opcoes);
-    if (keys[oIdx]) opcoes[keys[oIdx]] = destino;
+    if (keys[oIdx]) {
+      const atual = opcoes[keys[oIdx]];
+      opcoes[keys[oIdx]] = { destino, cor: this._getOpcaoCor(atual) || "#dc3545" };
+    }
+  }
+
+  _colorirOpcao(index, oIdx, cor) {
+    const opcoes = this.etapasEmCriacao[index].opcoes;
+    const keys = Object.keys(opcoes);
+    if (!keys[oIdx]) return;
+    const atual = opcoes[keys[oIdx]];
+    opcoes[keys[oIdx]] = { destino: this._getOpcaoDestino(atual), cor };
   }
 
   _removerOpcao(index, oIdx) {
@@ -1376,6 +1533,32 @@ class UI {
       .replace(/"/g, "&quot;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
+  }
+
+  _sanitizarHtml(html) {
+    const template = document.createElement("template");
+    template.innerHTML = String(html || "");
+    template.content.querySelectorAll("script, style, iframe, object, embed").forEach((node) => node.remove());
+    template.content.querySelectorAll("*").forEach((node) => {
+      [...node.attributes].forEach((attribute) => {
+        if (attribute.name.startsWith("on") || (attribute.name === "style" && !/^color\s*:\s*#[0-9a-f]{3,8}\s*;?$/i.test(attribute.value))) {
+          node.removeAttribute(attribute.name);
+        }
+      });
+    });
+    return template.innerHTML;
+  }
+
+  formatarTexto(comando, index, valor) {
+    const editor = document.getElementById(`editor-texto-${index}`);
+    if (!editor) return;
+    editor.focus();
+    if (comando === "increaseFontSize" || comando === "decreaseFontSize") {
+      document.execCommand("fontSize", false, comando === "increaseFontSize" ? "5" : "2");
+    } else {
+      document.execCommand(comando, false, valor);
+    }
+    this._atualizarCampo(index, "texto", editor.innerHTML);
   }
 
   toggleEditarEtapa(index) {
@@ -1404,12 +1587,16 @@ class UI {
       etapa.obs = "";
     } else if (novoTipo === "anexo") {
       etapa.obs = "";
-    } else if (novoTipo === "decisao" || novoTipo === "triagem") {
+    } else if (novoTipo === "decisao") {
       etapa.pergunta = "";
-      etapa.opcoes =
-        novoTipo === "decisao"
-          ? { Sim: "etapa_X", Não: "etapa_Y" }
-          : { "Opção 1": "etapa_X" };
+      etapa.opcoes = {
+        Sim: { destino: "etapa_X", cor: "#198754" },
+        Não: { destino: "etapa_Y", cor: "#dc3545" },
+      };
+    } else if (novoTipo === "triagem") {
+      etapa.descricaoTriagem = "";
+      etapa.observacoesTriagem = "";
+      etapa.itensTriagem = [];
     } else if (novoTipo === "link") {
       etapa.url = "";
       etapa.obs = "";
@@ -1795,6 +1982,35 @@ class UI {
     this._renderFluxoBuilder();
   }
 
+  moverEtapa(index, direcao) {
+    const destino = index + direcao;
+    if (destino < 0 || destino >= this.etapasEmCriacao.length) return;
+
+    const etapaAnterior = this.etapasEmCriacao[index];
+    const etapaDestino = this.etapasEmCriacao[destino];
+    const remapear = (referencia) => {
+      if (!referencia) return referencia;
+      const numero = Number(referencia.replace("etapa_", ""));
+      if (numero === index) return `etapa_${destino}`;
+      if (numero === destino) return `etapa_${index}`;
+      return referencia;
+    };
+
+    [this.etapasEmCriacao[index], this.etapasEmCriacao[destino]] = [etapaDestino, etapaAnterior];
+    this.etapasEmCriacao.forEach((etapa) => {
+      etapa.proximo = remapear(etapa.proximo);
+      if (etapa.opcoes) {
+        Object.keys(etapa.opcoes).forEach((chave) => {
+          const opcao = etapa.opcoes[chave];
+          if (typeof opcao === "object") opcao.destino = remapear(opcao.destino);
+          else etapa.opcoes[chave] = remapear(opcao);
+        });
+      }
+    });
+    this.etapaEditandoIndex = null;
+    this._renderFluxoBuilder();
+  }
+
   confirmarEdicaoEtapa(index) {
     this.etapaEditandoIndex = null;
     this._renderFluxoBuilder();
@@ -1817,6 +2033,7 @@ class UI {
     const processo = document.getElementById("form-processo").value.trim();
     const subtipo = document.getElementById("form-subtipo").value.trim();
     const descricao = document.getElementById("form-descricao").value.trim();
+    this.fluxoPrazo = document.getElementById("form-prazo").value.trim();
 
     if (!processo || !subtipo) {
       alert("Preencha o nome do processo e subtipo");
@@ -1828,7 +2045,7 @@ class UI {
       return;
     }
 
-    storage.addFluxo(processo, subtipo, descricao, this.etapasEmCriacao, this.visualizacaoEmCriacao);
+    storage.addFluxo(processo, subtipo, descricao, this.etapasEmCriacao, this.visualizacaoEmCriacao, this.fluxoPrazo || "");
     alert("Fluxo salvo com sucesso!");
 
     this.isEditingSavedFluxo = false;
@@ -1836,22 +2053,6 @@ class UI {
     this.etapaEditandoIndex = null;
     this.updateStats();
     this.goToPage("home");
-  }
-
-  restoreBackup(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    storage
-      .importBackup(file)
-      .then(() => {
-        alert("Backup restaurado com sucesso!");
-        this.updateStats();
-        this.renderHome();
-      })
-      .catch((err) => {
-        alert("Erro ao restaurar backup: " + err.message);
-      });
   }
 
   updateStats() {

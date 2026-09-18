@@ -222,6 +222,7 @@
               </div>
             </div>
           </div>
+          <div id="home-processos" class="processos-list"></div>
         </div>
 
         <!-- Processos Page -->
@@ -314,6 +315,10 @@
               <div class="form-group">
                 <label>Descrição</label>
                 <textarea id="form-descricao" class="textarea" placeholder="Descrição do fluxo processual"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Prazo do processo</label>
+                <input type="text" id="form-prazo" class="input" placeholder="Ex: Até 10 dias úteis" />
               </div>
             </div>
 
@@ -623,7 +628,8 @@
               <h2 class="section-title">🎓 Projeto de Pesquisa</h2>
               <p>
                 Este software foi desenvolvido para uma abordagem de projeto de pesquisa intitulada:
-                <strong>Desenvolvimento de ferramenta low-code para gestão de fluxos processuais no SEI com foco em soberania digital do IFRO</strong>.
+                <strong>Desenvolvimento de ferramenta low-code para gestão de fluxos processuais no SEI com foco em
+                  soberania digital do IFRO</strong>.
               </p>
             </div>
 
@@ -671,8 +677,8 @@
               </div>
 
               <div style="text-align: center; margin-top: 30px">
-                <a href="https://chromewebstore.google.com/detail/sei-plus/jjpoiockoiknmfffnkmmkjcnflagalci" target="_blank" class="btn btn-primary btn-lg"
-                  style="font-size: 1.2rem">
+                <a href="https://chromewebstore.google.com/detail/sei-plus/jjpoiockoiknmfffnkmmkjcnflagalci"
+                  target="_blank" class="btn btn-primary btn-lg" style="font-size: 1.2rem">
                   🧩 Baixar Extensão na Chrome Web Store
                 </a>
                 <p style="
@@ -1129,7 +1135,8 @@
                   </div>
                 </div>
                 <div class="config-api-row">
-                  <input type="password" id="openai-api-key" class="input" placeholder="Cole sua chave OpenAI (sk-...)" />
+                  <input type="password" id="openai-api-key" class="input"
+                    placeholder="Cole sua chave OpenAI (sk-...)" />
                   <button class="btn btn-primary" id="btn-save-api-key">Salvar Chave</button>
                 </div>
               </section>
@@ -1153,7 +1160,8 @@
                   <div class="config-icon config-icon-gold">🎓</div>
                   <h3>Projeto de pesquisa</h3>
                 </div>
-                <p>Desenvolvimento de ferramenta low-code para gestão de fluxos processuais no SEI com foco em soberania digital do IFRO.</p>
+                <p>Desenvolvimento de ferramenta low-code para gestão de fluxos processuais no SEI com foco em soberania
+                  digital do IFRO.</p>
               </section>
 
               <section class="config-panel">
@@ -1164,7 +1172,8 @@
                     <p>Atalhos para preenchimento rápido.</p>
                   </div>
                 </div>
-                <button class="btn btn-primary config-full-button" onclick="ui.goToPage('autocomplete')">Gerenciar Atalhos</button>
+                <button class="btn btn-primary config-full-button" onclick="ui.goToPage('autocomplete')">Gerenciar
+                  Atalhos</button>
               </section>
             </aside>
           </div>
@@ -1291,6 +1300,9 @@
               <button class="btn btn-sm btn-secondary" id="btn-view-fluxo">
                 📊 Fluxograma
               </button>
+              <button class="btn btn-sm btn-secondary" id="btn-view-linha">
+                🧭 Linha do tempo
+              </button>
             </div>
           </div>
 
@@ -1329,13 +1341,18 @@
                 <div class="fluxo-color-group">
                   <label>Paleta</label>
                   <div class="fluxo-colors">
-                    <label title="Cor das etapas"><input type="color" id="mermaid-color-default" aria-label="Cor das etapas"></label>
-                    <label title="Cor das decisões"><input type="color" id="mermaid-color-decision" aria-label="Cor das decisões"></label>
-                    <label title="Cor da primeira etapa"><input type="color" id="mermaid-color-start" aria-label="Cor da primeira etapa"></label>
-                    <label title="Cor das bordas"><input type="color" id="mermaid-color-border" aria-label="Cor das bordas"></label>
+                    <label title="Cor das etapas"><input type="color" id="mermaid-color-default"
+                        aria-label="Cor das etapas"></label>
+                    <label title="Cor das decisões"><input type="color" id="mermaid-color-decision"
+                        aria-label="Cor das decisões"></label>
+                    <label title="Cor da primeira etapa"><input type="color" id="mermaid-color-start"
+                        aria-label="Cor da primeira etapa"></label>
+                    <label title="Cor das bordas"><input type="color" id="mermaid-color-border"
+                        aria-label="Cor das bordas"></label>
                   </div>
                 </div>
-                <button type="button" class="btn btn-sm btn-secondary" id="btn-reset-mermaid-style">Restaurar padrão</button>
+                <button type="button" class="btn btn-sm btn-secondary" id="btn-reset-mermaid-style">Restaurar
+                  padrão</button>
               </div>
               <button id="btn-download-png" class="btn btn-primary"
                 style="width: 200px; text-align: center; align-items: center">
@@ -1344,6 +1361,9 @@
               <div class="fluxo-canvas">
                 <div id="mermaid-graph" class="mermaid"></div>
               </div>
+            </div>
+            <div id="view-linha-container" class="view-container">
+              <div id="linha-do-tempo" class="timeline"></div>
             </div>
           </div>
         </div>

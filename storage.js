@@ -55,7 +55,7 @@ class Storage {
         return true;
     }
 
-    addFluxo(processo, subtipo, descricao, etapas, visualizacao = null) {
+    addFluxo(processo, subtipo, descricao, etapas, visualizacao = null, prazo = '') {
         const data = this.getAllProcessos();
 
         if (!data[processo]) {
@@ -64,9 +64,7 @@ class Storage {
 
         const etapasMap = {};
         etapas.forEach((etapa, index) => {
-            // Se for decisão, as opções já devem conter as chaves corretas (etapa_X)
-            // Se não for decisão, o próximo é o index + 1
-            const proximaEtapa = (etapa.tipo !== 'decisao' && etapa.tipo !== 'triagem' && index < etapas.length - 1) ? `etapa_${index + 1}` : (etapa.proximo || null);
+            const proximaEtapa = etapa.proximo || null;
 
             etapasMap[`etapa_${index}`] = {
                 nome: etapa.nome,
@@ -77,7 +75,11 @@ class Storage {
                 ...(etapa.tipo === 'decisao' && { pergunta: etapa.pergunta, opcoes: etapa.opcoes }),
                 ...(etapa.tipo === 'link' && { url: etapa.url, obs: etapa.obs }),
                 ...(etapa.tipo === 'alerta' && { mensagem: etapa.mensagem, nivel: etapa.nivel || 'info' }),
-                ...(etapa.tipo === 'triagem' && { pergunta: etapa.pergunta, opcoes: etapa.opcoes }),
+                ...(etapa.tipo === 'triagem' && {
+                    descricaoTriagem: etapa.descricaoTriagem,
+                    observacoesTriagem: etapa.observacoesTriagem,
+                    itensTriagem: etapa.itensTriagem || []
+                }),
                 ...(etapa.tipo === 'email' && { modelo: etapa.modelo, obs: etapa.obs }),
                 ...(etapa.tipo === 'contato' && { contatos: etapa.contatos || [] }),
                 ...(etapa.tipo === 'reuniao' && { dataHora: etapa.dataHora, local: etapa.local, participantes: etapa.participantes, descricao: etapa.descricao }),
@@ -88,6 +90,7 @@ class Storage {
 
         data[processo][subtipo] = {
             descricao: descricao,
+            prazo,
             inicio: 'etapa_0',
             etapas: etapasMap,
             ...(visualizacao && { visualizacao })
@@ -145,6 +148,9 @@ class Storage {
             reader.onload = (e) => {
                 try {
                     const data = JSON.parse(e.target.result);
+                    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+                        throw new Error('Estrutura de backup inválida');
+                    }
                     this.set(data);
                     resolve(true);
                 } catch (error) {
@@ -171,7 +177,7 @@ class Storage {
                 totalFluxos++;
                 Object.values(fluxo.etapas).forEach(etapa => {
                     totalEtapas++;
-                    if (etapa.tipo === 'decisao' || etapa.tipo === 'triagem') {
+                    if (etapa.tipo === 'decisao') {
                         totalDecisoes++;
                     }
                 });
