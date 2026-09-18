@@ -991,11 +991,14 @@ class UI {
       return numA - numB;
     });
 
-    etapaKeys.forEach((key) => {
+    etapaKeys.forEach((key, index) => {
       const etapa = fluxo.etapas[key];
       const btn = document.createElement("button");
       btn.className = `etapa-nav-item ${key === this.currentEtapa ? "active" : ""}`;
-      btn.textContent = etapa.nome;
+      btn.innerHTML = `
+        <span class="etapa-nav-index">${index + 1}</span>
+        <span class="etapa-nav-label">${this._esc(etapa.nome)}</span>
+      `;
       btn.addEventListener("click", () => {
         this.currentEtapa = key;
         this.renderDetalhes();
@@ -1021,28 +1024,67 @@ class UI {
     }
 
     if (fluxo.prazo && etapa.tipo !== "triagem") {
-      html += `<div class="triagem-meta"><strong>Prazo do processo:</strong> ${this._esc(fluxo.prazo)}</div>`;
+      html += `
+        <div class="stage-meta">
+          <span class="stage-meta-icon">⏱</span>
+          <div class="stage-meta-copy">
+            <span class="stage-meta-label">Prazo do processo</span>
+            <strong>${this._esc(fluxo.prazo)}</strong>
+          </div>
+        </div>
+      `;
     }
 
     if (etapa.tipo === "texto") {
       html += `
-                <div class="etapa-content">${this._sanitizarHtml(etapa.texto || "")}</div>
-                <button class="btn btn-primary" onclick="ui.copiarTextoEtapa()">
-                    📋 Copiar Texto
-                </button>
+                <section class="stage-visual stage-visual-texto">
+                    <div class="stage-visual-header">
+                        <div class="stage-visual-icon">📝</div>
+                        <div>
+                            <span class="stage-visual-kicker">Texto da etapa</span>
+                            <h3>Conteúdo para leitura e uso</h3>
+                        </div>
+                    </div>
+                    <div class="stage-visual-body">
+                        <div class="etapa-content">${this._sanitizarHtml(etapa.texto || "")}</div>
+                    </div>
+                    <div class="stage-visual-actions">
+                        <button class="btn btn-primary" onclick="ui.copiarTextoEtapa()">📋 Copiar Texto</button>
+                    </div>
+                </section>
             `;
     } else if (etapa.tipo === "anexo") {
       html += `
-                <div class="etapa-alert warning">
-                    <div style="font-weight: 600; margin-bottom: 8px;">Anexação de Documento</div>
-                    <p style="font-size: 13px;">Nesta etapa, você deve anexar o documento especificado no SEI.</p>
-                </div>
+                <section class="stage-visual stage-visual-anexo">
+                    <div class="stage-visual-header">
+                        <div class="stage-visual-icon">📎</div>
+                        <div>
+                            <span class="stage-visual-kicker">Documento</span>
+                            <h3>Anexação de documento</h3>
+                        </div>
+                    </div>
+                    <div class="stage-visual-body">
+                        <div class="etapa-alert warning">
+                            <div style="font-weight: 600; margin-bottom: 8px;">Anexação de Documento</div>
+                            <p style="font-size: 13px;">Nesta etapa, você deve anexar o documento especificado no SEI.</p>
+                        </div>
+                    </div>
+                </section>
             `;
     } else if (etapa.tipo === "decisao") {
       html += `
-                <div style="margin: 20px 0;">
-                    <p style="font-weight: 600; margin-bottom: 16px; font-size: 16px;">${etapa.pergunta}</p>
-                    <div class="decision-buttons">
+                <section class="stage-visual stage-visual-decisao">
+                    <div class="stage-visual-header">
+                        <div class="stage-visual-icon">🔀</div>
+                        <div>
+                            <span class="stage-visual-kicker">Decisão</span>
+                            <h3>Selecione a alternativa correta</h3>
+                        </div>
+                    </div>
+                    <div class="stage-visual-body">
+                        <div class="decision-panel">
+                            <p class="decision-question">${etapa.pergunta}</p>
+                            <div class="decision-buttons">
             `;
       Object.entries(etapa.opcoes || {}).forEach(([opcao, opcaoConfig]) => {
         const proxima = this._getOpcaoDestino(opcaoConfig);
@@ -1052,25 +1094,47 @@ class UI {
           opcao.toLowerCase() === "yes" ||
           opcao.toLowerCase() === "ok";
         html += `
-                    <button class="btn-decision ${isYes ? "yes" : "no"}" style="background:${cor || ""}" onclick="ui.selectEtapa('${proxima}')">
-                        ${isYes ? "✓" : "✗"} ${opcao}
-                    </button>
-                `;
+                            <button class="btn-decision ${isYes ? "yes" : "no"}" style="background:${cor || ""}" onclick="ui.selectEtapa('${proxima}')">
+                                ${isYes ? "✓" : "✗"} ${opcao}
+                            </button>
+                        `;
       });
-      html += `</div></div>`;
+      html += `</div></div></div></section>`;
     } else if (etapa.tipo === "link") {
       html += `
-                <div class="etapa-alert info">
-                    <p style="margin-bottom: 12px;">Esta etapa requer acesso a um link externo ou recurso específico.</p>
-                    <a href="${etapa.url}" target="_blank" class="btn btn-primary">🌐 Acessar Recurso</a>
-                </div>
+                <section class="stage-visual stage-visual-link">
+                    <div class="stage-visual-header">
+                        <div class="stage-visual-icon">🔗</div>
+                        <div>
+                            <span class="stage-visual-kicker">Recurso externo</span>
+                            <h3>Link / acesso necessário</h3>
+                        </div>
+                    </div>
+                    <div class="stage-visual-body">
+                        <div class="etapa-alert info">
+                            <p style="margin-bottom: 12px;">Esta etapa requer acesso a um link externo ou recurso específico.</p>
+                            <a href="${etapa.url}" target="_blank" class="btn btn-primary">🌐 Acessar Recurso</a>
+                        </div>
+                    </div>
+                </section>
             `;
     } else if (etapa.tipo === "alerta") {
       html += `
-                <div class="etapa-alert ${etapa.nivel || "info"}">
-                    <div style="font-weight: 700; font-size: 16px; margin-bottom: 8px;">⚠️ ATENÇÃO</div>
-                    <p>${etapa.mensagem}</p>
-                </div>
+                <section class="stage-visual stage-visual-alerta">
+                    <div class="stage-visual-header">
+                        <div class="stage-visual-icon">⚠️</div>
+                        <div>
+                            <span class="stage-visual-kicker">Atenção</span>
+                            <h3>Evento importante</h3>
+                        </div>
+                    </div>
+                    <div class="stage-visual-body">
+                        <div class="etapa-alert ${etapa.nivel || "info"}">
+                            <div style="font-weight: 700; font-size: 16px; margin-bottom: 8px;">ATENÇÃO</div>
+                            <p>${etapa.mensagem}</p>
+                        </div>
+                    </div>
+                </section>
             `;
     } else if (etapa.tipo === "triagem") {
       const itensTriagem = etapa.itensTriagem || [];
@@ -1110,49 +1174,91 @@ class UI {
       html += `</div>${etapa.observacoesTriagem ? `<div class="triagem-notes"><span class="triagem-notes-icon">💡</span><div><span class="triagem-kicker">Atenção</span><strong>Observações importantes</strong><p>${this._esc(etapa.observacoesTriagem)}</p></div></div>` : ""}</section>`;
     } else if (etapa.tipo === "email") {
       html += `
-                <div class="etapa-content">${etapa.modelo}</div>
-                <button class="btn btn-primary" onclick="navigator.clipboard.writeText(\`${etapa.modelo.replace(/`/g, "\\`")}\`); alert('Modelo copiado!')">
-                    📋 Copiar Modelo de E-mail
-                </button>
+                <section class="stage-visual stage-visual-email">
+                    <div class="stage-visual-header">
+                        <div class="stage-visual-icon">📧</div>
+                        <div>
+                            <span class="stage-visual-kicker">Comunicação</span>
+                            <h3>Modelo de e-mail</h3>
+                        </div>
+                    </div>
+                    <div class="stage-visual-body">
+                        <div class="email-content">${etapa.modelo}</div>
+                    </div>
+                    <div class="stage-visual-actions">
+                        <button class="btn btn-primary" onclick="navigator.clipboard.writeText(\`${etapa.modelo.replace(/`/g, "\\`")}\`); alert('Modelo copiado!')">📋 Copiar Modelo de E-mail</button>
+                    </div>
+                </section>
             `;
     } else if (etapa.tipo === "contato") {
-      html += `<div class="contatos-list">`;
+      html += `
+                <section class="stage-visual stage-visual-contato">
+                    <div class="stage-visual-header">
+                        <div class="stage-visual-icon">👥</div>
+                        <div>
+                            <span class="stage-visual-kicker">Pessoas</span>
+                            <h3>Contatos da etapa</h3>
+                        </div>
+                    </div>
+                    <div class="stage-visual-body">
+                        <div class="contatos-list">`;
       if (etapa.contatos && Array.isArray(etapa.contatos)) {
         etapa.contatos.forEach((contato) => {
           html += `
-                        <div class="contato-card">
-                            <div class="contato-nome">${contato.nome}</div>
-                            <div class="contato-info">📧 ${contato.email}</div>
-                            <div class="contato-info">📱 ${contato.telefone}</div>
-                            ${contato.cargo ? `<div class="contato-info">💼 ${contato.cargo}</div>` : ""}
-                            ${contato.departamento ? `<div class="contato-info">🏢 ${contato.departamento}</div>` : ""}
-                        </div>
-                    `;
+                            <div class="contato-card">
+                                <div class="contato-nome">${contato.nome}</div>
+                                <div class="contato-info">📧 ${contato.email}</div>
+                                <div class="contato-info">📱 ${contato.telefone}</div>
+                                ${contato.cargo ? `<div class="contato-info">💼 ${contato.cargo}</div>` : ""}
+                                ${contato.departamento ? `<div class="contato-info">🏢 ${contato.departamento}</div>` : ""}
+                            </div>
+                        `;
         });
       }
-      html += `</div>`;
+      html += `</div></div></section>`;
     } else if (etapa.tipo === "reuniao") {
       html += `
-                <div class="reuniao-info">
-                    <div class="info-row"><span>📅 Data/Hora:</span> <strong>${etapa.dataHora || "A definir"}</strong></div>
-                    <div class="info-row"><span>📍 Local:</span> <strong>${etapa.local || "A definir"}</strong></div>
-                    <div class="info-row"><span>👥 Participantes:</span> <strong>${etapa.participantes || "A definir"}</strong></div>
-                    ${etapa.descricao ? `<div class="info-row"><span>📝 Descrição:</span></div><div class="etapa-content">${etapa.descricao}</div>` : ""}
-                </div>
+                <section class="stage-visual stage-visual-reuniao">
+                    <div class="stage-visual-header">
+                        <div class="stage-visual-icon">📅</div>
+                        <div>
+                            <span class="stage-visual-kicker">Agendamento</span>
+                            <h3>Dados da reunião</h3>
+                        </div>
+                    </div>
+                    <div class="stage-visual-body">
+                        <div class="reuniao-info">
+                            <div class="info-row"><span>📅 Data/Hora:</span> <strong>${etapa.dataHora || "A definir"}</strong></div>
+                            <div class="info-row"><span>📍 Local:</span> <strong>${etapa.local || "A definir"}</strong></div>
+                            <div class="info-row"><span>👥 Participantes:</span> <strong>${etapa.participantes || "A definir"}</strong></div>
+                            ${etapa.descricao ? `<div class="info-row"><span>📝 Descrição:</span></div><div class="etapa-content">${etapa.descricao}</div>` : ""}
+                        </div>
+                    </div>
+                </section>
             `;
     } else if (etapa.tipo === "checklist") {
-      html += `<div class="checklist-container">`;
+      html += `
+                <section class="stage-visual stage-visual-checklist">
+                    <div class="stage-visual-header">
+                        <div class="stage-visual-icon">✅</div>
+                        <div>
+                            <span class="stage-visual-kicker">Checklist</span>
+                            <h3>Itens de verificação</h3>
+                        </div>
+                    </div>
+                    <div class="stage-visual-body">
+                        <div class="checklist-container">`;
       if (etapa.itens && Array.isArray(etapa.itens)) {
         etapa.itens.forEach((item, idx) => {
           html += `
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check-${idx}" class="checklist-checkbox">
-                            <label for="check-${idx}" class="checklist-label">${item}</label>
-                        </div>
-                    `;
+                            <div class="checklist-item">
+                                <input type="checkbox" id="check-${idx}" class="checklist-checkbox">
+                                <label for="check-${idx}" class="checklist-label">${item}</label>
+                            </div>
+                        `;
         });
       }
-      html += `</div>`;
+      html += `</div></div></section>`;
     }
 
     if (etapa.proximo && etapa.tipo !== "decisao") {
