@@ -1020,7 +1020,7 @@ class UI {
       html += `<div class="etapa-alert info">ℹ️ ${etapa.obs}</div>`;
     }
 
-    if (fluxo.prazo) {
+    if (fluxo.prazo && etapa.tipo !== "triagem") {
       html += `<div class="triagem-meta"><strong>Prazo do processo:</strong> ${this._esc(fluxo.prazo)}</div>`;
     }
 
@@ -1073,21 +1073,41 @@ class UI {
                 </div>
             `;
     } else if (etapa.tipo === "triagem") {
+      const itensTriagem = etapa.itensTriagem || [];
+      const descricaoTriagem = etapa.descricaoTriagem || "Confira cada item antes de avançar para a próxima etapa.";
       html += `
-                <div class="triagem-viewer">
-                    ${etapa.descricaoTriagem ? `<div class="etapa-content">${this._sanitizarHtml(etapa.descricaoTriagem)}</div>` : ""}
-                    <div class="triagem-checklist">
+          <section class="triagem-viewer">
+            <div class="triagem-intro">
+              <div class="triagem-intro-icon">🔍</div>
+              <div>
+                <span class="triagem-kicker">Conferência da etapa</span>
+                <h3>Itens para verificar</h3>
+                <div class="triagem-description">${this._sanitizarHtml(descricaoTriagem)}</div>
+              </div>
+            </div>
+            <div class="triagem-summary">
+              <div class="triagem-summary-item">
+                <span class="triagem-summary-icon">☑</span>
+                <span><strong>${itensTriagem.length}</strong><small>itens de conferência</small></span>
+              </div>
+              ${fluxo.prazo ? `<div class="triagem-summary-item"><span class="triagem-summary-icon">⏱</span><span><strong>${this._esc(fluxo.prazo)}</strong><small>prazo do processo</small></span></div>` : ""}
+            </div>
+            <div class="triagem-section-heading">
+              <div><span class="triagem-kicker">Checklist</span><h4>Marque os itens conferidos</h4></div>
+              <span class="triagem-counter">0/${itensTriagem.length}</span>
+            </div>
+            <div class="triagem-checklist">
             `;
-      (etapa.itensTriagem || []).forEach((item, idx) => {
+      itensTriagem.forEach((item, idx) => {
         const itemData = typeof item === "string" ? { titulo: item } : item;
         html += `
-                    <label class="triagem-check-item">
+            <label class="triagem-check-item" for="triagem-item-${idx}">
                         <input type="checkbox" class="checklist-checkbox" id="triagem-item-${idx}">
-                        <span><strong>${this._esc(itemData.titulo || "Item sem título")}${itemData.obrigatorio ? " *" : ""}</strong>${itemData.detalhes ? `<small>${this._esc(itemData.detalhes)}</small>` : ""}</span>
+              <span class="triagem-check-content"><strong>${this._esc(itemData.titulo || "Item sem título")}${itemData.obrigatorio ? " <em>Obrigatório</em>" : ""}</strong>${itemData.detalhes ? `<small>${this._esc(itemData.detalhes)}</small>` : ""}</span>
                     </label>
                 `;
       });
-      html += `</div>${etapa.observacoesTriagem ? `<div class="etapa-alert info"><strong>Observações:</strong><br>${this._esc(etapa.observacoesTriagem)}</div>` : ""}</div>`;
+      html += `</div>${etapa.observacoesTriagem ? `<div class="triagem-notes"><span class="triagem-notes-icon">💡</span><div><span class="triagem-kicker">Atenção</span><strong>Observações importantes</strong><p>${this._esc(etapa.observacoesTriagem)}</p></div></div>` : ""}</section>`;
     } else if (etapa.tipo === "email") {
       html += `
                 <div class="etapa-content">${etapa.modelo}</div>
@@ -1145,7 +1165,20 @@ class UI {
             `;
     }
 
-    if (viewer) viewer.innerHTML = html;
+    if (viewer) {
+      viewer.innerHTML = html;
+
+      if (etapa.tipo === "triagem") {
+        const counter = viewer.querySelector(".triagem-counter");
+        const checkboxes = [...viewer.querySelectorAll(".triagem-check-item input")];
+        const updateCounter = () => {
+          const checked = checkboxes.filter((checkbox) => checkbox.checked).length;
+          if (counter) counter.textContent = `${checked}/${checkboxes.length}`;
+        };
+
+        checkboxes.forEach((checkbox) => checkbox.addEventListener("change", updateCounter));
+      }
+    }
   }
 
   copiarTextoEtapa() {
