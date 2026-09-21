@@ -72,7 +72,7 @@ A proposta é simples: permitir que qualquer usuário consiga estruturar process
 - Restauração de dados
 - Importação (mesclar ou substituir)
 
-O arquivo `fluxo-demo-completo.json` contém um exemplo importável com todos os
+O arquivo `modelo.json` contém um exemplo importável com todos os
 tipos de etapa, múltiplas conexões, decisões coloridas e triagens.
 
 ### 🔄 Compartilhamento

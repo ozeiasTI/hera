@@ -1008,6 +1008,7 @@ class UI {
 
     const etapa = fluxo.etapas[this.currentEtapa];
     const viewer = document.getElementById("etapa-viewer");
+    const isPrimeiraEtapa = etapaKeys[0] === this.currentEtapa;
 
     let html = `
             <div class="etapa-header">
@@ -1023,7 +1024,7 @@ class UI {
       html += `<div class="etapa-alert info">ℹ️ ${etapa.obs}</div>`;
     }
 
-    if (fluxo.prazo && etapa.tipo !== "triagem") {
+    if (fluxo.prazo && isPrimeiraEtapa) {
       html += `
         <div class="stage-meta">
           <span class="stage-meta-icon">⏱</span>
@@ -1154,7 +1155,7 @@ class UI {
                 <span class="triagem-summary-icon">☑</span>
                 <span><strong>${itensTriagem.length}</strong><small>itens de conferência</small></span>
               </div>
-              ${fluxo.prazo ? `<div class="triagem-summary-item"><span class="triagem-summary-icon">⏱</span><span><strong>${this._esc(fluxo.prazo)}</strong><small>prazo do processo</small></span></div>` : ""}
+              ${fluxo.prazo && isPrimeiraEtapa ? `<div class="triagem-summary-item"><span class="triagem-summary-icon">⏱</span><span><strong>${this._esc(fluxo.prazo)}</strong><small>prazo do processo</small></span></div>` : ""}
             </div>
             <div class="triagem-section-heading">
               <div><span class="triagem-kicker">Checklist</span><h4>Marque os itens conferidos</h4></div>
