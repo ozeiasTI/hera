@@ -366,9 +366,11 @@ class UI {
     document.getElementById("stat-processos").textContent = stats.processos;
     document.getElementById("stat-etapas").textContent = stats.etapas;
     document.getElementById("stat-tamanho").textContent = stats.tamanho;
+    document.getElementById("stat-tamanho-percentual").textContent = `${stats.tamanhoPercentual}% de ${stats.limiteTamanho}`;
 
     const data = storage.getAllProcessos();
     const grid = document.getElementById("home-processos");
+    grid.classList.add("home-processos");
     grid.innerHTML = "";
 
     if (Object.keys(data).length === 0) {
@@ -2395,6 +2397,8 @@ class UI {
     document.getElementById("stat-processos").textContent = stats.processos;
     document.getElementById("stat-etapas").textContent = stats.etapas;
     document.getElementById("stat-tamanho").textContent = stats.tamanho;
+    const tamanhoPercentualEl = document.getElementById("stat-tamanho-percentual");
+    if (tamanhoPercentualEl) tamanhoPercentualEl.textContent = `${stats.tamanhoPercentual}% de ${stats.limiteTamanho}`;
 
     const atalhosEl = document.getElementById("stat-atalhos");
     if (atalhosEl) atalhosEl.textContent = stats.atalhos || 0;

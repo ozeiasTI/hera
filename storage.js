@@ -190,7 +190,15 @@ class Storage {
             totalAtalhos += items.length;
         });
 
-        const dataSize = (new Blob([JSON.stringify(data)]).size / 1024).toFixed(2);
+        const storageLimitBytes = 10 * 1024 * 1024;
+        let storageUsedBytes = 0;
+        for (let index = 0; index < localStorage.length; index++) {
+            const key = localStorage.key(index);
+            storageUsedBytes += new Blob([key || '', localStorage.getItem(key) || '']).size;
+        }
+        const storageUsedMb = storageUsedBytes / (1024 * 1024);
+        const storageLimitMb = storageLimitBytes / (1024 * 1024);
+        const storagePercent = Math.min((storageUsedBytes / storageLimitBytes) * 100, 100);
 
         return {
             processos: Object.keys(data).length,
@@ -198,7 +206,9 @@ class Storage {
             etapas: totalEtapas,
             decisoes: totalDecisoes,
             atalhos: totalAtalhos,
-            tamanho: `${dataSize}KB`
+            tamanho: `${storageUsedMb.toFixed(2)} MB`,
+            limiteTamanho: `${storageLimitMb.toFixed(0)} MB`,
+            tamanhoPercentual: storagePercent.toFixed(2)
         };
     }
 

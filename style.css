@@ -316,6 +316,15 @@ h6 {
     color: var(--text-muted);
 }
 
+.stat-card-storage .stat-value {
+    font-size: 20px;
+    white-space: nowrap;
+}
+
+.stat-card-storage .stat-label {
+    white-space: nowrap;
+}
+
 .recent-section h3 {
     font-size: 20px;
     margin-bottom: 16px;
@@ -2031,6 +2040,46 @@ h6 {
 .processo-card.selected {
     border-color: var(--primary);
     background: var(--primary-light);
+}
+
+.home-processos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.home-processos .processo-card {
+    min-height: 0;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+}
+
+.home-processos .processo-header {
+    margin-bottom: 8px;
+}
+
+.home-processos .processo-icon {
+    font-size: 22px;
+}
+
+.home-processos .processo-title {
+    font-size: 14px;
+    margin-bottom: 3px;
+}
+
+.home-processos .processo-subtitle,
+.home-processos .processo-count {
+    font-size: 11px;
+}
+
+.home-processos .processo-description {
+    font-size: 11px;
+    line-height: 1.35;
+}
+
+.home-processos .processo-footer {
+    margin-top: 10px;
+    padding-top: 10px;
 }
 
 .page-header {
